@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your Cart</title>
   <link rel="stylesheet" href="styles/cart.css">
+<<<<<<< HEAD
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -34,5 +35,46 @@
 
 <script src="scripts/cart.js"></script> <!-- your JavaScript here -->
 
+=======
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- For cart icon -->
+</head>
+<body>
+  <div class="cart-wrapper">
+    <div class="cart-container">
+      <div class="cart-header">
+        <i class="fas fa-shopping-cart cart-icon"></i>
+        <h1>Your Cart</h1>
+      </div>
+
+      <div class="cart-items" id="cart-items">
+        <div class="cart-item">
+          <span>Blue T-Shirt (M)</span>
+          <span>$25.00</span>
+        </div>
+        <div class="cart-item">
+          <span>White Sneakers (Size 8)</span>
+          <span>$50.00</span>
+        </div>
+      </div>
+
+      <div class="cart-total" id="cart-total">
+        <strong>Total:</strong> <span>$75.00</span>
+      </div>
+
+      <div class="cart-buttons">
+        <button class="btn proceed-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
+        <button class="btn clear-btn" onclick="clearCart()">Clear Cart</button>
+        <button class="btn continue-btn" onclick="window.location.href='products.html'">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function clearCart() {
+      document.getElementById('cart-items').innerHTML = "<p>Your cart is now empty.</p>";
+      document.getElementById('cart-total').innerHTML = "<strong>Total:</strong> <span>$0.00</span>";
+    }
+  </script>
+>>>>>>> 881301ef04b64f5679fcd478e89ae4d00a588a5a
 </body>
 </html>
