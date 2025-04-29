@@ -1,0 +1,246 @@
+/* about.css */
+
+/* Transparent Navbar (like Contact Us page) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    position: absolute; /* Position it over the hero image */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: transparent; /* No background */
+    color: white;
+  }
+  
+  .navbar .logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+  
+  .navbar .nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .navbar .nav-links li a:hover,
+  .navbar .nav-links li a.active {
+    color: #007bff;
+  }
+  
+  
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .hero-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+  }
+  
+  .hero-content h1 {
+    font-size: 48px;
+  }
+  
+ /* Who We Are Section */
+.who-we-are {
+    background-color: #f8f9fa; /* light background */
+    padding: 80px 0;
+}
+
+.who-we-are-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.who-text {
+    flex: 1 1 45%;
+}
+
+.who-text h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.who-text h2::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    background-color: #007bff;
+    margin-bottom: 10px;
+}
+
+.who-text p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.who-image {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: center;
+}
+
+.who-image img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+  
+  /* Team Section */
+.team-section {
+    padding: 80px 0;
+    background: #fff;
+    text-align: center;
+  }
+  
+  .team-section .section-title h5 {
+    color: #007bff;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  .team-section .section-title h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .team-section .section-title p {
+    max-width: 600px;
+    margin: 0 auto 50px;
+    color: #555;
+  }
+  
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .team-member {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    width: 200px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .team-member:hover {
+    transform: translateY(-5px);
+  }
+  
+  .team-member img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .team-member h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .team-member p {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  
+ /* Follow Us Section */
+.follow-us {
+    background: url('images/follow-bg.jpg') center center/cover no-repeat;
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.follow-us::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+}
+
+.follow-us-container {
+    position: relative;
+    background: white;
+    padding: 40px 60px;
+    text-align: center;
+    z-index: 1;
+}
+
+.follow-us-container h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.social-icons {
+    margin-top: 15px;
+}
+
+.social-icons a {
+    color: black;
+    font-size: 24px;
+    margin: 0 15px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #007bff; /* blue when hover */
+} 
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #007bff;
+    color: white;
+  }
+  

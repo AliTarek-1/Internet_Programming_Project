@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="styles/cart.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="cart-wrapper">
+  <div class="cart-container">
+    <div class="cart-header">
+      <i class="fas fa-shopping-cart cart-icon"></i>
+      <h1>Your Cart</h1>
+    </div>
+
+    <div class="cart-items" id="cart-items">
+      <!-- Dynamically filled by JavaScript -->
+    </div>
+
+    <div class="cart-total" id="cart-total">
+      <strong>Total:</strong> <span>$0.00</span>
+    </div>
+
+    <div class="cart-buttons">
+      <button class="btn proceed-btn" onclick="goToCheckout()">Proceed to Checkout</button>
+      <button class="btn clear-btn" onclick="clearCart()">Clear Cart</button>
+      <button class="btn continue-btn" onclick="window.location.href='products.html'">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/cart.js"></script> <!-- your JavaScript here -->
+
+</body>
+</html>

@@ -1,21 +1,31 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
 
 function verifyToken(req, res, next) {
-    // const token = req.headers['x-access-token'];
-    const token = req.cookies.accessToken;
-    if (!token) {
-        return res.status(401).json({
-            auth: false,
-            message: 'No se proporcionó el token de autenticación'
-        });
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({
+      auth: false,
+      message: "No authentication token provided.",
+    });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.error("JWT Verification Error:", err.message);
+      return res.status(403).json({
+        auth: false,
+        message: "Failed to authenticate token.",
+      });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     req.userId = decoded.id;
+
     next();
+  });
 }
 
 module.exports = verifyToken;

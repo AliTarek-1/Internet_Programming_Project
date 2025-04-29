@@ -1,0 +1,122 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  .cart-wrapper {
+    padding: 20px;
+  }
+  
+  .cart-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  .cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #0056b3;
+  }
+  
+  .cart-header h1 {
+    margin-left: 10px;
+    font-size: 24px;
+  }
+  
+  .cart-icon {
+    font-size: 30px;
+  }
+  
+  .cart-items {
+    margin-bottom: 20px;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  
+  .cart-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn {
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .proceed-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .proceed-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .clear-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .clear-btn:hover {
+    background-color: #a71d2a;
+  }
+  
+  .continue-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .continue-btn:hover {
+    background-color: #5a6268;
+  }
+  .cart-item-buttons {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .cart-item-buttons button {
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .cart-item-buttons button:hover {
+    background-color: #0056b3;
+  }
+  
