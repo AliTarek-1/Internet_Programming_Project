@@ -13,9 +13,13 @@
 
 <!-- Navbar -->
 <header class="navbar">
-    <div class="logo"><a href="index.html">ALL IN ONE</a></div>
+  <div class="logo">
+    <a href="HomePage.html">
+      <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
+    </a>
+  </div>  
     <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="HomePage.html" class="active">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contactus.html">Contact Us</a></li>
       <li><a href="products.html">Products</a></li>
@@ -36,223 +40,109 @@
 
 <!-- Hero Section -->
 <section class="hero">
-    <img src="images/mainimage.jpg" alt="Hero Background" class="hero-bg" />
-    <div class="hero-content">
-      <h1>Raining Offers For Hot Summer!</h1>
-      <p>25% Off On All Products</p>
-      <div class="hero-buttons">
-        <a href="#shop" class="btn-primary">Shop Now</a>
-        <a href="#about" class="btn-secondary">Find More</a>
-      </div>
+  <img src="images/mainimage.jpg" alt="Hero Background" class="hero-bg" />
+  <div class="hero-content">
+    <h1>Raining Offers For Hot Summer!</h1>
+    <p>25% Off On All Products</p>
+    <div class="hero-buttons">
+      <a href="products.html" class="btn-primary">Shop Now</a>
+      <a href="about.html" class="btn-secondary">Find More</a>
     </div>
-  </section>
-  
-  
+  </div>
+</section>
 
 <!-- Category Banners -->
 <section class="categories" id="categories">
-    <div class="category-card" style="background-image: url('images/Tanktopforwomen.avif');">
-      <div class="category-content">
-        <h2>20% Off On Tank Tops</h2>
-        <p>Explore the women's collection</p>
-        <a href="#products" class="category-btn">Shop Now</a>
-      </div>
+  <div class="category-card" style="background-image: url('images/Tanktopforwomen.avif');">
+    <div class="category-content">
+      <h2>20% Off On Tank Tops</h2>
+      <p>Explore the women's collection</p>
+      <a href="products.html" class="category-btn">Shop Now</a>
     </div>
-  
-    <div class="category-card" style="background-image: url('images/eyewear.webp');">
-      <div class="category-content">
-        <h2>Latest Eyewear For You</h2>
-        <p>Explore the men's collection</p>
-        <a href="#products" class="category-btn">Shop Now</a>
-      </div>
-    </div>
-  
-    <div class="category-card" style="background-image: url('images/Suits.webp');">
-      <div class="category-content">
-        <h2>Let's Suit Up!</h2>
-        <p>Explore accessories now</p>
-        <a href="#products" class="category-btn">Check Out</a>
-      </div>
-    </div>
-  </section>
-  
+  </div>
 
-<!-- Featured Products -->
-<section class="products" id="products">
-    <h2 class="section-title">Featured Products</h2>
-    <div class="product-grid">
-      
-      <!-- Product 1 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="images/Yellowshoes.avif" alt=" Yellow Shoes">
-          <span class="sale-badge">Sale!</span>
-          <div class="overlay">
-            <button onclick="addToCart('Yellow Shoes', 120)">🛒</button>
-          </div>
-        </div>
-        <div class="product-info">
-          <h3> Yellow Shoes</h3>
-          <p class="category">Men</p>
-          <p><span class="old-price">$150.00</span> <span class="new-price">$120.00</span></p>
-          <div class="stars" data-product=" Yellow Shoes">
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-          </div>
-          
-        </div>
-      </div>
-  
-      <!-- Product 2 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="images/blueshoes.avif" alt="Blue Shoes">
-          <div class="overlay">
-            <button onclick="addToCart(' Blue Shoes', 220)">🛒</button>
-          </div>
-        </div>
-        <div class="product-info">
-          <h3>Blue Shoes</h3>
-          <p class="category">Men</p>
-          <p class="new-price">$200.00</p>
-          <div class="stars" data-product=" Blue Shoes">
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-          </div>
-          
-        </div>
-      </div>
-  
-      <!-- Product 3 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="images/darkbrownjeans.avif" alt="Dark Brown Jeans">
-          <div class="overlay">
-            <button onclick="addToCart('Dark Brown Jeans', 150)">🛒</button>
-          </div>
-        </div>
-        <div class="product-info">
-          <h3>Dark Brown Jeans</h3>
-          <p class="category">Men</p>
-          <p class="new-price">$150.00</p>
-          <div class="stars" data-product="Dark Brown Jeans">
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Product 4 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="images/BlueDenimJeans.jpg" alt="Blue Denim Jeans">
-          <div class="overlay">
-            <button onclick="addToCart('Blue Denim Jeans', 150)">🛒</button>
-          </div>
-        </div>
-        <div class="product-info">
-          <h3>Blue Denim Jeans</h3>
-          <p class="category">Women</p>
-          <p class="new-price">$150.00</p>
-          <div class="stars" data-product="Blue Denim Jeans">
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-          </div>
-        </div>
-      </div>
-  
+  <div class="category-card" style="background-image: url('images/eyewear.webp');">
+    <div class="category-content">
+      <h2>Latest Eyewear For You</h2>
+      <p>Explore the men's collection</p>
+      <a href="products.html" class="category-btn">Shop Now</a>
     </div>
-  </section>
-  
+  </div>
+
+  <div class="category-card" style="background-image: url('images/Suits.webp');">
+    <div class="category-content">
+      <h2>Let's Suit Up!</h2>
+      <p>Explore accessories now</p>
+      <a href="products.html" class="category-btn">Check Out</a>
+    </div>
+  </div>
+</section>
+
 <!-- Special Offer Section -->
 <section class="special-offer">
-    <div class="special-offer-content">
-      <div class="text">
-        <h3>Limited Time Offer</h3>
-        <h2>Special Edition</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
-        <p><strong>Buy This T-shirt At 20% Discount, Use Code OFF20</strong></p>
-        <a href="#products" class="btn-offer">Shop Now</a>
-      </div>
-      <div class="image">
-        <img src="images/mainimage.jpg" alt="Special Offer">
-      </div>
+  <div class="special-offer-content">
+    <div class="text">
+      <h3>Limited Time Offer</h3>
+      <h2>Special Edition</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+      <p><strong>Buy This T-shirt At 20% Discount, Use Code OFF20</strong></p>
+      <a href="products.html" class="btn-offer">Shop Now</a>
     </div>
-  </section>
-  
-<!-- Features Section -->
-<section class="features">
-    <div class="feature">
-      <img src="images/inspect.png" alt="Worldwide Shipping">
-      <h4>Worldwide Shipping</h4>
-      <p>It elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+    <div class="image">
+      <img src="images/mainimage.jpg" alt="Special Offer">
     </div>
-    <div class="feature">
-      <img src="images/quality.png" alt="Best Quality">
-      <h4>Best Quality</h4>
-      <p>It elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="logo">
+      <a href="HomePage.html">
+        <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
+      </a>
+      <p>The best look anytime, anywhere.</p>
     </div>
-    <div class="feature">
-      <img src="images/offers.png" alt="Best Offers">
-      <h4>Best Offers</h4>
-      <p>It elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+
+    <div class="footer-links">
+      <h4>For Her</h4>
+      <ul>
+        <li><a href="products.html">Women Jeans</a></li>
+        <li><a href="products.html">Tops and Shirts</a></li>
+        <li><a href="products.html">Women Jackets</a></li>
+        <li><a href="products.html">Heels and Flats</a></li>
+        <li><a href="products.html">Women Accessories</a></li>
+      </ul>
     </div>
-    <div class="feature">
-      <img src="images/secure.png" alt="Secure Payments">
-      <h4>Secure Payments</h4>
-      <p>It elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+
+    <div class="footer-links">
+      <h4>For Him</h4>
+      <ul>
+        <li><a href="products.html">Men Jeans</a></li>
+        <li><a href="products.html">Men Shirts</a></li>
+        <li><a href="products.html">Men Shoes</a></li>
+        <li><a href="products.html">Men Accessories</a></li>
+        <li><a href="products.html">Men Jackets</a></li>
+      </ul>
     </div>
-  </section>
-  
-  <!-- Sale Banner -->
-  <section class="sale-banner">
-    <h2>SALE UP TO 70% OFF FOR ALL CLOTHES & FASHION ITEMS, ON ALL BRANDS.</h2>
-  </section>
-  
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-logo">
-        <h2>ALL IN ONE</h2>
-        <p>The best look anytime, anywhere.</p>
-      </div>
-  
-      <div class="footer-links">
-        <h4>For Her</h4>
-        <ul>
-          <li><a href="#">Women Jeans</a></li>
-          <li><a href="#">Tops and Shirts</a></li>
-          <li><a href="#">Women Jackets</a></li>
-          <li><a href="#">Heels and Flats</a></li>
-          <li><a href="#">Women Accessories</a></li>
-        </ul>
-      </div>
-  
-      <div class="footer-links">
-        <h4>For Him</h4>
-        <ul>
-          <li><a href="#">Men Jeans</a></li>
-          <li><a href="#">Men Shirts</a></li>
-          <li><a href="#">Men Shoes</a></li>
-          <li><a href="#">Men Accessories</a></li>
-          <li><a href="#">Men Jackets</a></li>
-        </ul>
-      </div>
-  
-      <div class="footer-subscribe">
-        <h4>Subscribe</h4>
-        <input type="email" placeholder="Your email address...">
-        <button>SUBSCRIBE</button>
-      </div>
+
+    <div class="footer-subscribe">
+      <h4>Subscribe</h4>
+      <input type="email" placeholder="Your email address...">
+      <button>SUBSCRIBE</button>
     </div>
-  
-    <div class="footer-bottom">
-      <p>© 2025 BrandStore. Powered by BrandStore.</p>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-google-plus-g"></i></a>
-      </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 BrandStore. Powered by BrandStore.</p>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-google-plus-g"></i></a>
     </div>
-    </div>
-  </footer>
+  </div>
+</footer>
   
 
 <script src="scripts/HomePage.js"></script>

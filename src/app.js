@@ -42,4 +42,8 @@ app.get("/signup.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "signup.html"));
 });
 
+app.get("/products.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "products.html"));
+});
+
 module.exports = app;

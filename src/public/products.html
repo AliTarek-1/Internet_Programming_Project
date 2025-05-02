@@ -1,0 +1,604 @@
+<!-- products.html (with cart buttons) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - ALL IN ONE</title>
+  <link rel="stylesheet" href="styles/products.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+<header class="navbar">
+    <div class="logo">
+      <a href="HomePage.html">
+        <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
+      </a>
+    </div>  
+      <ul class="nav-links">
+        <li><a href="HomePage.html" >Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contactus.html">Contact Us</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="cart.html" id="cart-icon">🛒 (<span id="cart-count">0</span>)</a></li>
+      </ul>
+      <div class="user-menu">
+          <i class="fas fa-user user-icon" id="userIcon"></i>
+          <div class="dropdown" id="userDropdown">
+            <a href="loginuser.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+          </div>
+        </div>
+        
+      </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Products Sections -->
+  <main>
+    <h2 class="section-title">Women Jeans</h2>
+<div class="scroll-container">
+  <button class="scroll-button left" onclick="scrollRow(this, 'left')">&#10094;</button>
+  <div class="product-row">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Blue Denim Jeans', 150)">🛒</button></div>
+      <img src="images/women-jeans.jpg" alt="Blue Denim Jeans">
+      <div class="content">
+        <h4>Blue Denim Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$150.00</div>
+        <div class="stars" data-product="Blue Denim Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Black High-Rise Jeans', 160)">🛒</button></div>
+      <img src="images/black-jeans.jpg" alt="Black High-Rise Jeans">
+      <div class="content">
+        <h4>Black High-Rise Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$160.00</div>
+        <div class="stars" data-product="Black High-Rise Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 3 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Ripped Slim Fit Jeans', 140)">🛒</button></div>
+      <img src="images/ripped-jeans.jpg" alt="Ripped Slim Fit Jeans">
+      <div class="content">
+        <h4>Ripped Slim Fit Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$140.00</div>
+        <div class="stars" data-product="Ripped Slim Fit Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Wide-Leg Jeans', 170)">🛒</button></div>
+      <img src="images/wide-leg-jeans.jpg" alt="Wide-Leg Jeans">
+      <div class="content">
+        <h4>Wide-Leg Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$170.00</div>
+        <div class="stars" data-product="Wide-Leg Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Flare Fit Jeans', 145)">🛒</button></div>
+      <img src="images/flare-jeans.jpg" alt="Flare Fit Jeans">
+      <div class="content">
+        <h4>Flare Fit Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$145.00</div>
+        <div class="stars" data-product="Flare Fit Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Classic Fit Jeans', 155)">🛒</button></div>
+      <img src="images/classic-jeans.jpg" alt="Classic Fit Jeans">
+      <div class="content">
+        <h4>Classic Fit Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$155.00</div>
+        <div class="stars" data-product="Classic Fit Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 7–15 (filler sample) -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Mid Waist Jeans', 135)">🛒</button></div>
+      <img src="images/mid-waist.jpg" alt="Mid Waist Jeans">
+      <div class="content">
+        <h4>Mid Waist Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$135.00</div>
+        <div class="stars" data-product="Mid Waist Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Light Wash Jeans', 125)">🛒</button></div>
+      <img src="images/light-wash.jpg" alt="Light Wash Jeans">
+      <div class="content">
+        <h4>Light Wash Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$125.00</div>
+        <div class="stars" data-product="Light Wash Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Stretch Fit Jeans', 165)">🛒</button></div>
+      <img src="images/stretch-fit.jpg" alt="Stretch Fit Jeans">
+      <div class="content">
+        <h4>Stretch Fit Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$165.00</div>
+        <div class="stars" data-product="Stretch Fit Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Skinny Jeans', 158)">🛒</button></div>
+      <img src="images/skinny.jpg" alt="Skinny Jeans">
+      <div class="content">
+        <h4>Skinny Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$158.00</div>
+        <div class="stars" data-product="Skinny Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Vintage Cut Jeans', 150)">🛒</button></div>
+      <img src="images/vintage.jpg" alt="Vintage Cut Jeans">
+      <div class="content">
+        <h4>Vintage Cut Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$150.00</div>
+        <div class="stars" data-product="Vintage Cut Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Patchwork Jeans', 149)">🛒</button></div>
+      <img src="images/patchwork.jpg" alt="Patchwork Jeans">
+      <div class="content">
+        <h4>Patchwork Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$149.00</div>
+        <div class="stars" data-product="Patchwork Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Cuffed Jeans', 142)">🛒</button></div>
+      <img src="images/cuffed.jpg" alt="Cuffed Jeans">
+      <div class="content">
+        <h4>Cuffed Jeans</h4>
+        <div class="category">Women</div>
+        <div class="price">$142.00</div>
+        <div class="stars" data-product="Cuffed Jeans"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+  </div>
+  <button class="scroll-button right" onclick="scrollRow(this, 'right')">&#10095;</button>
+</div>
+
+
+<h2 class="section-title">Tops and Shirts</h2>
+<div class="scroll-container">
+  <button class="scroll-button left" onclick="scrollRow(this, 'left')">&#10094;</button>
+  <div class="product-row">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Floral Shirt', 75)">🛒</button></div>
+      <img src="images/floral-shirt.jpg" alt="Floral Shirt">
+      <div class="content">
+        <h4>Floral Shirt</h4>
+        <div class="category">Women</div>
+        <div class="price">$75.00</div>
+        <div class="stars" data-product="Floral Shirt"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Striped Blouse', 80)">🛒</button></div>
+      <img src="images/striped-blouse.jpg" alt="Striped Blouse">
+      <div class="content">
+        <h4>Striped Blouse</h4>
+        <div class="category">Women</div>
+        <div class="price">$80.00</div>
+        <div class="stars" data-product="Striped Blouse"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 3 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Cotton Tunic', 65)">🛒</button></div>
+      <img src="images/cotton-tunic.jpg" alt="Cotton Tunic">
+      <div class="content">
+        <h4>Cotton Tunic</h4>
+        <div class="category">Women</div>
+        <div class="price">$65.00</div>
+        <div class="stars" data-product="Cotton Tunic"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Sleeveless Top', 55)">🛒</button></div>
+      <img src="images/sleeveless-top.jpg" alt="Sleeveless Top">
+      <div class="content">
+        <h4>Sleeveless Top</h4>
+        <div class="category">Women</div>
+        <div class="price">$55.00</div>
+        <div class="stars" data-product="Sleeveless Top"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Chiffon Shirt', 85)">🛒</button></div>
+      <img src="images/chiffon-shirt.jpg" alt="Chiffon Shirt">
+      <div class="content">
+        <h4>Chiffon Shirt</h4>
+        <div class="category">Women</div>
+        <div class="price">$85.00</div>
+        <div class="stars" data-product="Chiffon Shirt"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Button-Up Shirt', 70)">🛒</button></div>
+      <img src="images/button-up.jpg" alt="Button-Up Shirt">
+      <div class="content">
+        <h4>Button-Up Shirt</h4>
+        <div class="category">Women</div>
+        <div class="price">$70.00</div>
+        <div class="stars" data-product="Button-Up Shirt"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 7-15 (sample filler) -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Peplum Top', 72)">🛒</button></div>
+      <img src="images/peplum.jpg" alt="Peplum Top">
+      <div class="content">
+        <h4>Peplum Top</h4>
+        <div class="category">Women</div>
+        <div class="price">$72.00</div>
+        <div class="stars" data-product="Peplum Top"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Crop Top', 50)">🛒</button></div>
+      <img src="images/crop-top.jpg" alt="Crop Top">
+      <div class="content">
+        <h4>Crop Top</h4>
+        <div class="category">Women</div>
+        <div class="price">$50.00</div>
+        <div class="stars" data-product="Crop Top"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Graphic Tee', 48)">🛒</button></div>
+      <img src="images/graphic-tee.jpg" alt="Graphic Tee">
+      <div class="content">
+        <h4>Graphic Tee</h4>
+        <div class="category">Women</div>
+        <div class="price">$48.00</div>
+        <div class="stars" data-product="Graphic Tee"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Wrap Blouse', 90)">🛒</button></div>
+      <img src="images/wrap-blouse.jpg" alt="Wrap Blouse">
+      <div class="content">
+        <h4>Wrap Blouse</h4>
+        <div class="category">Women</div>
+        <div class="price">$90.00</div>
+        <div class="stars" data-product="Wrap Blouse"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Oversized Shirt', 68)">🛒</button></div>
+      <img src="images/oversized.jpg" alt="Oversized Shirt">
+      <div class="content">
+        <h4>Oversized Shirt</h4>
+        <div class="category">Women</div>
+        <div class="price">$68.00</div>
+        <div class="stars" data-product="Oversized Shirt"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Tank Top', 45)">🛒</button></div>
+      <img src="images/tank-top.jpg" alt="Tank Top">
+      <div class="content">
+        <h4>Tank Top</h4>
+        <div class="category">Women</div>
+        <div class="price">$45.00</div>
+        <div class="stars" data-product="Tank Top"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+  </div>
+  <button class="scroll-button right" onclick="scrollRow(this, 'right')">&#10095;</button>
+</div>
+
+
+<h2 class="section-title">Men Shoes</h2>
+<div class="scroll-container">
+  <button class="scroll-button left" onclick="scrollRow(this, 'left')">&#10094;</button>
+  <div class="product-row">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="badge">Sale!</div>
+      <div class="overlay"><button onclick="addToCart('Yellow Shoes', 120)">🛒</button></div>
+      <img src="images/Yellowshoes.avif" alt="Yellow Shoes">
+      <div class="content">
+        <h4>Yellow Shoes</h4>
+        <div class="category">Men</div>
+        <div class="price"><span class="old-price">$150.00</span> $120.00</div>
+        <div class="stars" data-product="Yellow Shoes"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Blue Shoes', 200)">🛒</button></div>
+      <img src="images/blueshoes.avif" alt="Blue Shoes">
+      <div class="content">
+        <h4>Blue Shoes</h4>
+        <div class="category">Men</div>
+        <div class="price">$200.00</div>
+        <div class="stars" data-product="Blue Shoes"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 3 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Black Leather Loafers', 180)">🛒</button></div>
+      <img src="images/black-loafers.jpg" alt="Black Leather Loafers">
+      <div class="content">
+        <h4>Black Leather Loafers</h4>
+        <div class="category">Men</div>
+        <div class="price">$180.00</div>
+        <div class="stars" data-product="Black Leather Loafers"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('White Sneakers', 145)">🛒</button></div>
+      <img src="images/white-sneakers.jpg" alt="White Sneakers">
+      <div class="content">
+        <h4>White Sneakers</h4>
+        <div class="category">Men</div>
+        <div class="price">$145.00</div>
+        <div class="stars" data-product="White Sneakers"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Tan Brogues', 175)">🛒</button></div>
+      <img src="images/tan-brogues.jpg" alt="Tan Brogues">
+      <div class="content">
+        <h4>Tan Brogues</h4>
+        <div class="category">Men</div>
+        <div class="price">$175.00</div>
+        <div class="stars" data-product="Tan Brogues"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Running Shoes', 130)">🛒</button></div>
+      <img src="images/running-shoes.jpg" alt="Running Shoes">
+      <div class="content">
+        <h4>Running Shoes</h4>
+        <div class="category">Men</div>
+        <div class="price">$130.00</div>
+        <div class="stars" data-product="Running Shoes"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 7-15 (examples) -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Casual Slip-Ons', 95)">🛒</button></div>
+      <img src="images/slip-ons.jpg" alt="Casual Slip-Ons">
+      <div class="content">
+        <h4>Casual Slip-Ons</h4>
+        <div class="category">Men</div>
+        <div class="price">$95.00</div>
+        <div class="stars" data-product="Casual Slip-Ons"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Brown Boots', 165)">🛒</button></div>
+      <img src="images/brown-boots.jpg" alt="Brown Boots">
+      <div class="content">
+        <h4>Brown Boots</h4>
+        <div class="category">Men</div>
+        <div class="price">$165.00</div>
+        <div class="stars" data-product="Brown Boots"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Formal Black Oxford', 190)">🛒</button></div>
+      <img src="images/formal-oxford.jpg" alt="Formal Black Oxford">
+      <div class="content">
+        <h4>Formal Black Oxford</h4>
+        <div class="category">Men</div>
+        <div class="price">$190.00</div>
+        <div class="stars" data-product="Formal Black Oxford"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Canvas Sneakers', 110)">🛒</button></div>
+      <img src="images/canvas-sneakers.jpg" alt="Canvas Sneakers">
+      <div class="content">
+        <h4>Canvas Sneakers</h4>
+        <div class="category">Men</div>
+        <div class="price">$110.00</div>
+        <div class="stars" data-product="Canvas Sneakers"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('High Top Sneakers', 155)">🛒</button></div>
+      <img src="images/high-top.jpg" alt="High Top Sneakers">
+      <div class="content">
+        <h4>High Top Sneakers</h4>
+        <div class="category">Men</div>
+        <div class="price">$155.00</div>
+        <div class="stars" data-product="High Top Sneakers"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Training Sneakers', 160)">🛒</button></div>
+      <img src="images/training-shoes.jpg" alt="Training Sneakers">
+      <div class="content">
+        <h4>Training Sneakers</h4>
+        <div class="category">Men</div>
+        <div class="price">$160.00</div>
+        <div class="stars" data-product="Training Sneakers"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+  </div>
+  <button class="scroll-button right" onclick="scrollRow(this, 'right')">&#10095;</button>
+</div>
+
+<h2 class="section-title">Accessories</h2>
+<div class="scroll-container">
+  <button class="scroll-button left" onclick="scrollRow(this, 'left')">&#10094;</button>
+  <div class="product-row">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Sunglasses', 90)">🛒</button></div>
+      <img src="images/sunglasses.jpg" alt="Sunglasses">
+      <div class="content">
+        <h4>Sunglasses</h4>
+        <div class="category">Unisex</div>
+        <div class="price">$90.00</div>
+        <div class="stars" data-product="Sunglasses"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Leather Belt', 40)">🛒</button></div>
+      <img src="images/belt.jpg" alt="Leather Belt">
+      <div class="content">
+        <h4>Leather Belt</h4>
+        <div class="category">Men</div>
+        <div class="price">$40.00</div>
+        <div class="stars" data-product="Leather Belt"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <!-- Product 3–15 -->
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Silk Scarf', 35)">🛒</button></div>
+      <img src="images/silk-scarf.jpg" alt="Silk Scarf">
+      <div class="content">
+        <h4>Silk Scarf</h4>
+        <div class="category">Women</div>
+        <div class="price">$35.00</div>
+        <div class="stars" data-product="Silk Scarf"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Wrist Watch', 150)">🛒</button></div>
+      <img src="images/wrist-watch.jpg" alt="Wrist Watch">
+      <div class="content">
+        <h4>Wrist Watch</h4>
+        <div class="category">Unisex</div>
+        <div class="price">$150.00</div>
+        <div class="stars" data-product="Wrist Watch"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Leather Wallet', 55)">🛒</button></div>
+      <img src="images/wallet.jpg" alt="Leather Wallet">
+      <div class="content">
+        <h4>Leather Wallet</h4>
+        <div class="category">Men</div>
+        <div class="price">$55.00</div>
+        <div class="stars" data-product="Leather Wallet"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Stud Earrings', 28)">🛒</button></div>
+      <img src="images/stud-earrings.jpg" alt="Stud Earrings">
+      <div class="content">
+        <h4>Stud Earrings</h4>
+        <div class="category">Women</div>
+        <div class="price">$28.00</div>
+        <div class="stars" data-product="Stud Earrings"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Gold Bracelet', 110)">🛒</button></div>
+      <img src="images/gold-bracelet.jpg" alt="Gold Bracelet">
+      <div class="content">
+        <h4>Gold Bracelet</h4>
+        <div class="category">Women</div>
+        <div class="price">$110.00</div>
+        <div class="stars" data-product="Gold Bracelet"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Backpack', 95)">🛒</button></div>
+      <img src="images/backpack.jpg" alt="Backpack">
+      <div class="content">
+        <h4>Backpack</h4>
+        <div class="category">Unisex</div>
+        <div class="price">$95.00</div>
+        <div class="stars" data-product="Backpack"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Messenger Bag', 105)">🛒</button></div>
+      <img src="images/messenger-bag.jpg" alt="Messenger Bag">
+      <div class="content">
+        <h4>Messenger Bag</h4>
+        <div class="category">Men</div>
+        <div class="price">$105.00</div>
+        <div class="stars" data-product="Messenger Bag"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Handbag', 125)">🛒</button></div>
+      <img src="images/handbag.jpg" alt="Handbag">
+      <div class="content">
+        <h4>Handbag</h4>
+        <div class="category">Women</div>
+        <div class="price">$125.00</div>
+        <div class="stars" data-product="Handbag"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Phone Case', 20)">🛒</button></div>
+      <img src="images/phone-case.jpg" alt="Phone Case">
+      <div class="content">
+        <h4>Phone Case</h4>
+        <div class="category">Unisex</div>
+        <div class="price">$20.00</div>
+        <div class="stars" data-product="Phone Case"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="overlay"><button onclick="addToCart('Keychain', 10)">🛒</button></div>
+      <img src="images/keychain.jpg" alt="Keychain">
+      <div class="content">
+        <h4>Keychain</h4>
+        <div class="category">Unisex</div>
+        <div class="price">$10.00</div>
+        <div class="stars" data-product="Keychain"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+      </div>
+    </div>
+  </div>
+  <button class="scroll-button right" onclick="scrollRow(this, 'right')">&#10095;</button>
+</div>
+
+  </main>
+  <div class="footer-bottom">
+    <p>© 2025 BrandStore. Powered by BrandStore.</p>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-google-plus-g"></i></a>
+    </div>
+  </div>
+  </div>
+  </footer>
+  <script src="scripts/products.js"></script>
+</body>
+</html>

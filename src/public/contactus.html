@@ -5,22 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact Us</title>
   <link rel="stylesheet" href="styles/contact.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <!-- Navbar -->
-<header>
-  <nav class="navbar">
-    <div class="logo">
-      <a href="#">ALL IN ONE</a>
-    </div>
+<header class="navbar">
+  <div class="logo">
+    <a href="HomePage.html">
+      <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
+    </a>
+  </div>  
     <ul class="nav-links">
-      <li><a href="HomePage.html">Home</a></li>
+      <li><a href="HomePage.html" class="active">Home</a></li>
       <li><a href="about.html">About</a></li>
+      <li><a href="contactus.html">Contact Us</a></li>
       <li><a href="products.html">Products</a></li>
-      <li><a href="cart.html">Cart</a></li>
-      <li><a href="contactus.html" class="active">Contact Us</a></li>
+      <li><a href="cart.html" id="cart-icon">🛒 (<span id="cart-count">0</span>)</a></li>
     </ul>
+    <div class="user-menu">
+        <i class="fas fa-user user-icon" id="userIcon"></i>
+        <div class="dropdown" id="userDropdown">
+          <a href="loginuser.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        </div>
+      </div>
+      
+    </div>
+    </div>
   </nav>
 </header>
 
@@ -78,5 +91,18 @@
   </div>
 </section>
 
+<div class="footer-bottom">
+  <p>© 2025 BrandStore. Powered by BrandStore.</p>
+  <div class="social-icons">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-google-plus-g"></i></a>
+  </div>
+</div>
+</div>
+</footer>
+
+<script src="scripts/contactus.js"></script>
 </body>
 </html>

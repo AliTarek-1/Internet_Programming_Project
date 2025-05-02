@@ -30,6 +30,13 @@
     color: white;
     text-decoration: none;
   }
+  .logo-img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+
   
   .navbar .nav-links {
     list-style: none;
