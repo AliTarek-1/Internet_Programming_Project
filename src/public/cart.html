@@ -1,38 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Cart</title>
-  <link rel="stylesheet" href="styles/cart.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/cart.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
 
-<div class="cart-wrapper">
-  <div class="cart-container">
-    <div class="cart-header">
-      <i class="fas fa-shopping-cart cart-icon"></i>
-      <h1>Your Cart</h1>
-    </div>
+    <!-- Cart Section -->
+    <section class="cart-section">
+      <div class="container">
+        <div class="section-header">
+          <h1>Your Shopping Cart</h1>
+          <p>Review and modify your items before checkout</p>
+        </div>
 
-    <div class="cart-items" id="cart-items">
-      <!-- Dynamically filled by JavaScript -->
-    </div>
+        <div class="cart-container">
+          <div class="cart-items">
+            <!-- Cart items will be dynamically added here -->
+            <div class="empty-cart" id="emptyCart">
+              <i class="fas fa-shopping-cart"></i>
+              <h3>Your cart is empty</h3>
+              <p>Looks like you haven't added any products to your cart yet.</p>
+              <a href="products.html" class="continue-shopping"
+                >Continue Shopping</a
+              >
+            </div>
+          </div>
 
-    <div class="cart-total" id="cart-total">
-      <strong>Total:</strong> <span>$0.00</span>
-    </div>
+          <div class="cart-summary" id="cartSummary">
+            <h2>Order Summary</h2>
 
-    <div class="cart-buttons">
-      <button class="btn proceed-btn" onclick="goToCheckout()">Proceed to Checkout</button>
-      <button class="btn clear-btn" onclick="clearCart()">Clear Cart</button>
-      <button class="btn continue-btn" onclick="window.location.href='products.html'">Continue Shopping</button>
-    </div>
-  </div>
-</div>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal">$0.00</span>
+            </div>
 
-<script src="scripts/cart.js"></script> <!-- your JavaScript here -->
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="shipping">$0.00</span>
+            </div>
 
-</body>
+            <div class="summary-row">
+              <span>Tax (10%)</span>
+              <span id="tax">$0.00</span>
+            </div>
+
+            <div class="coupon-code">
+              <input type="text" placeholder="Coupon Code" />
+              <button>Apply</button>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total</span>
+              <span id="total">$0.00</span>
+            </div>
+
+            <div class="checkout-buttons">
+              <a href="checkout.html" class="checkout-btn"
+                >Proceed to Checkout</a
+              >
+              <a href="products.html" class="continue-shopping"
+                >Continue Shopping</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cart Item Template (hidden) -->
+    <template id="cartItemTemplate">
+      <div class="cart-item">
+        <div class="item-image">
+          <div class="product-placeholder">
+            <i class="fas fa-tshirt"></i>
+          </div>
+        </div>
+        <div class="item-details">
+          <h3 class="item-name"></h3>
+          <p class="item-category"></p>
+          <div class="item-price"></div>
+        </div>
+        <div class="item-quantity">
+          <button class="quantity-decrease">-</button>
+          <input type="number" min="1" max="10" value="1" />
+          <button class="quantity-increase">+</button>
+        </div>
+        <div class="item-total"></div>
+        <button class="remove-item">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </template>
+
+    <!-- Related Products Section -->
+    <section class="related-products">
+      <div class="container">
+        <h2>You Might Also Like</h2>
+        <div class="products-grid">
+          <!-- Related products will be dynamically added here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Shop</h3>
+            <ul>
+              <li><a href="#">Women's Collection</a></li>
+              <li><a href="#">Men's Collection</a></li>
+              <li><a href="#">Children's Collection</a></li>
+              <li><a href="#">New Arrivals</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Help</h3>
+            <ul>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Shipping & Returns</a></li>
+              <li><a href="#">Size Guide</a></li>
+              <li><a href="#">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 BrandStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart.js"></script>
+  </body>
 </html>

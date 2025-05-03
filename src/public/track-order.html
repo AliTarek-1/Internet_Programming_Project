@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Track Your Order - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/about.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .track-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 20px;
+      }
+      .track-form-container {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      .track-form-container h2 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .form-row {
+        margin-bottom: 1.5rem;
+      }
+      .form-row label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--primary-color);
+      }
+      .form-row input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+      .form-row input:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+      }
+      .track-btn {
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+      .track-btn:hover {
+        background: var(--primary-color);
+        transform: translateY(-2px);
+      }
+      .info-section {
+        margin-bottom: 2.5rem;
+      }
+      .info-section h2 {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+      }
+      .info-section p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+      .info-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .info-card h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .info-card h3 i {
+        color: var(--secondary-color);
+      }
+      .info-card ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .info-card li {
+        margin-bottom: 0.5rem;
+        color: #666;
+      }
+      .tracking-status {
+        display: none;
+        margin-top: 2rem;
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      .status-timeline {
+        margin-top: 1.5rem;
+        position: relative;
+      }
+      .status-timeline::before {
+        content: "";
+        position: absolute;
+        top: 24px;
+        left: 15px;
+        height: calc(100% - 60px);
+        width: 2px;
+        background-color: #e0e0e0;
+      }
+      .status-item {
+        display: flex;
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+      .status-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        z-index: 2;
+      }
+      .status-icon.active {
+        background-color: var(--secondary-color);
+        color: white;
+      }
+      .status-content {
+        flex: 1;
+      }
+      .status-content h4 {
+        margin-bottom: 0.25rem;
+        color: var(--primary-color);
+      }
+      .status-content p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+      .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("images/tracking-banner.jpg") center/cover;
+        color: white;
+        text-align: center;
+        padding: 100px 20px;
+        margin-top: 60px;
+      }
+      .hero-section h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .hero-section p {
+        max-width: 700px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <h1>Track Your Order</h1>
+      <p>
+        Stay updated on your purchase's journey from our warehouse to your
+        doorstep.
+      </p>
+    </div>
+
+    <div class="track-container">
+      <div class="track-form-container">
+        <h2>Enter Your Order Details</h2>
+        <form id="trackingForm">
+          <div class="form-row">
+            <label for="order-number">Order Number</label>
+            <input
+              type="text"
+              id="order-number"
+              placeholder="e.g., BS12345678"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter email used for order"
+              required
+            />
+          </div>
+
+          <button type="submit" class="track-btn">Track Order</button>
+        </form>
+      </div>
+
+      <!-- Example tracking status (usually this would be populated dynamically) -->
+      <div class="tracking-status" id="trackingResult">
+        <h2>Order #BS12345678</h2>
+        <p><strong>Estimated Delivery:</strong> June 15, 2024</p>
+
+        <div class="status-timeline">
+          <div class="status-item">
+            <div class="status-icon active">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="status-content">
+              <h4>Order Placed</h4>
+              <p>June 10, 2024 at 2:45 PM</p>
+            </div>
+          </div>
+
+          <div class="status-item">
+            <div class="status-icon active">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="status-content">
+              <h4>Payment Confirmed</h4>
+              <p>June 10, 2024 at 2:50 PM</p>
+            </div>
+          </div>
+
+          <div class="status-item">
+            <div class="status-icon active">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="status-content">
+              <h4>Order Processing</h4>
+              <p>June 11, 2024 at 9:30 AM</p>
+            </div>
+          </div>
+
+          <div class="status-item">
+            <div class="status-icon active">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="status-content">
+              <h4>Order Shipped</h4>
+              <p>June 12, 2024 at 11:15 AM</p>
+              <p>Tracking Number: 1Z999AA10123456784</p>
+            </div>
+          </div>
+
+          <div class="status-item">
+            <div class="status-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="status-content">
+              <h4>In Transit</h4>
+              <p>Your package is on its way</p>
+            </div>
+          </div>
+
+          <div class="status-item">
+            <div class="status-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <div class="status-content">
+              <h4>Delivered</h4>
+              <p>Pending</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h2>Tracking Information</h2>
+        <p>
+          At BrandStore, we understand the excitement of waiting for your new
+          purchase to arrive. We provide detailed tracking information to keep
+          you informed every step of the way. Here's what you need to know about
+          tracking your order:
+        </p>
+
+        <div class="info-card">
+          <h3>
+            <i class="fas fa-clock"></i> When Will I Receive Tracking
+            Information?
+          </h3>
+          <p>
+            You'll receive an email with tracking information as soon as your
+            order ships. The timing depends on your purchase:
+          </p>
+          <ul>
+            <li>
+              In-stock items: Tracking information is typically sent within 1-2
+              business days after your order is placed
+            </li>
+            <li>
+              Made-to-order items: Tracking is sent after production is complete
+              (usually 5-7 business days)
+            </li>
+            <li>
+              Pre-order items: Tracking is sent once the item becomes available
+              and ships
+            </li>
+            <li>
+              Mixed orders: You may receive multiple tracking numbers if items
+              ship separately
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>
+            <i class="fas fa-map-marker-alt"></i> Understanding Your Tracking
+            Status
+          </h3>
+          <p>
+            Your order will go through several stages as it makes its way to
+            you:
+          </p>
+          <ul>
+            <li>
+              <strong>Order Placed:</strong> We've received your order and
+              payment is being processed
+            </li>
+            <li>
+              <strong>Payment Confirmed:</strong> Your payment has been verified
+              and accepted
+            </li>
+            <li>
+              <strong>Order Processing:</strong> We're preparing your items for
+              shipment
+            </li>
+            <li>
+              <strong>Order Shipped:</strong> Your package has left our
+              warehouse
+            </li>
+            <li>
+              <strong>In Transit:</strong> Your package is on the way to your
+              delivery address
+            </li>
+            <li>
+              <strong>Out for Delivery:</strong> Your package is on a delivery
+              vehicle for final delivery
+            </li>
+            <li>
+              <strong>Delivered:</strong> Your package has been delivered to the
+              specified address
+            </li>
+          </ul>
+          <p>
+            Please note that once your package is shipped, the carrier handles
+            delivery and updates the tracking information. There may be a short
+            delay between actual delivery and tracking updates.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>
+            <i class="fas fa-question-circle"></i> Common Tracking Questions
+          </h3>
+
+          <h4>Why hasn't my tracking updated?</h4>
+          <p>
+            Tracking information may not update for 24-48 hours after shipping.
+            During busy periods or holidays, updates may be delayed. If your
+            tracking hasn't updated for more than 3 days, please contact us.
+          </p>
+
+          <h4>
+            My order shows "delivered," but I haven't received it. What should I
+            do?
+          </h4>
+          <p>If your order shows as delivered but you haven't received it:</p>
+          <ol>
+            <li>
+              Check with other household members who may have accepted the
+              package
+            </li>
+            <li>
+              Look around your property, including porches, side doors, and
+              garages
+            </li>
+            <li>Check with neighbors who might have received it</li>
+            <li>
+              Wait 24 hours, as carriers sometimes mark packages as delivered
+              shortly before actual delivery
+            </li>
+            <li>
+              If you still can't locate your package, contact our customer
+              service team
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h2>Contact Us About Your Order</h2>
+        <p>
+          If you need more information about your order or are experiencing
+          issues with tracking, our customer service team is here to help:
+        </p>
+        <ul>
+          <li>
+            Email:
+            <a href="mailto:orders@brandstore.com">orders@brandstore.com</a>
+          </li>
+          <li>Phone: 1-800-BRAND-STORE (1-800-272-6378)</li>
+          <li>
+            Live Chat: Available on our website 7 days a week, 9 AM - 9 PM EST
+          </li>
+        </ul>
+        <p>
+          For the fastest assistance, please have your order number ready when
+          you contact us.
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Shop</h3>
+            <ul>
+              <li><a href="womens-products.html">Women's Collection</a></li>
+              <li><a href="mens-products.html">Men's Collection</a></li>
+              <li>
+                <a href="childrens-products.html">Children's Collection</a>
+              </li>
+              <li><a href="#">New Arrivals</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Help</h3>
+            <ul>
+              <li><a href="faq.html">FAQs</a></li>
+              <li><a href="returns.html">Shipping & Returns</a></li>
+              <li><a href="size-guide.html">Size Guide</a></li>
+              <li><a href="track-order.html">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 BrandStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="scripts/navbar.js"></script>
+    <script>
+      // Simple script to show the sample tracking result when form is submitted
+      document
+        .getElementById("trackingForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          document.getElementById("trackingResult").style.display = "block";
+
+          // Scroll to the tracking result
+          document.getElementById("trackingResult").scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+    </script>
+  </body>
+</html>

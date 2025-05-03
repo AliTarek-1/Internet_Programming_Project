@@ -46,4 +46,20 @@ app.get("/products.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "products.html"));
 });
 
+app.get("/faq.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "faq.html"));
+});
+
+app.get("/returns.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "returns.html"));
+});
+
+app.get("/track-order.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "track-order.html"));
+});
+
+app.get("/customer-service.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "customer-service.html"));
+});
+
 module.exports = app;

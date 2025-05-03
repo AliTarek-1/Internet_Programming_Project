@@ -1,152 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BrandStore - Home</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-  <link rel="stylesheet" href="styles/HomePage.css">
-</head>
-<body>
-
-<!-- Navbar -->
-<header class="navbar">
-  <div class="logo">
-    <a href="HomePage.html">
-      <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
-    </a>
-  </div>  
-    <ul class="nav-links">
-      <li><a href="HomePage.html" class="active">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contactus.html">Contact Us</a></li>
-      <li><a href="products.html">Products</a></li>
-      <li><a href="cart.html" id="cart-icon">🛒 (<span id="cart-count">0</span>)</a></li>
-    </ul>
-    <div class="user-menu">
-        <i class="fas fa-user user-icon" id="userIcon"></i>
-        <div class="dropdown" id="userDropdown">
-          <a href="loginuser.html">Login</a>
-          <a href="signup.html">Sign Up</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BrandStore - Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/HomePage.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container">
+        <div class="logo">
+          <a href="HomePage.html">
+            <img
+              src="images/ourLogo.png"
+              alt="BrandStore Logo"
+              class="logo-img"
+            />
+          </a>
+        </div>
+        <nav class="nav-links">
+          <a href="HomePage.html" class="active">Home</a>
+          <a href="about.html">About</a>
+          <a href="contactus.html">Contact Us</a>
+          <a href="products.html">Products</a>
+          <a href="cart.html" class="cart-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </nav>
+        <div class="user-menu">
+          <i class="fas fa-user user-icon" id="userIcon"></i>
+          <div class="dropdown" id="userDropdown">
+            <a href="loginuser.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+          </div>
         </div>
       </div>
-      
-    </div>
-    </div>
-  </nav>
-</header>
+    </header>
 
-<!-- Hero Section -->
-<section class="hero">
-  <img src="images/mainimage.jpg" alt="Hero Background" class="hero-bg" />
-  <div class="hero-content">
-    <h1>Raining Offers For Hot Summer!</h1>
-    <p>25% Off On All Products</p>
-    <div class="hero-buttons">
-      <a href="products.html" class="btn-primary">Shop Now</a>
-      <a href="about.html" class="btn-secondary">Find More</a>
-    </div>
-  </div>
-</section>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Summer Collection 2025</h1>
+        <p>Discover the latest trends with up to 50% off</p>
+        <div class="hero-buttons">
+          <a href="products.html" class="btn-primary">Shop Now</a>
+          <a href="#featured" class="btn-secondary">Explore</a>
+        </div>
+      </div>
+    </section>
 
-<!-- Category Banners -->
-<section class="categories" id="categories">
-  <div class="category-card" style="background-image: url('images/Tanktopforwomen.avif');">
-    <div class="category-content">
-      <h2>20% Off On Tank Tops</h2>
-      <p>Explore the women's collection</p>
-      <a href="products.html" class="category-btn">Shop Now</a>
-    </div>
-  </div>
+    <!-- Featured Categories -->
+    <section class="featured-categories" id="featured">
+      <div class="container">
+        <div class="section-header">
+          <h2>Shop by Category</h2>
+          <p>Explore our curated collections</p>
+        </div>
+        <div class="categories-grid">
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/women-category.jpg" alt="Women's Collection" />
+            </div>
+            <div class="category-content">
+              <h3>Women's Collection</h3>
+              <p>Trendy styles for every occasion</p>
+              <a href="products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/men-category.jpg" alt="Men's Collection" />
+            </div>
+            <div class="category-content">
+              <h3>Men's Collection</h3>
+              <p>Classic and contemporary styles</p>
+              <a href="products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/accessories-category.jpg" alt="Accessories" />
+            </div>
+            <div class="category-content">
+              <h3>Accessories</h3>
+              <p>Complete your look</p>
+              <a href="products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="category-card" style="background-image: url('images/eyewear.webp');">
-    <div class="category-content">
-      <h2>Latest Eyewear For You</h2>
-      <p>Explore the men's collection</p>
-      <a href="products.html" class="category-btn">Shop Now</a>
-    </div>
-  </div>
+    <!-- Special Offers -->
+    <section class="special-offers">
+      <div class="container">
+        <div class="offer-card">
+          <div class="offer-content">
+            <span class="offer-tag">Limited Time</span>
+            <h2>Summer Sale</h2>
+            <p>Get up to 50% off on selected items</p>
+            <a href="products.html" class="btn-offer">Shop Now</a>
+          </div>
+          <div class="offer-image">
+            <img src="images/summer-sale.jpg" alt="Summer Sale" />
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="category-card" style="background-image: url('images/Suits.webp');">
-    <div class="category-content">
-      <h2>Let's Suit Up!</h2>
-      <p>Explore accessories now</p>
-      <a href="products.html" class="category-btn">Check Out</a>
-    </div>
-  </div>
-</section>
+    <!-- Featured Products -->
+    <section class="featured-products">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Products</h2>
+          <p>Discover our best-selling items</p>
+        </div>
+        <div class="products-grid">
+          <!-- Product cards will be dynamically loaded here -->
+        </div>
+      </div>
+    </section>
 
-<!-- Special Offer Section -->
-<section class="special-offer">
-  <div class="special-offer-content">
-    <div class="text">
-      <h3>Limited Time Offer</h3>
-      <h2>Special Edition</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
-      <p><strong>Buy This T-shirt At 20% Discount, Use Code OFF20</strong></p>
-      <a href="products.html" class="btn-offer">Shop Now</a>
-    </div>
-    <div class="image">
-      <img src="images/mainimage.jpg" alt="Special Offer">
-    </div>
-  </div>
-</section>
+    <!-- Newsletter -->
+    <section class="newsletter">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Subscribe to Our Newsletter</h2>
+          <p>Get the latest updates on new products and upcoming sales</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-top">
-    <div class="logo">
-      <a href="HomePage.html">
-        <img src="images/ourLogo.png" alt="ALL IN ONE Logo" class="logo-img">
-      </a>
-      <p>The best look anytime, anywhere.</p>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="images/ourLogo.png" alt="BrandStore Logo" />
+            <p>Your trusted shopping destination</p>
+          </div>
+          <div class="footer-links">
+            <div class="link-group">
+              <h4>Shop</h4>
+              <a href="products.html">Women's Collection</a>
+              <a href="products.html">Men's Collection</a>
+              <a href="products.html">Accessories</a>
+              <a href="products.html">New Arrivals</a>
+            </div>
+            <div class="link-group">
+              <h4>Help</h4>
+              <a href="contactus.html">Contact Us</a>
+              <a href="#">FAQs</a>
+              <a href="#">Shipping</a>
+              <a href="#">Returns</a>
+            </div>
+            <div class="link-group">
+              <h4>Company</h4>
+              <a href="about.html">About Us</a>
+              <a href="#">Careers</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms & Conditions</a>
+            </div>
+          </div>
+          <div class="footer-social">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2025 BrandStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
 
-    <div class="footer-links">
-      <h4>For Her</h4>
-      <ul>
-        <li><a href="products.html">Women Jeans</a></li>
-        <li><a href="products.html">Tops and Shirts</a></li>
-        <li><a href="products.html">Women Jackets</a></li>
-        <li><a href="products.html">Heels and Flats</a></li>
-        <li><a href="products.html">Women Accessories</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-links">
-      <h4>For Him</h4>
-      <ul>
-        <li><a href="products.html">Men Jeans</a></li>
-        <li><a href="products.html">Men Shirts</a></li>
-        <li><a href="products.html">Men Shoes</a></li>
-        <li><a href="products.html">Men Accessories</a></li>
-        <li><a href="products.html">Men Jackets</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-subscribe">
-      <h4>Subscribe</h4>
-      <input type="email" placeholder="Your email address...">
-      <button>SUBSCRIBE</button>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <p>© 2025 BrandStore. Powered by BrandStore.</p>
-    <div class="social-icons">
-      <a href="#"><i class="fab fa-facebook-f"></i></a>
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-google-plus-g"></i></a>
-    </div>
-  </div>
-</footer>
-  
-
-<script src="scripts/HomePage.js"></script>
-
-
-</body>
+    <script src="scripts/HomePage.js"></script>
+  </body>
 </html>

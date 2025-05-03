@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Men's Collection - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/products.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="category-badge">Men's Collection</span>
+        <h1>Stylish Essentials for Modern Men</h1>
+        <p>Discover premium quality clothing designed for comfort and style</p>
+        <a href="#products" class="hero-btn"
+          >Shop Now <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="container">
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="feature-text">
+              <h3>Free Shipping</h3>
+              <p>On all orders over $50</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-undo"></i>
+            </div>
+            <div class="feature-text">
+              <h3>Easy Returns</h3>
+              <p>30-day return policy</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="feature-text">
+              <h3>Secure Payments</h3>
+              <p>Protected by encryption</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <div class="feature-text">
+              <h3>24/7 Support</h3>
+              <p>Get help when you need it</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters">
+      <div class="container">
+        <div class="search-box">
+          <input type="text" placeholder="Search for products..." />
+          <i class="fas fa-search"></i>
+        </div>
+
+        <div class="filter-options">
+          <select class="category-filter">
+            <option value="">All Categories</option>
+            <option value="shirts">Shirts</option>
+            <option value="pants">Pants</option>
+            <option value="jackets">Jackets</option>
+            <option value="accessories">Accessories</option>
+          </select>
+
+          <select class="sort-filter">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Men's Collection</h2>
+          <p>Quality clothing and accessories for the modern man</p>
+        </div>
+
+        <div class="products-grid">
+          <!-- Products will be dynamically loaded here from products.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Section -->
+    <section class="trending-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Trending This Season</h2>
+          <p>Our most popular picks for the season</p>
+        </div>
+        <div class="trending-categories">
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h3>Casual Shirts</h3>
+            <p>Perfect for everyday wear</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>Formal Wear</h3>
+            <p>Make a statement at work</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-hiking"></i>
+            </div>
+            <h3>Activewear</h3>
+            <p>Performance meets style</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-mitten"></i>
+            </div>
+            <h3>Accessories</h3>
+            <p>Complete your look</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Subscribe to Our Newsletter</h2>
+          <p>Get the latest updates on new products and exclusive offers</p>
+
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email Address" required />
+            <button type="submit">
+              Subscribe <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Shop</h3>
+            <ul>
+              <li><a href="womens-products.html">Women's Collection</a></li>
+              <li><a href="mens-products.html">Men's Collection</a></li>
+              <li>
+                <a href="childrens-products.html">Children's Collection</a>
+              </li>
+              <li><a href="#">New Arrivals</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Help</h3>
+            <ul>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Shipping & Returns</a></li>
+              <li><a href="#">Size Guide</a></li>
+              <li><a href="#">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 BrandStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Quick View Modal -->
+    <div class="quick-view-modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-product">
+          <div class="modal-product-image">
+            <div class="product-placeholder">
+              <i class="fas fa-tshirt"></i>
+            </div>
+          </div>
+          <div class="modal-product-info">
+            <h2 id="modal-product-name"></h2>
+            <p id="modal-product-category"></p>
+            <p id="modal-product-price" class="price"></p>
+            <div class="product-description">
+              <p>
+                This is a placeholder description for the product. Actual
+                product details will be added later.
+              </p>
+            </div>
+            <div class="product-options">
+              <div class="size-options">
+                <h4>Size</h4>
+                <div class="size-buttons">
+                  <button>S</button>
+                  <button>M</button>
+                  <button>L</button>
+                  <button>XL</button>
+                </div>
+              </div>
+              <div class="quantity-selector">
+                <h4>Quantity</h4>
+                <div class="quantity-controls">
+                  <button class="quantity-decrease">-</button>
+                  <input type="number" value="1" min="1" max="10" />
+                  <button class="quantity-increase">+</button>
+                </div>
+              </div>
+            </div>
+            <button class="modal-add-to-cart">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/products.js"></script>
+  </body>
+</html>
