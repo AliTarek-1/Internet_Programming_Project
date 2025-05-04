@@ -15,11 +15,11 @@ app.use(require("./controllers/authController"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/login", function (req, res) {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "public", "login-admin.html"));
 });
 
 app.get("/register", function (req, res) {
-  res.sendFile(path.join(__dirname, "public", "register.html"));
+  res.sendFile(path.join(__dirname, "public", "register-admin.html"));
 });
 
 app.get("/", function (req, res) {

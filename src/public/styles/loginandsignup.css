@@ -304,6 +304,41 @@ body {
   }
 }
 
+/* Error Messages */
+.error-message-container {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #dc3545;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Form Validation */
+.form-group input.error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Button States */
+.submit-btn:disabled {
+  background-color: #cccccc !important;
+  cursor: not-allowed;
+}
+
+.submit-btn:disabled i {
+  display: none;
+}
+
+/* Loading State */
+.submit-btn .fa-spinner {
+  margin-right: 8px;
+}
+
 /* Add styles for the back to home button */
 .back-to-home {
   display: inline-flex;

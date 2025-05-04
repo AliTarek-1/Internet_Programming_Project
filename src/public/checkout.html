@@ -18,6 +18,9 @@
   <body>
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
+    
+    <!-- Page Content Wrapper -->
+    <div class="page-wrapper">
 
     <!-- Checkout Section -->
     <section class="checkout-section">
@@ -71,34 +74,66 @@
                   <input type="text" id="address" name="address" required />
                 </div>
 
+                <div class="form-group">
+                  <label for="city">City/Governorate <span class="required-field">*</span></label>
+                  <select id="city" name="city" required>
+                    <option value="">Select City/Governorate</option>
+                    <option value="Cairo">Cairo</option>
+                    <option value="Giza">Giza</option>
+                    <option value="Alexandria">Alexandria</option>
+                    <option value="Luxor">Luxor</option>
+                    <option value="Aswan">Aswan</option>
+                    <option value="Hurghada">Hurghada</option>
+                    <option value="Sharm El Sheikh">Sharm El Sheikh</option>
+                    <option value="Mansoura">Mansoura</option>
+                    <option value="Tanta">Tanta</option>
+                    <option value="Asyut">Asyut</option>
+                    <option value="Port Said">Port Said</option>
+                    <option value="Suez">Suez</option>
+                    <option value="Ismailia">Ismailia</option>
+                    <option value="Faiyum">Faiyum</option>
+                    <option value="Zagazig">Zagazig</option>
+                    <option value="Damietta">Damietta</option>
+                    <option value="Minya">Minya</option>
+                    <option value="Qena">Qena</option>
+                    <option value="Sohag">Sohag</option>
+                    <option value="Beni Suef">Beni Suef</option>
+                    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                    <option value="Marsa Matruh">Marsa Matruh</option>
+                    <option value="New Valley">New Valley</option>
+                    <option value="North Sinai">North Sinai</option>
+                    <option value="South Sinai">South Sinai</option>
+                    <option value="Red Sea">Red Sea</option>
+                  </select>
+                </div>
+                
+                <div class="shipping-notice">
+                  <i class="fas fa-info-circle"></i>
+                  <p>Shipping fees vary based on your location in Egypt. Cairo has the lowest delivery fees, with prices increasing for more distant governorates.</p>
+                </div>
+
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" id="city" name="city" required />
-                  </div>
-
-                  <div class="form-group">
-                    <label for="state">State/Province</label>
-                    <input type="text" id="state" name="state" required />
+                    <label for="address">Detailed Address <span class="required-field">*</span></label>
+                    <textarea id="address" name="address" rows="3" required placeholder="Building number, street name, landmarks, etc."></textarea>
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="zipCode">Zip/Postal Code</label>
-                    <input type="text" id="zipCode" name="zipCode" required />
+                    <label for="zipCode">Postal Code</label>
+                    <input type="text" id="zipCode" name="zipCode" />
                   </div>
 
                   <div class="form-group">
                     <label for="country">Country</label>
                     <select id="country" name="country" required>
-                      <option value="">Select Country</option>
+                      <option value="EG" selected>Egypt</option>
                       <option value="US">United States</option>
                       <option value="CA">Canada</option>
                       <option value="UK">United Kingdom</option>
-                      <option value="AU">Australia</option>
-                      <option value="FR">France</option>
-                      <option value="DE">Germany</option>
+                      <option value="UAE">United Arab Emirates</option>
+                      <option value="SA">Saudi Arabia</option>
                       <option value="JP">Japan</option>
                     </select>
                   </div>
@@ -349,6 +384,7 @@
         </div>
       </div>
     </section>
+    </div><!-- End of page-wrapper -->
 
     <!-- Footer -->
     <footer class="footer">
@@ -357,9 +393,9 @@
           <div class="footer-column">
             <h3>Shop</h3>
             <ul>
+              <li><a href="HomePage.html">Home</a></li>
               <li><a href="#">Women's Collection</a></li>
               <li><a href="#">Men's Collection</a></li>
-              <li><a href="#">Children's Collection</a></li>
               <li><a href="#">New Arrivals</a></li>
             </ul>
           </div>
@@ -376,7 +412,7 @@
             <h3>Company</h3>
             <ul>
               <li><a href="#">About Us</a></li>
-              <li><a href="#">Careers</a></li>
+              <li><a href="#">Contact Us</a></li>
               <li><a href="#">Terms & Conditions</a></li>
               <li><a href="#">Privacy Policy</a></li>
             </ul>
@@ -384,10 +420,10 @@
           <div class="footer-column">
             <h3>Connect</h3>
             <div class="social-icons">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+              <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
             </div>
           </div>
         </div>
@@ -397,6 +433,7 @@
       </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="scripts/navbar.js"></script>
     <script src="scripts/checkout.js"></script>
   </body>

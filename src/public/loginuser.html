@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login - BrandStore</title>
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" defer></script>
+
     <link rel="stylesheet" href="styles/loginandsignup.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -25,14 +29,14 @@
       </div>
       <div class="form-container">
         <div class="form-header">
-          <a href="index.html" class="back-to-home">
+          <a href="HomePage.html" class="back-to-home">
             <i class="fas fa-arrow-left"></i> Back to Website
           </a>
           <img src="images/ourLogo.png" alt="BrandStore Logo" class="logo" />
           <h2>Login to Your Account</h2>
           <p>Enter your credentials to access your account</p>
         </div>
-        <form class="auth-form">
+        <form class="auth-form" id="loginForm">
           <div class="form-group">
             <label for="email">Email</label>
             <div class="input-group">
@@ -60,6 +64,8 @@
               </button>
             </div>
           </div>
+          <p id="text_error" style="color: red; margin: 10px 0"></p>
+
           <div class="form-options">
             <label class="remember-me">
               <input type="checkbox" id="remember" />
@@ -67,29 +73,36 @@
             </label>
             <a href="#" class="forgot-password">Forgot Password?</a>
           </div>
+
           <button type="submit" class="submit-btn">
             <span>Login</span>
             <i class="fas fa-arrow-right"></i>
           </button>
+
           <div class="social-login">
             <p>Or login with</p>
-            <div class="social-buttons">
-              <button class="social-btn google">
-                <i class="fab fa-google"></i>
-                <span>Google</span>
-              </button>
-              <button class="social-btn facebook">
-                <i class="fab fa-facebook-f"></i>
-                <span>Facebook</span>
-              </button>
+            <div
+              class="social-buttons"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+              "
+            >
+              <!-- Google Sign-In Button will be rendered here -->
+              <div id="g_id_signin" style="margin-top: 8px"></div>
             </div>
           </div>
+
           <p class="auth-switch">
             Don't have an account? <a href="signup.html">Sign Up</a>
           </p>
         </form>
       </div>
     </div>
-    <script src="scripts/auth.js"></script>
+
+    <!-- Your login logic (includes Google Sign-In handling) -->
+    <script src="scripts/login.js"></script>
   </body>
 </html>

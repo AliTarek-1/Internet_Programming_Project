@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body>
     <div class="auth-container">
@@ -27,26 +28,14 @@
       </div>
       <div class="form-container">
         <div class="form-header">
-          <a href="index.html" class="back-to-home">
+          <a href="HomePage.html" class="back-to-home">
             <i class="fas fa-arrow-left"></i> Back to Website
           </a>
           <img src="images/ourLogo.png" alt="BrandStore Logo" class="logo" />
           <h2>Create Your Account</h2>
           <p>Fill in your details to get started</p>
         </div>
-        <form class="auth-form">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <div class="input-group">
-              <i class="fas fa-user"></i>
-              <input
-                type="text"
-                id="username"
-                placeholder="Choose a username"
-                required
-              />
-            </div>
-          </div>
+        <form class="auth-form" novalidate>
           <div class="form-group">
             <label for="email">Email</label>
             <div class="input-group">
@@ -54,11 +43,13 @@
               <input
                 type="email"
                 id="email"
+                name="email"
                 placeholder="Enter your email"
                 required
               />
             </div>
           </div>
+
           <div class="form-group">
             <label for="password">Password</label>
             <div class="input-group">
@@ -66,6 +57,7 @@
               <input
                 type="password"
                 id="password"
+                name="password"
                 placeholder="Create a password"
                 required
               />
@@ -74,6 +66,7 @@
               </button>
             </div>
           </div>
+
           <div class="form-group">
             <label for="confirm-password">Confirm Password</label>
             <div class="input-group">
@@ -81,6 +74,7 @@
               <input
                 type="password"
                 id="confirm-password"
+                name="confirm-password"
                 placeholder="Confirm your password"
                 required
               />
@@ -89,32 +83,37 @@
               </button>
             </div>
           </div>
+
           <div class="form-options">
             <label class="terms">
               <input type="checkbox" id="terms" required />
-              <span
-                >I agree to the <a href="#">Terms of Service</a> and
-                <a href="#">Privacy Policy</a></span
-              >
+              <span>
+                I agree to the <a href="#">Terms of Service</a> and
+                <a href="#">Privacy Policy</a>
+              </span>
             </label>
           </div>
+
           <button type="submit" class="submit-btn">
             <span>Create Account</span>
             <i class="fas fa-arrow-right"></i>
           </button>
+
           <div class="social-login">
             <p>Or sign up with</p>
-            <div class="social-buttons">
-              <button class="social-btn google">
-                <i class="fab fa-google"></i>
-                <span>Google</span>
-              </button>
-              <button class="social-btn facebook">
-                <i class="fab fa-facebook-f"></i>
-                <span>Facebook</span>
-              </button>
+            <div
+              class="social-buttons"
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+              "
+            >
+              <div id="g_id_signin"></div>
             </div>
           </div>
+
           <p class="auth-switch">
             Already have an account? <a href="loginuser.html">Login</a>
           </p>

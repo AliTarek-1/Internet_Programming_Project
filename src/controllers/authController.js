@@ -88,14 +88,49 @@ router.get("/dashboard", (req, res, next) => {
  * @param {string} req.body.email - The email for login.
  * @param {string} req.body.password - The password for login.
  */
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+
 router.post("/signin", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, credential } = req.body;
 
-    // Find the user by email in the database
+    // === Google Sign-In path ===
+    if (credential) {
+      const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+      const userEmail = payload.email;
+      const username = payload.name || "GoogleUser";
+
+      // Try to find existing user
+      let user = await User.findOne({ email: userEmail });
+
+      // If not found, create a new user
+      if (!user) {
+        user = new User({
+          username,
+          email: userEmail,
+          password: "", // No password needed for Google users
+        });
+        await user.save();
+      }
+
+      // Generate JWT
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: 60 * 60 * 24,
+      });
+
+      return res.status(200).json({ auth: true, token });
+    }
+
+    // === Email/password login fallback ===
     const user = await User.findOne({ email });
 
-    // If user does not exist, return 404 Not Found
     if (!user) {
       return res.status(404).json({
         auth: false,
@@ -104,64 +139,26 @@ router.post("/signin", async (req, res, next) => {
       });
     }
 
-    // Validate the provided password against the stored hashed password
-    // (assuming validatePassword method exists on User model)
     const validPassword = await user.validatePassword(password);
 
-    // If password is not valid, return 401 Unauthorized
     if (!validPassword) {
-      return res
-        .status(401)
-        .json({ auth: false, token: null, message: "Password is incorrect." });
+      return res.status(401).json({
+        auth: false,
+        token: null,
+        message: "Password is incorrect.",
+      });
     }
 
-    // Generate a JWT token for the authenticated user
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 60 * 60 * 24, // Token expires in 24 hours
+      expiresIn: 60 * 60 * 24,
     });
 
-    // Send a success response with auth status and token in JSON body
-    // Removed cookie setting to align with front-end localStorage/Authorization header approach
     res.status(200).json({ auth: true, token });
+
   } catch (error) {
     console.error("Signin Error:", error);
-    // Pass the error to the next error-handling middleware
     next(error);
   }
 });
 
-/**
- * @route GET /me
- * @description Protected route to get the authenticated user's details (excluding password).
- * Requires a valid JWT token in the Authorization header.
- * Uses the verifyToken middleware to authenticate and get the user ID.
- */
-router.get("/me", verifyToken, async (req, res, next) => {
-  try {
-    // Find the user by the ID stored in the request object by verifyToken middleware
-    // Exclude the password field from the result
-    const user = await User.findById(req.userId, { password: 0 });
-
-    // If user is not found (should ideally not happen if verifyToken passed, but good practice)
-    if (!user) {
-      return res.status(404).json({ message: "No user found." });
-    }
-
-    // Send the user details in the response
-    res.status(200).json(user);
-  } catch (error) {
-    console.error("Get User Error:", error);
-    // Pass the error to the next error-handling middleware
-    next(error);
-  }
-});
-
-/**
- * @route GET /HomePage
- * @description Serves the HomePage.html for e-commerce homepage
- */
-router.get("/HomePage", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "HomePage.html"));
-});
-
-module.exports = router; // Export the router
+module.exports = router;

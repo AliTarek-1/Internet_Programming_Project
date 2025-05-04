@@ -337,11 +337,35 @@ function addToCart(productName, price) {
 }
 
 function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalCount = 0;
-  cart.forEach((item) => (totalCount += item.quantity));
-  document.getElementById("cart-count").innerText = totalCount;
+  let cart = [];
+  try {
+    const cartData = localStorage.getItem('cart');
+    cart = cartData ? JSON.parse(cartData) : [];
+    if (!Array.isArray(cart)) {
+      console.error('Cart is not an array, resetting');
+      cart = [];
+    }
+  } catch (error) {
+    console.error('Error parsing cart data:', error);
+    cart = [];
+  }
+
+  const count = cart.reduce((total, item) => total + parseInt(item.quantity || 1), 0);
+
+  // Update count in localStorage
+  localStorage.setItem('cartCount', count.toString());
+
+  // Update UI
+  const cartCountElements = document.querySelectorAll('.cart-count');
+  cartCountElements.forEach(element => {
+    element.textContent = count;
+    element.style.display = count > 0 ? 'flex' : 'none';
+  });
+
+  console.log('Cart count updated:', count);
+  return count;
 }
+
 // Handle star rating clicks
 function setupStars() {
   const starElements = document.querySelectorAll(".stars");
@@ -399,10 +423,19 @@ function scrollRow(button, direction) {
 const userIcon = document.getElementById("userIcon");
 const userDropdown = document.getElementById("userDropdown");
 
-userIcon.addEventListener("click", () => {
-  userDropdown.style.display =
-    userDropdown.style.display === "flex" ? "none" : "flex";
-});
+if (userIcon && userDropdown) {
+  userIcon.addEventListener("click", () => {
+    userDropdown.style.display =
+      userDropdown.style.display === "flex" ? "none" : "flex";
+  });
+
+  // Optional: close dropdown if click outside
+  window.addEventListener("click", (e) => {
+    if (!document.querySelector(".user-menu").contains(e.target)) {
+      userDropdown.style.display = "none";
+    }
+  });
+}
 
 // Optional: close dropdown if click outside
 window.addEventListener("click", (e) => {
@@ -560,24 +593,47 @@ function sortProducts(sortType) {
 
 // Set up "Add to Cart" functionality
 function setupAddToCart() {
+  console.log('Setting up Add to Cart functionality');
   // Select all add-to-cart buttons on the page
   const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  
+  console.log('Found add-to-cart buttons:', addToCartButtons.length);
   
   if (!addToCartButtons.length) return;
   
   addToCartButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
+    // Remove any existing event listeners
+    const newButton = button.cloneNode(true);
+    button.parentNode.replaceChild(newButton, button);
+    
+    newButton.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
       
+      console.log('Add to cart button clicked');
+      
       // Get product information from the card
       const productCard = this.closest('.product-card');
-      if (!productCard) return;
+      if (!productCard) {
+        console.error('Product card not found');
+        return;
+      }
+      
+      console.log('Product card found:', productCard);
       
       const productName = productCard.querySelector('h3').textContent;
-      const productPrice = parseFloat(productCard.querySelector('.current').textContent.replace('$', ''));
-      const productCategory = productCard.querySelector('.category').textContent;
+      const priceElement = productCard.querySelector('.current');
+      if (!priceElement) {
+        console.error('Price element not found');
+        return;
+      }
+      
+      const productPrice = parseFloat(priceElement.textContent.replace('$', ''));
+      const categoryElement = productCard.querySelector('.category');
+      const productCategory = categoryElement ? categoryElement.textContent : 'General';
       const productId = productCard.dataset.productId || generateProductId(productName);
+      
+      console.log('Product details:', { productName, productPrice, productCategory, productId });
       
       // Create a product object
       const product = {
@@ -600,6 +656,30 @@ function setupAddToCart() {
       console.log('Product added to cart:', product);
     });
   });
+  
+  // Also set up direct add to cart functionality for any buttons with class 'direct-add'
+  document.querySelectorAll('.direct-add').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const productName = this.dataset.name;
+      const productPrice = parseFloat(this.dataset.price);
+      const productCategory = this.dataset.category || 'General';
+      const productId = this.dataset.id || generateProductId(productName);
+      
+      const product = {
+        id: productId,
+        name: productName,
+        price: productPrice.toFixed(2),
+        category: productCategory,
+        quantity: 1
+      };
+      
+      addProductToCart(product);
+      showNotification(`${productName} added to cart!`);
+      updateCartCount();
+    });
+  });
 }
 
 // Generate a simple product ID
@@ -611,8 +691,24 @@ function generateProductId(name) {
 function addProductToCart(product) {
   console.log('Adding to cart:', product);
   
+  if (!product || !product.name || !product.price) {
+    console.error('Invalid product data:', product);
+    return;
+  }
+  
   // Get current cart from localStorage or initialize empty array
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let cart = [];
+  try {
+    const cartData = localStorage.getItem('cart');
+    cart = cartData ? JSON.parse(cartData) : [];
+    if (!Array.isArray(cart)) {
+      console.error('Cart is not an array, resetting');
+      cart = [];
+    }
+  } catch (error) {
+    console.error('Error parsing cart data:', error);
+    cart = [];
+  }
   
   // Check if product already exists in cart
   const existingProductIndex = cart.findIndex(item => item.id === product.id);
@@ -628,30 +724,44 @@ function addProductToCart(product) {
   }
   
   // Save updated cart to localStorage
-  localStorage.setItem('cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (error) {
+    console.error('Error saving cart to localStorage:', error);
+  }
   
   // Update cart count in localStorage for navbar.js
-  const cartCount = cart.reduce((total, item) => total + parseInt(item.quantity), 0);
-  localStorage.setItem('cartCount', cartCount);
+  const cartCount = cart.reduce((total, item) => total + parseInt(item.quantity || 1), 0);
+  localStorage.setItem('cartCount', cartCount.toString());
   
   console.log('Current cart:', cart);
   console.log('Total items in cart:', cartCount);
+  
+  // Dispatch a custom event that other scripts can listen for
+  document.dispatchEvent(new CustomEvent('cartUpdated', { detail: { cart, count: cartCount } }));
 }
 
 // Update updateCartCount function
 function updateCartCount() {
-  const cartCountElement = document.querySelector('.cart-count');
-  if (!cartCountElement) {
-    console.log('Cart count element not found');
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const count = cart.reduce((total, product) => total + parseInt(product.quantity), 0);
+
+  // Try both ID and class selectors
+  const cartCountEls = document.querySelectorAll("#cart-count, .cart-count");
+
+  if (cartCountEls.length === 0) {
+    console.warn("No cart count element found on this page.");
     return;
   }
-  
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const count = cart.reduce((total, product) => total + parseInt(product.quantity), 0);
-  
-  cartCountElement.textContent = count;
-  console.log('Cart count updated:', count);
+
+  cartCountEls.forEach(el => {
+    el.innerText = count;
+    el.style.display = count > 0 ? "flex" : "none";
+  });
+
+  console.log("Cart count updated:", count);
 }
+
 
 // Add the enhanced modal functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -788,6 +898,39 @@ function setupModalAddToCart() {
       console.log('Product added to cart from modal:', product);
     });
   }
+}
+
+
+function showNotification(message) {
+  let notification = document.createElement('div');
+  notification.className = 'cart-notification';
+  notification.textContent = message;
+
+  // Style (you can move to CSS file)
+  notification.style.position = 'fixed';
+  notification.style.bottom = '20px';
+  notification.style.right = '20px';
+  notification.style.background = '#27ae60';
+  notification.style.color = '#fff';
+  notification.style.padding = '12px 20px';
+  notification.style.borderRadius = '5px';
+  notification.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+  notification.style.zIndex = 9999;
+  notification.style.fontSize = '16px';
+  notification.style.opacity = 0;
+  notification.style.transition = 'opacity 0.3s ease';
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.style.opacity = 1;
+  }, 10);
+
+  // Auto remove after 3s
+  setTimeout(() => {
+    notification.style.opacity = 0;
+    setTimeout(() => document.body.removeChild(notification), 300);
+  }, 3000);
 }
 
 // Set up Quick View functionality

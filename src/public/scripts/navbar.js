@@ -15,6 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeNavbar() {
+  // Check if user is logged in
+  const userToken = localStorage.getItem('userToken');
+  const userEmail = localStorage.getItem('userEmail');
+  const isLoggedIn = !!userToken;
+  
+  // Update user dropdown based on authentication status
+  updateUserMenu(isLoggedIn, userEmail);
+  
   // Toggle user dropdown
   const userIcon = document.getElementById('userIcon');
   const userDropdown = document.getElementById('userDropdown');
@@ -60,4 +68,70 @@ function initializeNavbar() {
       }
     });
   }
-} 
+}
+
+// Update user menu based on authentication status
+function updateUserMenu(isLoggedIn, userEmail) {
+  const userDropdown = document.getElementById('userDropdown');
+  const userIcon = document.getElementById('userIcon');
+  
+  if (!userDropdown) return;
+  
+  // Clear existing dropdown items
+  userDropdown.innerHTML = '';
+  
+  if (isLoggedIn) {
+    // User is logged in - show account options
+    if (userEmail) {
+      const emailDisplay = document.createElement('div');
+      emailDisplay.className = 'user-email';
+      emailDisplay.textContent = userEmail;
+      userDropdown.appendChild(emailDisplay);
+    }
+    
+    const accountLink = document.createElement('a');
+    accountLink.href = 'account.html';
+    accountLink.textContent = 'My Account';
+    userDropdown.appendChild(accountLink);
+    
+    const ordersLink = document.createElement('a');
+    ordersLink.href = 'orders.html';
+    ordersLink.textContent = 'My Orders';
+    userDropdown.appendChild(ordersLink);
+    
+    const logoutLink = document.createElement('a');
+    logoutLink.href = '#';
+    logoutLink.textContent = 'Sign Out';
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Clear authentication data
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userEmail');
+      
+      // Redirect to home page
+      window.location.href = 'HomePage.html';
+    });
+    userDropdown.appendChild(logoutLink);
+    
+    // Update user icon to show logged in state
+    if (userIcon) {
+      userIcon.classList.add('logged-in');
+    }
+  } else {
+    // User is not logged in - show login/signup options
+    const loginLink = document.createElement('a');
+    loginLink.href = 'loginuser.html';
+    loginLink.textContent = 'Login';
+    userDropdown.appendChild(loginLink);
+    
+    const signupLink = document.createElement('a');
+    signupLink.href = 'signup.html';
+    signupLink.textContent = 'Sign Up';
+    userDropdown.appendChild(signupLink);
+    
+    // Update user icon to show logged out state
+    if (userIcon) {
+      userIcon.classList.remove('logged-in');
+    }
+  }
+}
