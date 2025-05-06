@@ -6,6 +6,7 @@
     <title>Contact Us - BrandStore</title>
     <link rel="stylesheet" href="styles/navbar.css" />
     <link rel="stylesheet" href="styles/contact.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -16,37 +17,27 @@
     />
   </head>
   <body>
-    <!-- Navbar -->
-    <header class="navbar">
-      <div class="logo">
-        <a href="HomePage.html">
-          <img
-            src="images/ourLogo.png"
-            alt="BrandStore Logo"
-            class="logo-img"
-          />
-        </a>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+    
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
       </div>
-      <ul class="nav-links">
-        <li><a href="HomePage.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="contactus.html" class="active">Contact Us</a></li>
-        <li><a href="about.html">About</a></li>
-        <li>
-          <a href="cart.html" id="cart-icon"
-            ><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span
-            >)</a
-          >
-        </li>
-      </ul>
-      <div class="user-menu">
-        <i class="fas fa-user user-icon" id="userIcon"></i>
-        <div class="dropdown" id="userDropdown">
-          <a href="loginuser.html">Login</a>
-          <a href="signup.html">Sign Up</a>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
         </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
       </div>
-    </header>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -288,6 +279,8 @@
     </footer>
 
     <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
     <script src="scripts/contact.js"></script>
   </body>
 </html>

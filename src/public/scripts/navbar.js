@@ -38,7 +38,7 @@ function initializeNavbar() {
       userDropdown.classList.remove('active');
     });
   }
-
+  
   // Update active link based on current page
   const currentPath = window.location.pathname;
   const navLinks = document.querySelectorAll('.nav-links a');
@@ -49,13 +49,8 @@ function initializeNavbar() {
     }
   });
 
-  // Update cart count
-  const cartCount = document.querySelector('.cart-count');
-  if (cartCount) {
-    // Get cart count from localStorage or default to 0
-    const count = localStorage.getItem('cartCount') || 0;
-    cartCount.textContent = count;
-  }
+  // Update cart count on all pages
+  updateCartCountDisplay();
 
   // Add scroll effect to navbar
   const navbar = document.querySelector('.navbar');
@@ -68,7 +63,79 @@ function initializeNavbar() {
       }
     });
   }
+  
+  // Add mobile menu toggle functionality
+  addMobileMenuToggle();
+
+  window.addEventListener('resize', () => {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    if (window.innerWidth <= 768 && !mobileToggle) {
+      addMobileMenuToggle();
+    } else if (window.innerWidth > 768 && mobileToggle) {
+      mobileToggle.remove(); // remove toggle if resizing to desktop
+      document.querySelector('.nav-links')?.classList.remove('active');
+    }
+  });
+  
 }
+
+// Function to update cart count display across all pages
+function updateCartCountDisplay() {
+  const cartCountElements = document.querySelectorAll('.cart-count');
+  if (cartCountElements.length > 0) {
+    // Get cart count from localStorage or default to 0
+    const count = localStorage.getItem('cartCount') || 0;
+    
+    // Update all cart count elements
+    cartCountElements.forEach(element => {
+      element.textContent = count;
+    });
+  }
+}
+
+// Add mobile menu toggle functionality
+function addMobileMenuToggle() {
+  // Only add toggle for screens <= 768px
+  if (window.innerWidth > 768) return;
+
+  const navbar = document.querySelector('.navbar');
+  const navLinks = document.querySelector('.nav-links');
+
+  if (!navbar || !navLinks) return;
+
+  let mobileToggle = document.querySelector('.mobile-menu-toggle');
+
+  if (!mobileToggle) {
+    mobileToggle = document.createElement('button');
+    mobileToggle.className = 'mobile-menu-toggle';
+    mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    mobileToggle.setAttribute('aria-label', 'Toggle navigation menu');
+
+    const logo = navbar.querySelector('.logo');
+    if (logo) {
+      logo.parentNode.insertBefore(mobileToggle, logo.nextSibling);
+    } else {
+      navbar.insertBefore(mobileToggle, navbar.firstChild);
+    }
+  }
+
+  mobileToggle.addEventListener('click', function () {
+    navLinks.classList.toggle('active');
+    const icon = mobileToggle.querySelector('i');
+    if (icon) {
+      icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!navbar.contains(e.target) && navLinks.classList.contains('active')) {
+      navLinks.classList.remove('active');
+      const icon = mobileToggle.querySelector('i');
+      if (icon) icon.className = 'fas fa-bars';
+    }
+  });
+}
+
 
 // Update user menu based on authentication status
 function updateUserMenu(isLoggedIn, userEmail) {

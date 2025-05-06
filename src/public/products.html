@@ -7,6 +7,7 @@
     <title>Products - BrandStore</title>
     <link rel="stylesheet" href="styles/products.css" />
     <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -19,6 +20,25 @@
   <body>
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
+    
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -514,6 +534,8 @@
     </footer>
 
     <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
     <script src="scripts/products.js"></script>
   </body>
 </html>

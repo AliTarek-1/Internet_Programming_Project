@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         navbarPlaceholder.innerHTML = data;
         // Execute navbar script after loading
         const script = document.createElement('script');
-        script.textContent = `initNavbar();`;
+        script.textContent = `initializeNavbar();`;
         document.body.appendChild(script);
       })
       .catch(error => console.error('Error loading navbar:', error));

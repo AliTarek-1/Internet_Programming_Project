@@ -1,8 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Check for redirect parameter in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectUrl = urlParams.get('redirect');
+  
   const loginForm = document.querySelector('.auth-form');
   const errorContainer = document.createElement('div');
   errorContainer.className = 'error-message-container';
   loginForm.parentNode.insertBefore(errorContainer, loginForm);
+  
+  // Check for saved credentials and auto-fill if available
+  const savedEmail = localStorage.getItem('rememberedEmail');
+  const savedPassword = localStorage.getItem('rememberedPassword');
+  const rememberCheckbox = document.getElementById('remember');
+  
+  if (savedEmail && savedPassword) {
+    document.getElementById('email').value = savedEmail;
+    document.getElementById('password').value = savedPassword;
+    if (rememberCheckbox) {
+      rememberCheckbox.checked = true;
+    }
+  }
 
   function showError(message) {
     // Clear any existing errors first
@@ -16,143 +33,119 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+  
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
+    const rememberMe = document.getElementById('remember')?.checked;
     const submitBtn = loginForm.querySelector('.submit-btn');
     const errorTextElement = document.querySelector('#text_error');
-
-    // Clear previous errors
+  
     errorContainer.innerHTML = '';
     errorTextElement.innerText = '';
-
-    // Client-side validation
-    if (!email) {
-      showError('Please enter your email address');
-      errorTextElement.innerText = 'Please enter your email address';
+  
+    if (!email || !password) {
+      showError('Email and password are required.');
       return;
     }
-
-    if (!isValidEmail(email)) {
-      showError('Please enter a valid email address');
-      errorTextElement.innerText = 'Please enter a valid email address';
-      return;
-    }
-
-    if (!password) {
-      showError('Please enter your password');
-      errorTextElement.innerText = 'Please enter your password';
-      return;
-    }
-
+  
+    console.log("🔐 Attempting login with:", { email, password });
+  
     try {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span><i class="fas fa-spinner fa-spin"></i> Logging in...</span>';
-
-      // Try the /signin endpoint first (original endpoint)
-      // Try the /signin endpoint
-      let res = await fetch('/signin', {
+  
+      const res = await fetch('/signin', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      
-      // If that fails, try a fallback approach
-      if (!res.ok) {
-        console.log('Signin endpoint not responding, using fallback method');
-        
-        // Check if user exists in localStorage (for users created with the fallback signup)
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-          // Create a token-like string
-          const token = btoa(email + ':' + Date.now());
-          localStorage.setItem('userToken', token);
-          
-          // Store user email for display in navbar
-          localStorage.setItem('userEmail', email);
-          
-          // Redirect to home
-          window.location.href = 'HomePage.html';
-          return;
-        } else {
-          // Show error if user not found
-          showError('Invalid email or password');
-          errorTextElement.innerText = 'Invalid email or password';
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<span>Login</span><i class="fas fa-arrow-right"></i>';
-          return;
-        }
+  
+      console.log(`📡 Server responded with status: ${res.status}`);
+  
+      const contentType = res.headers.get("Content-Type");
+      let data;
+      try {
+        data = contentType.includes("application/json") ? await res.json() : await res.text();
+      } catch (e) {
+        console.warn("⚠️ Could not parse server response:", e);
+        data = null;
       }
-
-      if (res.ok) {
-        const data = await res.json();
-        const token = data.token;
-
-        if (token) {
-          localStorage.setItem('userToken', token);
-          // Store user email for display in navbar
-          localStorage.setItem('userEmail', email);
-          window.location.href = 'HomePage.html'; // Remove leading slash for relative path
+  
+      console.log("📨 Server response content:", data);
+  
+      if (res.ok && data?.token) {
+        console.log("✅ Login successful. Token received.");
+        localStorage.setItem('userToken', data.token);
+        localStorage.setItem('userEmail', email);
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', email);
+          localStorage.setItem('rememberedPassword', password);
         } else {
-          showError('Login successful, but no token received from the server.');
-          errorTextElement.innerText = 'Login successful, but no token received from the server.';
-          console.error('Login successful but no token in response:', data);
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
         }
-      } else {
-        const errorResponse = await res.text();
-        showError(errorResponse || 'Invalid email or password');
-        errorTextElement.innerText = errorResponse || 'Invalid email or password';
-        console.error('Login failed:', res.status, errorResponse);
+        window.location.href = redirectUrl || 'HomePage.html';
+        return;
       }
-    } catch (error) {
-      console.error('Fetch Error during login:', error);
-      showError('An unexpected error occurred. Please try again.');
-      errorTextElement.innerText = 'An unexpected error occurred. Please try again.';
-      
-      // Fallback method if the server is not responding
-      console.log('Using fallback login method due to error');
-      
-      // Check if user exists in localStorage (for users created with the fallback signup)
+  
+      console.warn("❌ Login failed:", res.status, data);
+      throw new Error(data?.message || 'Login failed');
+  
+    } catch (err) {
+      console.warn("⚠️ Login fetch error or fallback triggered:", err.message);
+  
+      console.log("📦 Checking localStorage users:");
       const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      
+      console.log("localStorage users:", users);
+  
+      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
       if (user) {
-        // Create a token-like string
+        console.log("✅ Found fallback user, logging in via localStorage.");
         const token = btoa(email + ':' + Date.now());
         localStorage.setItem('userToken', token);
-        
-        // Redirect to home
+        localStorage.setItem('userEmail', email);
         window.location.href = 'HomePage.html';
         return;
+      } else {
+        console.error("❌ No matching user found in localStorage.");
+        showError('Invalid email or password.');
       }
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<span>Login</span><i class="fas fa-arrow-right"></i>';
     }
   });
+  
 
   // === Load Google Sign-In Button ===
   const waitForGoogle = setInterval(() => {
     if (window.google && google.accounts && google.accounts.id) {
       clearInterval(waitForGoogle);
 
+      // Configure Google Sign-In
       google.accounts.id.initialize({
+        // This client ID is configured for localhost and common development environments
         client_id: '663221054063-tklrb4in2o677lkgn00qgohkte6oqd7e.apps.googleusercontent.com',
         callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true
       });
 
+      // Render the Google Sign-In button
       const googleDiv = document.getElementById("g_id_signin");
       if (googleDiv) {
         google.accounts.id.renderButton(googleDiv, {
-          theme: "outline",
-          size: "large",
-          shape: "rectangular",
-          text: "signin_with",
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          width: 250
         });
+
+        // Also display One-Tap UI
+        google.accounts.id.prompt();
       }
     }
   }, 100);

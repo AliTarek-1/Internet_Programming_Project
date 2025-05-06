@@ -439,7 +439,10 @@ if (userIcon && userDropdown) {
 
 // Optional: close dropdown if click outside
 window.addEventListener("click", (e) => {
-  if (!document.querySelector(".user-menu").contains(e.target)) {
+  const userMenu = document.querySelector(".user-menu");
+  const userDropdown = document.getElementById("userDropdown");
+  
+  if (userMenu && userDropdown && !userMenu.contains(e.target)) {
     userDropdown.style.display = "none";
   }
 });
@@ -750,7 +753,7 @@ function updateCartCount() {
   const cartCountEls = document.querySelectorAll("#cart-count, .cart-count");
 
   if (cartCountEls.length === 0) {
-    console.warn("No cart count element found on this page.");
+    // Silently return if no cart count element is found on this page
     return;
   }
 

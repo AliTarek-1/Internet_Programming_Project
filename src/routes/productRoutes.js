@@ -1,20 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const productController = require("../controllers/productController");
-const verifyToken = require("../controllers/verifyToken");
+const { 
+  getAllProducts, 
+  getProductById, 
+  createProduct, 
+  updateProduct, 
+  deleteProduct,
+  getFeaturedProducts,
+  getProductsByCategory
+} = require("../controllers/productController");
+const { verifyToken, restrictTo } = require("../controllers/verifyToken");
 
-const isAdmin = (req, res, next) => {
-  if (req.userRole !== "admin") {
-    return res.status(403).json({ message: "Forbidden: Admins only" });
-  }
-  next();
-};
+// Public routes
+router.get("/featured", getFeaturedProducts);
+router.get("/category/:category", getProductsByCategory);
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
 
-router.get("/", productController.getAllProducts);
-router.get("/:id", productController.getProductById);
-
-router.post("/", verifyToken, isAdmin, productController.createProduct);
-router.put("/:id", verifyToken, isAdmin, productController.updateProduct);
-router.delete("/:id", verifyToken, isAdmin, productController.deleteProduct);
+// Protected routes - only admins can create, update, delete products
+router.post("/", verifyToken, restrictTo('admin'), createProduct);
+router.put("/:id", verifyToken, restrictTo('admin'), updateProduct);
+router.delete("/:id", verifyToken, restrictTo('admin'), deleteProduct);
 
 module.exports = router;

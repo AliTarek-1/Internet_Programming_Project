@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FAQ - BrandStore</title>
     <link rel="stylesheet" href="styles/navbar.css" />
-    <link rel="stylesheet" href="styles/about.css" />
+    <link rel="stylesheet" href="styles/faq.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -14,71 +15,62 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <style>
-      .faq-container {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 0 20px;
-      }
-      .faq-item {
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 1.5rem;
-      }
-      .faq-question {
-        font-weight: 600;
-        color: var(--primary-color);
-        margin-bottom: 0.5rem;
-        font-size: 1.2rem;
-      }
-      .faq-answer {
-        color: #666;
-        line-height: 1.6;
-      }
-      .faq-category {
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
-      }
-      .faq-category h2 {
-        font-size: 1.8rem;
-        color: var(--secondary-color);
-        border-bottom: 2px solid var(--secondary-color);
-        padding-bottom: 0.5rem;
-        display: inline-block;
-      }
-      .hero-section {
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-          url("images/faq-banner.jpg") center/cover;
-        color: white;
-        text-align: center;
-        padding: 100px 20px;
-        margin-top: 60px;
-      }
-      .hero-section h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-      }
-      .hero-section p {
-        max-width: 700px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-      }
-    </style>
   </head>
   <body>
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
+    <!-- Cart Sidebar (will be loaded via JavaScript) -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
+
     <!-- Hero Section -->
     <div class="hero-section">
-      <h1>Frequently Asked Questions</h1>
-      <p>
-        Find answers to common questions about our products, ordering process,
-        shipping, returns, and more.
-      </p>
+      <div class="hero-content">
+        <h1>Frequently Asked Questions</h1>
+        <p>
+          Find answers to the most common questions about our products,
+          services, and policies.
+        </p>
+      </div>
     </div>
 
     <div class="faq-container">
+      <!-- Search and Filter -->
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="faq-search" placeholder="Search for questions...">
+      </div>
+      
+      <div class="faq-categories-nav">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="Shopping">Shopping</button>
+        <button class="category-btn" data-category="Shipping & Delivery">Shipping</button>
+        <button class="category-btn" data-category="Returns & Exchanges">Returns</button>
+        <button class="category-btn" data-category="Account & Payment">Account</button>
+      </div>
+      
+      <div class="no-results" style="display: none;">
+        <i class="fas fa-search"></i>
+        <h3>No results found</h3>
+        <p>We couldn't find any FAQs matching your search. Try different keywords or browse by category.</p>
+      </div>
+      
       <!-- Shopping FAQs -->
       <div class="faq-category">
         <h2>Shopping</h2>
@@ -283,55 +275,13 @@
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-column">
-            <h3>Shop</h3>
-            <ul>
-              <li><a href="womens-products.html">Women's Collection</a></li>
-              <li><a href="mens-products.html">Men's Collection</a></li>
-              <li>
-                <a href="childrens-products.html">Children's Collection</a>
-              </li>
-              <li><a href="#">New Arrivals</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Help</h3>
-            <ul>
-              <li><a href="faq.html">FAQs</a></li>
-              <li><a href="returns.html">Shipping & Returns</a></li>
-              <li><a href="size-guide.html">Size Guide</a></li>
-              <li><a href="track-order.html">Track Order</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Company</h3>
-            <ul>
-              <li><a href="about.html">About Us</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Connect</h3>
-            <div class="social-icons">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-pinterest-p"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2024 BrandStore. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
 
+    <!-- Scripts -->
     <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/faq.js"></script>
   </body>
 </html>

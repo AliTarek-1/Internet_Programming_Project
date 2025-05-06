@@ -23,7 +23,10 @@ function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCount = 0;
   cart.forEach((item) => (totalCount += item.quantity));
-  document.getElementById("cart-count").innerText = totalCount;
+  const cartCountElement = document.getElementById("cart-count");
+  if (cartCountElement) {
+    cartCountElement.innerText = totalCount;
+  }
 }
 // Handle star rating clicks
 function setupStars() {
@@ -70,12 +73,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setupStars();
 });
 
-const userIcon = document.getElementById("userIcon");
-const userDropdown = document.getElementById("userDropdown");
+document.addEventListener('DOMContentLoaded', () => {
+  const userIcon = document.getElementById("userIcon");
+  const userDropdown = document.getElementById("userDropdown");
 
-userIcon.addEventListener("click", () => {
-  userDropdown.style.display =
-    userDropdown.style.display === "flex" ? "none" : "flex";
+  if (userIcon && userDropdown) {
+    userIcon.addEventListener("click", () => {
+      userDropdown.style.display =
+        userDropdown.style.display === "flex" ? "none" : "flex";
+    });
+  }
 });
 
 // Optional: close dropdown if click outside

@@ -196,18 +196,19 @@ function updateCartSummary() {
     return total + (parseFloat(item.price) * item.quantity);
   }, 0);
   
-  // Calculate shipping (free for orders over $100)
-  const shipping = subtotal >= 100 ? 0 : 10;
-  
   // Calculate tax (10%)
   const tax = subtotal * 0.1;
   
-  // Calculate total
-  const total = subtotal + shipping + tax;
+  // For shipping, we'll display a message that it will be calculated at checkout
+  // But for total calculation, we'll use a default value of 0
+  const shipping = 0;
+  
+  // Calculate total (subtotal + tax, shipping will be added at checkout)
+  const total = subtotal + tax;
   
   // Update UI
   document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`;
+  document.getElementById('shipping').textContent = 'Calculated at checkout';
   document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
   document.getElementById('total').textContent = `$${total.toFixed(2)}`;
 }

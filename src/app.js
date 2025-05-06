@@ -4,15 +4,46 @@ const app = express();
 const path = require("path");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
+// Load environment variables
 dotenv.config();
 
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Connect to database
+require("./database");
 
-app.use(require("./controllers/authController"));
+// Middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://accounts.google.com"],
+      styleSrcElem: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://accounts.google.com"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:", "https://accounts.google.com", "https://*.googleusercontent.com"],
+      frameSrc: ["'self'", "https://www.google.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
+      connectSrc: ["'self'", "https://accounts.google.com", "https://*.googleapis.com"],
+      scriptSrcElem: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
+      formAction: ["'self'", "https://accounts.google.com"],
+      objectSrc: ["'none'"]
+    }
+  }
+})); // Security headers with custom CSP
+app.use(cors()); // Enable CORS
+app.use(morgan("dev")); // HTTP request logger
+app.use(cookieParser()); // Parse cookies
+app.use(express.json()); // Parse JSON request body
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded request body
+
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "public")));
+
+// Routes
+app.use(require("./controllers/authController"));
+app.use("/api/products", require("./routes/productRoutes"));
 
 app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));

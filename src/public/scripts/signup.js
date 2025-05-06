@@ -45,41 +45,99 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading state
             const submitBtn = signupForm.querySelector('.submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.innerHTML = '<span><i class="fas fa-spinner fa-spin"></i> Creating account...</span>';
 
-            // Try the /signup endpoint
-            const response = await fetch('/signup', {
+            // Extract username from email for better user experience
+            const username = email.split('@')[0];
+            
+            // Create a debug element to display the request payload
+            const debugElement = document.createElement('div');
+            debugElement.style.position = 'fixed';
+            debugElement.style.top = '10px';
+            debugElement.style.right = '10px';
+            debugElement.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            debugElement.style.color = 'white';
+            debugElement.style.padding = '10px';
+            debugElement.style.borderRadius = '5px';
+            debugElement.style.zIndex = '9999';
+            debugElement.style.maxWidth = '400px';
+            debugElement.style.maxHeight = '80vh';
+            debugElement.style.overflow = 'auto';
+            debugElement.style.fontFamily = 'monospace';
+            debugElement.style.fontSize = '12px';
+            
+            // Debug: Log the data being sent to the server
+            const requestPayload = { username, email, password: '***' };
+            console.log('📤 Signup data being sent:', requestPayload);
+            debugElement.innerHTML = `<h3>Request Payload:</h3><pre>${JSON.stringify(requestPayload, null, 2)}</pre>`;
+            document.body.appendChild(debugElement);
+            
+            // Add a 5-second delay to see the debug information
+            console.log('⏱️ Waiting 5 seconds before sending request...');
+            await new Promise(resolve => setTimeout(resolve, 30000));
+            
+            // Send data to the server
+            console.log('🚀 Now sending request to /signup endpoint...');
+            
+            // Log the complete request details
+            const requestBody = { username, email, password };
+            console.log('Complete request details:', {
+                url: '/signup',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: requestBody
             });
-
-            // If that fails, try a fallback approach
+            
+            // Try both /signup and /api/signup endpoints
+            let response;
+            try {
+                response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                    credentials: 'include' // Include cookies in the request
+                });
+                
+                if (response.status === 404) {
+                    console.log('Endpoint /signup not found, trying /api/signup...');
+                    response = await fetch('/api/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestBody),
+                        credentials: 'include' // Include cookies in the request
+                    });
+                }
+            } catch (fetchError) {
+                console.error('Fetch error:', fetchError);
+                throw fetchError;
+            }
+            
+            // Debug: Log the response status
+            console.log(`📡 Server response status: ${response.status}`);
+            
+            // Handle the response from the server
+            let data;
+            try {
+                data = await response.json();
+                console.log('📥 Server response data:', data);
+                debugElement.innerHTML += `<h3>Response Status:</h3><pre>${response.status}</pre><h3>Response Data:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (e) {
+                console.error('Error parsing response:', e);
+                debugElement.innerHTML += `<h3>Response Status:</h3><pre>${response.status}</pre><h3>Error parsing response:</h3><pre>${e.message}</pre>`;
+                data = { success: false, message: 'Error parsing server response' };
+            }
+            
             if (!response.ok) {
-                console.log('Signup endpoint not responding, using fallback method');
-                // Store user data in localStorage as a fallback
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                users.push({ email, password });
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                // Create a token-like string
-                const token = btoa(email + ':' + Date.now());
-                localStorage.setItem('userToken', token);
-                
-                // Store user email for display in navbar
-                localStorage.setItem('userEmail', email);
-                
-                // Redirect to home
-                window.location.href = 'HomePage.html';
+                // Show error message from server
+                showError(data.message || 'An error occurred during signup');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Create Account <i class="fas fa-arrow-right"></i>';
                 return;
             }
-
-            const data = await response.json();
 
             if (response.ok) {
                 // Store token and user email
@@ -134,18 +192,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.google && google.accounts && google.accounts.id) {
             clearInterval(waitForGoogle);
 
+            // Configure Google Sign-In
             google.accounts.id.initialize({
+                // This client ID is configured for localhost and common development environments
                 client_id: '663221054063-tklrb4in2o677lkgn00qgohkte6oqd7e.apps.googleusercontent.com',
                 callback: handleGoogleCredential,
+                auto_select: false,
+                cancel_on_tap_outside: true
             });
 
+            // Render the Google Sign-In button
             const googleDiv = document.getElementById("g_id_signin");
             if (googleDiv) {
                 google.accounts.id.renderButton(googleDiv, {
-                    theme: "outline",
-                    size: "large",
-                    shape: "rectangular",
-                    text: "signup_with",
+                    type: 'standard',
+                    theme: 'outline',
+                    size: 'large',
+                    text: 'signup_with',
+                    shape: 'rectangular',
+                    logo_alignment: 'left',
+                    width: 250
                 });
             }
         }
