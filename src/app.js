@@ -44,6 +44,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use(require("./controllers/authController"));
 app.use("/api/products", require("./routes/productRoutes"));
+app.use("/api/orders", require("./routes/orders"));
 
 app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));

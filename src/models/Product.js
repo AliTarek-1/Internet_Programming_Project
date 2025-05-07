@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const productSchema = new Schema({
+const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Product name is required'],
@@ -28,6 +28,16 @@ const productSchema = new Schema({
       values: ["Men's Collection", "Women's Collection", "Children's Collection"],
       message: 'Please select a valid category'
     }
+  },
+  image: {
+    type: String,
+    required: true
+  },
+  inventory: {
+    type: Number,
+    required: true,
+    min: [0, 'Inventory cannot be negative'],
+    default: 20
   },
   sku: {
     type: String,
@@ -57,15 +67,10 @@ const productSchema = new Schema({
     type: [String],
     default: []
   },
-  stock: {
-    type: Number,
-    min: [0, 'Stock cannot be negative'],
-    default: 10 // Default to 10 items in stock
-  },
   createdBy: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false // Made optional to allow importing products without a user reference
+    required: false
   },
   createdAt: {
     type: Date,
@@ -82,4 +87,10 @@ const productSchema = new Schema({
 // Add index for better search performance
 productSchema.index({ name: 'text', description: 'text', category: 'text', tags: 'text' });
 
-module.exports = model('Product', productSchema);
+// Update the updatedAt timestamp before saving
+productSchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
+});
+
+module.exports = mongoose.model('Product', productSchema);

@@ -437,6 +437,7 @@ async function getChildrensProducts() {
     ))
   );
 }
+
 // Mock product data (in a real application, this would come from an API)
 function getAllProducts() {
   return [

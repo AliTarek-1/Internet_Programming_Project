@@ -49,9 +49,11 @@
                   </div>
                 </div>
 
-                <!-- Step 1: Shipping Information -->
+                <!-- Shipping Information -->
                 <div class="form-step active" id="shipping-step">
-                  <h2>Shipping Information</h2>
+                  <div class="section-header">
+                    <h2>Shipping Information</h2>
+                  </div>
 
                   <div class="form-group">
                     <label for="fullName">Full Name</label>
@@ -78,172 +80,100 @@
                     />
                   </div>
 
-                  <div class="form-group">
-                    <label for="city"
-                      >City/Governorate
-                      <span class="required-field">*</span></label
-                    >
-                    <select id="city" name="city" required>
-                      <option value="">Select City/Governorate</option>
-                      <option value="Cairo">Cairo</option>
-                      <option value="Giza">Giza</option>
-                      <option value="Alexandria">Alexandria</option>
-                      <option value="Luxor">Luxor</option>
-                      <option value="Aswan">Aswan</option>
-                      <option value="Hurghada">Hurghada</option>
-                      <option value="Sharm El Sheikh">Sharm El Sheikh</option>
-                      <option value="Mansoura">Mansoura</option>
-                      <option value="Tanta">Tanta</option>
-                      <option value="Asyut">Asyut</option>
-                      <option value="Port Said">Port Said</option>
-                      <option value="Suez">Suez</option>
-                      <option value="Ismailia">Ismailia</option>
-                      <option value="Faiyum">Faiyum</option>
-                      <option value="Zagazig">Zagazig</option>
-                      <option value="Damietta">Damietta</option>
-                      <option value="Minya">Minya</option>
-                      <option value="Qena">Qena</option>
-                      <option value="Sohag">Sohag</option>
-                      <option value="Beni Suef">Beni Suef</option>
-                      <option value="Kafr El Sheikh">Kafr El Sheikh</option>
-                      <option value="Marsa Matruh">Marsa Matruh</option>
-                      <option value="New Valley">New Valley</option>
-                      <option value="North Sinai">North Sinai</option>
-                      <option value="South Sinai">South Sinai</option>
-                      <option value="Red Sea">Red Sea</option>
-                    </select>
-                  </div>
-
-                  <div class="shipping-notice">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Shipping fees vary based on your location.</p>
-                  </div>
-
-<div class="form-group">
-  <label for="detailedAddress">Detailed Address</label>
-  <textarea id="detailedAddress" name="detailedAddress" rows="3" required placeholder="Building number, street name, landmarks, etc."></textarea>
-</div>
-                      <textarea
-                        id="address"
-                        name="address"
-                        rows="3"
-                        required
-                        placeholder="Building number, street name, landmarks, etc."
-                      ></textarea>
-                    </div>
-                  </div>
-
                   <div class="form-row">
                     <div class="form-group">
-                      <label for="zipCode">Postal Code</label>
-                      <input type="text" id="zipCode" name="zipCode" />
+                      <label for="city">City</label>
+                      <select id="city" name="city" required>
+                        <option value="">Select City</option>
+                        <option value="Cairo">Cairo</option>
+                        <option value="Alexandria">Alexandria</option>
+                        <option value="Giza">Giza</option>
+                        <option value="Sharm El Sheikh">Sharm El Sheikh</option>
+                        <option value="Luxor">Luxor</option>
+                        <option value="Aswan">Aswan</option>
+                        <option value="Hurghada">Hurghada</option>
+                        <option value="Port Said">Port Said</option>
+                        <option value="Suez">Suez</option>
+                        <option value="Mansoura">Mansoura</option>
+                      </select>
                     </div>
 
                     <div class="form-group">
-                      <label for="country">Country</label>
-                      <select id="country" name="country" required>
-                        <option value="EG" selected>Egypt</option>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="UAE">United Arab Emirates</option>
-                        <option value="SA">Saudi Arabia</option>
-                        <option value="JP">Japan</option>
-                      </select>
+                      <label for="postalCode">Postal Code</label>
+                      <input
+                        type="text"
+                        id="postalCode"
+                        name="postalCode"
+                        required
+                      />
                     </div>
-                  </div>
-
-                  <div class="form-checkbox">
-                    <input
-                      type="checkbox"
-                      id="saveAddress"
-                      name="saveAddress"
-                    />
-                    <label for="saveAddress"
-                      >Save this address for future orders</label
-                    >
                   </div>
 
                   <div class="form-buttons">
                     <button
                       type="button"
-                      class="continue-btn"
-                      id="toPaymentBtn"
-                    >
-                      Continue to Payment
-                    </button>
-                    <button
-                      type="button"
-                      class="back-btn"
+                      class="btn-secondary"
                       onclick="window.location.href='cart.html'"
                     >
                       Return to Cart
                     </button>
+                    <button type="button" class="btn-primary" id="toPaymentBtn">
+                      Continue to Review
+                    </button>
                   </div>
                 </div>
 
-                <!-- Step 2: Payment Information -->
+                <!-- Payment Information -->
                 <div class="form-step" id="payment-step">
-                  <h2>Payment Information</h2>
+                  <div class="section-header">
+                    <h2>Payment Method</h2>
+                  </div>
 
                   <div class="payment-options">
-                    <div class="payment-option active">
-                      <input
-                        type="radio"
-                        id="creditCard"
-                        name="paymentMethod"
-                        value="creditCard"
-                        checked
-                      />
-                      <label for="creditCard">
-                        <i class="far fa-credit-card"></i> Credit Card
-                      </label>
-                    </div>
-
                     <div class="payment-option">
                       <input
                         type="radio"
-                        id="paypal"
                         name="paymentMethod"
+                        id="creditCard"
+                        value="creditCard"
+                      />
+                      <label for="creditCard">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Credit Card</span>
+                      </label>
+                    </div>
+                    <div class="payment-option">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        id="paypal"
                         value="paypal"
                       />
                       <label for="paypal">
-                        <i class="fab fa-paypal"></i> PayPal
-                      </label>
-                    </div>
-
-                    <div class="payment-option">
-                      <input
-                        type="radio"
-                        id="applePay"
-                        name="paymentMethod"
-                        value="applePay"
-                      />
-                      <label for="applePay">
-                        <i class="fab fa-apple-pay"></i> Apple Pay
+                        <i class="fab fa-paypal"></i>
+                        <span>PayPal</span>
                       </label>
                     </div>
                   </div>
 
-                  <div class="payment-details" id="creditCardDetails">
+                  <div
+                    id="creditCardDetails"
+                    class="credit-card-details"
+                    style="display: none"
+                  >
                     <div class="form-group">
                       <label for="cardName">Name on Card</label>
                       <input type="text" id="cardName" name="cardName" />
                     </div>
-
                     <div class="form-group">
                       <label for="cardNumber">Card Number</label>
-                      <div class="input-icon">
-                        <input
-                          type="text"
-                          id="cardNumber"
-                          name="cardNumber"
-                          placeholder="1234 5678 9012 3456"
-                        />
-                        <i class="fas fa-credit-card"></i>
-                      </div>
+                      <input
+                        type="text"
+                        id="cardNumber"
+                        name="cardNumber"
+                        maxlength="19"
+                      />
                     </div>
-
                     <div class="form-row">
                       <div class="form-group">
                         <label for="expiryDate">Expiry Date</label>
@@ -252,108 +182,88 @@
                           id="expiryDate"
                           name="expiryDate"
                           placeholder="MM/YY"
+                          maxlength="5"
                         />
                       </div>
-
                       <div class="form-group">
                         <label for="cvv">CVV</label>
-                        <div class="input-icon">
-                          <input
-                            type="text"
-                            id="cvv"
-                            name="cvv"
-                            placeholder="123"
-                          />
-                          <i
-                            class="fas fa-question-circle"
-                            title="3 or 4 digit security code on the back of your card"
-                          ></i>
-                        </div>
+                        <input type="text" id="cvv" name="cvv" maxlength="4" />
                       </div>
                     </div>
                   </div>
 
-                  <div class="form-checkbox">
-                    <input
-                      type="checkbox"
-                      id="savePayment"
-                      name="savePayment"
-                    />
-                    <label for="savePayment"
-                      >Save this payment method for future orders</label
-                    >
-                  </div>
-
-                  <div class="form-checkbox">
-                    <input
-                      type="checkbox"
-                      id="billingAddress"
-                      name="billingAddress"
-                    />
-                    <label for="billingAddress"
-                      >Billing address same as shipping address</label
-                    >
-                  </div>
-
                   <div class="form-buttons">
-                    <button type="button" class="continue-btn" id="toReviewBtn">
-                      Continue to Review
-                    </button>
-                    <button type="button" class="back-btn" id="toShippingBtn">
+                    <button
+                      type="button"
+                      class="btn-secondary"
+                      id="backToShippingBtn"
+                    >
                       Back to Shipping
+                    </button>
+                    <button type="button" class="btn-primary" id="toReviewBtn">
+                      Continue to Review
                     </button>
                   </div>
                 </div>
 
-                <!-- Step 3: Order Review -->
+                <!-- Review Order -->
                 <div class="form-step" id="review-step">
-                  <h2>Review Your Order</h2>
-
-                  <div class="review-section">
-                    <h3>Shipping Information</h3>
-                    <div class="review-info" id="shippingInfo">
-                      <!-- This will be filled by JavaScript -->
-                    </div>
-                    <button type="button" class="edit-btn" id="editShippingBtn">
-                      Edit
-                    </button>
+                  <div class="section-header">
+                    <h2>Review Order</h2>
                   </div>
 
                   <div class="review-section">
-                    <h3>Payment Information</h3>
-                    <div class="review-info" id="paymentInfo">
-                      <!-- This will be filled by JavaScript -->
+                    <div class="section-header">
+                      <h3>Shipping Information</h3>
+                      <button
+                        type="button"
+                        class="edit-button"
+                        id="editShipping"
+                      >
+                        Edit
+                      </button>
                     </div>
-                    <button type="button" class="edit-btn" id="editPaymentBtn">
-                      Edit
-                    </button>
+                    <div id="shippingInfo"></div>
                   </div>
 
                   <div class="review-section">
-                    <h3>Order Summary</h3>
-                    <div class="review-items" id="orderItems">
-                      <!-- This will be filled by JavaScript -->
+                    <div class="section-header">
+                      <h3>Payment Information</h3>
+                      <button
+                        type="button"
+                        class="edit-button"
+                        id="editPayment"
+                      >
+                        Edit
+                      </button>
                     </div>
+                    <div id="paymentInfo"></div>
                   </div>
 
                   <div class="terms-checkbox">
                     <input type="checkbox" id="terms" name="terms" required />
                     <label for="terms"
-                      >I agree to the <a href="#">Terms and Conditions</a> and
-                      <a href="#">Privacy Policy</a></label
+                      >I agree to the
+                      <a href="#" class="terms-link">Terms and Conditions</a>
+                      and
+                      <a href="#" class="privacy-link">Privacy Policy</a></label
                     >
                   </div>
 
                   <div class="form-buttons">
-                    <button type="submit" class="place-order-btn">
-                      Place Order
-                    </button>
                     <button
                       type="button"
-                      class="back-btn"
+                      class="btn-secondary"
                       id="backToPaymentBtn"
                     >
                       Back to Payment
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn-primary"
+                      id="placeOrderBtn"
+                    >
+                      Place Order
                     </button>
                   </div>
                 </div>
@@ -362,47 +272,41 @@
 
             <!-- Order Summary -->
             <div class="order-summary">
-              <h2>Order Summary</h2>
-
-              <div class="order-items" id="summaryItems">
-                <!-- This will be filled by JavaScript -->
+              <div class="summary-header">
+                <h2>Order Summary</h2>
               </div>
 
-              <div class="summary-divider"></div>
+              <div id="summaryItems" class="order-items"></div>
 
-              <div class="summary-row">
-                <span>Subtotal</span>
-                <span id="summarySubtotal">$0.00</span>
-              </div>
-
-              <div class="summary-row">
-                <span>Shipping</span>
-                <span id="summaryShipping">$0.00</span>
-              </div>
-
-              <div class="summary-row">
-                <span>Tax</span>
-                <span id="summaryTax">$0.00</span>
-              </div>
-
-              <div
-                class="summary-row discount"
-                id="discountRow"
-                style="display: none"
-              >
-                <span>Discount</span>
-                <span id="summaryDiscount">-$0.00</span>
-              </div>
-
-              <div class="summary-divider"></div>
-
-              <div class="summary-row total">
-                <span>Total</span>
-                <span id="summaryTotal">$0.00</span>
+              <div class="summary-totals">
+                <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span id="summarySubtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                  <span>Shipping</span>
+                  <span id="summaryShipping">$0.00</span>
+                </div>
+                <div class="summary-row">
+                  <span>Tax</span>
+                  <span id="summaryTax">$0.00</span>
+                </div>
+                <div class="summary-row" id="discountRow" style="display: none">
+                  <span>Discount</span>
+                  <span id="summaryDiscount">-$0.00</span>
+                </div>
+                <div class="summary-row total">
+                  <span>Total</span>
+                  <span id="summaryTotal">$0.00</span>
+                </div>
               </div>
 
               <div class="promo-code">
-                <input type="text" id="promoCode" placeholder="Promo Code" />
+                <input
+                  type="text"
+                  id="promoCode"
+                  placeholder="Enter promo code"
+                />
                 <button type="button" id="applyPromoBtn">Apply</button>
               </div>
 
@@ -415,65 +319,8 @@
         </div>
       </section>
     </div>
-    <!-- End of page-wrapper -->
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-column">
-            <h3>Shop</h3>
-            <ul>
-              <li><a href="HomePage.html">Home</a></li>
-              <li><a href="#">Women's Collection</a></li>
-              <li><a href="#">Men's Collection</a></li>
-              <li><a href="#">New Arrivals</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Help</h3>
-            <ul>
-              <li><a href="#">FAQs</a></li>
-              <li><a href="#">Shipping & Returns</a></li>
-              <li><a href="#">Size Guide</a></li>
-              <li><a href="#">Track Order</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Company</h3>
-            <ul>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Contact Us</a></li>
-              <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h3>Connect</h3>
-            <div class="social-icons">
-              <a href="#" aria-label="Facebook"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a href="#" aria-label="Twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="#" aria-label="Instagram"
-                ><i class="fab fa-instagram"></i
-              ></a>
-              <a href="#" aria-label="Pinterest"
-                ><i class="fab fa-pinterest-p"></i
-              ></a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2024 BrandStore. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
 
     <!-- Scripts -->
-    <script src="scripts/navbar.js"></script>
     <script src="scripts/checkout.js"></script>
   </body>
 </html>
