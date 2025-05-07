@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#backlog">Product Backlog</a>
+    <a href="#inventory">Inventory</a>
+    <a href="#orders">Order Management</a>
+  </div>
+
+  <div class="main">
+    <h1>Admin Dashboard</h1>
+
+    <section id="backlog">
+      <h2>Product Backlog</h2>
+      <ul id="product-backlog">
+        <li>Wireless Mouse <button onclick="approveProduct(this)">Approve</button></li>
+        <li>New T-shirt Design <button onclick="approveProduct(this)">Approve</button></li>
+        <li>Bluetooth Speaker <button onclick="approveProduct(this)">Approve</button></li>
+      </ul>
+    </section>
+
+    <section id="inventory">
+      <h2>Inventory Management</h2>
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Stock</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Phone Case</td><td>120</td><td>In Stock</td></tr>
+          <tr><td>USB Cable</td><td>15</td><td>Low Stock</td></tr>
+          <tr><td>Notebook</td><td>0</td><td>Out of Stock</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="orders">
+      <h2>Order Management</h2>
+      <table>
+        <thead>
+          <tr><th>Order ID</th><th>Customer</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#1001</td><td>Jane Doe</td><td>Pending</td><td><button onclick="markShipped(this)">Ship</button></td></tr>
+          <tr><td>#1002</td><td>John Smith</td><td>Shipped</td><td><button disabled>Shipped</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <script src="scripts/dashboard.js"></script>
+</body>
+</html>
