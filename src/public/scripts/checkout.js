@@ -621,8 +621,12 @@ async function handleSubmit(e) {
             throw new Error(`Failed to find product ${item.name}`);
           }
           data = await response.json();
+          // Handle both response formats (data or products)
+          const productsArray = data.products || data.data || [];
+          console.log(`Search results for ${item.name}:`, productsArray);
+          
           // Get the first product that matches the name exactly
-          const matchingProduct = data.data.find(p => p.name === item.name);
+          const matchingProduct = productsArray.find(p => p.name === item.name);
           if (!matchingProduct) {
             throw new Error(`Product ${item.name} not found in database`);
           }
@@ -636,7 +640,9 @@ async function handleSubmit(e) {
         
         // If ID fetch succeeded
         data = await response.json();
-        const product = data.data;
+        // Handle both response formats (data or product)
+        const product = data.product || data.data;
+        console.log(`Product fetch result for ${item.name}:`, product);
         
         if (!product) {
           throw new Error(`Product ${item.name} not found in database`);

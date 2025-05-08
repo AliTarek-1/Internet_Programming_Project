@@ -54,16 +54,31 @@ async function fetchProductsByCategory(category, params = {}) {
     
     const url = `${API_BASE_URL}/products/category/${encodeURIComponent(category)}${queryString ? `?${queryString}` : ''}`;
     
+    console.log(`[DEBUG] Fetching products from URL: ${url}`);
+    
     const response = await fetch(url);
+    console.log(`[DEBUG] Response status:`, response.status, response.statusText);
     
     if (!response.ok) {
       throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
-    return data.products || [];
+    console.log(`[DEBUG] API response data:`, data);
+    
+    // Check what property contains the products
+    if (data.products && Array.isArray(data.products)) {
+      console.log(`[DEBUG] Found ${data.products.length} products in 'products' property`);
+      return data.products;
+    } else if (data.data && Array.isArray(data.data)) {
+      console.log(`[DEBUG] Found ${data.data.length} products in 'data' property`);
+      return data.data;
+    } else {
+      console.warn(`[DEBUG] No products found in response. Response keys:`, Object.keys(data));
+      return [];
+    }
   } catch (error) {
-    console.error(`Error fetching ${category} products:`, error);
+    console.error(`[DEBUG] Error fetching ${category} products:`, error);
     // Return empty array in case of error to prevent UI breaking
     return [];
   }
@@ -109,7 +124,13 @@ async function fetchProductById(productId) {
     }
     
     const data = await response.json();
-    return data.product || null;
+    // Handle different response formats - backend might return data.product or data.data
+    if (data.product) {
+      return data.product;
+    } else if (data.data) {
+      return data.data;
+    }
+    return null;
   } catch (error) {
     console.error(`Error fetching product ${productId}:`, error);
     // Return null in case of error

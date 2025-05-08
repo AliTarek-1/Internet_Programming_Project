@@ -45,6 +45,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(require("./controllers/authController"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orders"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/reviews", require("./routes/reviewRoutes"));
 
 app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));
@@ -92,6 +94,10 @@ app.get("/track-order.html", (req, res) => {
 
 app.get("/customer-service.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "customer-service.html"));
+});
+
+app.get("/account.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "account.html"));
 });
 
 module.exports = app;

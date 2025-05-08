@@ -8,7 +8,7 @@ const {
   deleteProduct,
   getFeaturedProducts,
   getProductsByCategory
-} = require("../controllers/productController");
+} = require("../controllers/productControllerFixed");
 const { verifyToken, restrictTo } = require("../controllers/verifyToken");
 
 // Public routes

@@ -152,7 +152,6 @@ exports.createProduct = async (req, res) => {
     
     res.status(201).json({
       success: true,
-      message: 'Product created successfully',
       product: product // Changed from 'data' to 'product' to match frontend expectations
     });
   } catch (error) {
@@ -184,8 +183,7 @@ exports.createProduct = async (req, res) => {
  */
 exports.updateProduct = async (req, res) => {
   try {
-    // Find product to update
-    let product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id);
     
     if (!product) {
       return res.status(404).json({
@@ -195,19 +193,15 @@ exports.updateProduct = async (req, res) => {
     }
     
     // Update product
-    product = await Product.findByIdAndUpdate(
+    const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
-      {
-        new: true, // Return updated product
-        runValidators: true // Run validators on update
-      }
+      { new: true, runValidators: true }
     );
     
     res.status(200).json({
       success: true,
-      message: 'Product updated successfully',
-      product: product // Changed from 'data' to 'product' to match frontend expectations
+      product: updatedProduct // Changed from 'data' to 'product' to match frontend expectations
     });
   } catch (error) {
     console.error('Update Product Error:', error);
@@ -259,8 +253,7 @@ exports.deleteProduct = async (req, res) => {
     
     res.status(200).json({
       success: true,
-      message: 'Product deleted successfully',
-      data: {}
+      message: 'Product deleted successfully'
     });
   } catch (error) {
     console.error('Delete Product Error:', error);

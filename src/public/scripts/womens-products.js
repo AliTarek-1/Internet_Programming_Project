@@ -93,44 +93,95 @@ async function loadProducts() {
   });
 }
 
+// Generate star rating HTML based on rating value
+function generateStarRating(rating) {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  
+  let starsHtml = '';
+  
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    starsHtml += '<i class="fas fa-star"></i>';
+  }
+  
+  // Add half star if needed
+  if (halfStar) {
+    starsHtml += '<i class="fas fa-star-half-alt"></i>';
+  }
+  
+  // Add empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    starsHtml += '<i class="far fa-star"></i>';
+  }
+  
+  return starsHtml;
+}
+
 // Create product card element
 function createProductCard(product) {
+  console.log(`[DEBUG] Creating product card for:`, product);
+  
+  if (!product || typeof product !== 'object') {
+    console.error('[DEBUG] Invalid product data:', product);
+    return document.createElement('div');
+  }
+  
   const productCard = document.createElement('div');
   productCard.className = 'product-card';
+  productCard.setAttribute('data-id', product._id || product.productID || '');
   
+  // Ensure we have valid image path
+  let imagePath = product.image || '/images/product-placeholder.jpg';
+  
+  // If the image path doesn't start with '/', add the base path
+  if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) {
+    imagePath = '/images/product-placeholder.jpg';
+  }
+  
+  // Handle discount calculation
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
   
+  // Create the product card structure
   productCard.innerHTML = `
     <div class="product-image">
+      ${imagePath ? `<img src="${imagePath}" alt="${product.name}" class="product-img">` : `
       <div class="product-placeholder">
         <i class="fas fa-tshirt"></i>
       </div>
+      `}
       ${hasDiscount ? '<span class="discount-badge">Sale</span>' : ''}
       <div class="quick-view">
-        <button class="quick-view-btn" data-id="${product.id}">Quick View</button>
-        <a href="product-details.html?id=${product.id}" class="view-details-btn">View Details</a>
+        <button class="quick-view-btn" data-id="${product._id || product.productID}">Quick View</button>
+        <a href="product-details.html?id=${product._id || product.productID}" class="view-details-btn">View Details</a>
       </div>
     </div>
     <div class="product-info">
-      <h3><a href="product-details.html?id=${product.id}">${product.name}</a></h3>
+      <h3><a href="product-details.html?id=${product._id || product.productID}">${product.name}</a></h3>
       <p class="category">${product.category}</p>
       <div class="price">
         <span class="current">$${product.price.toFixed(2)}</span>
         ${hasDiscount ? `<span class="old">$${product.oldPrice.toFixed(2)}</span>` : ''}
       </div>
       <div class="rating">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="${product.rating >= 4.5 ? 'fas' : 'far'} fa-star"></i>
-        <span>(${product.reviews})</span>
+        ${generateStarRating(product.averageRating || product.rating || 0)}
+        <span class="review-count">(${product.totalReviews || product.reviews || 0})</span>
       </div>
-      <button class="add-to-cart" data-id="${product.id}">
+      <button class="add-to-cart" data-id="${product._id || product.productID}">
         <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
     </div>
   `;
+  
+  // Add error handler for the image
+  const productImg = productCard.querySelector('.product-img');
+  if (productImg) {
+    productImg.addEventListener('error', function() {
+      this.src = '/images/product-placeholder.jpg';
+      this.parentElement.classList.add('image-error');
+    });
+  }
   
   // Add event listener to "Add to Cart" button
   const addToCartBtn = productCard.querySelector('.add-to-cart');
@@ -197,10 +248,13 @@ function initQuickView() {
 }
 
 // Open quick view modal for a product
-function openQuickView(productId) {
-  const product = getProductById(productId);
+async function openQuickView(productId) {
+  const product = await getProductById(productId);
   
-  if (!product) return;
+  if (!product) {
+    console.error('Product not found');
+    return;
+  }
   
   // Update modal content with product details
   document.getElementById('modal-product-name').textContent = product.name;
@@ -391,14 +445,19 @@ function showNotification(message) {
 }
 
 // Get product by ID
-function getProductById(productId) {
-  const products = getAllProducts();
-  return products.find(product => product.id === productId);
+async function getProductById(productId) {
+  try {
+    if (window.apiService) {
+      return await window.apiService.fetchProductById(productId);
+    }
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+  }
+  return null;
 }
 
 // Get all women's products
 async function getWomensProducts() {
-  // Try to fetch from API first
   try {
     if (window.apiService) {
       const products = await window.apiService.fetchProductsByCategory("Women's Collection");
@@ -407,179 +466,9 @@ async function getWomensProducts() {
       }
     }
   } catch (error) {
-    console.warn('Error fetching women\'s products from API, falling back to local data:', error);
+    console.error('Error fetching women\'s products from API:', error);
   }
   
-  // Fallback to local data if API fails or returns empty
-  return getAllProducts().filter(product => product.category.includes("Women's"));
-}
-
-// Mock product data (in a real application, this would come from an API)
-function getAllProducts() {
-  return [
-    // Women's Collection
-    {
-      id: '1',
-      name: 'Blue Denim Jeans',
-      category: "Women's Collection",
-      price: 125.00,
-      oldPrice: 150.00,
-      description: 'Premium quality denim jeans with a modern slim fit design. Perfect for casual everyday wear.',
-      sku: 'WJ12345',
-      rating: 4.5,
-      reviews: 24,
-      featured: 1,
-      date: '2025-01-15',
-      tags: ['pants', 'casual']
-    },
-    {
-      id: '2',
-      name: 'Floral Shirt',
-      category: "Women's Collection",
-      price: 55.00,
-      description: 'Lightweight floral print shirt made from breathable cotton. Ideal for summer days.',
-      sku: 'WS67890',
-      rating: 4.0,
-      reviews: 18,
-      featured: 0,
-      date: '2025-02-10',
-      tags: ['shirts', 'casual']
-    },
-    {
-      id: '3',
-      name: 'Summer Dress',
-      category: "Women's Collection",
-      price: 89.00,
-      oldPrice: 120.00,
-      description: 'Elegant summer dress with a floral pattern. Made from lightweight fabric for maximum comfort.',
-      sku: 'WD54321',
-      rating: 5.0,
-      reviews: 32,
-      featured: 1,
-      date: '2025-01-20',
-      tags: ['dresses', 'casual']
-    },
-    {
-      id: '4',
-      name: 'Leather Jacket',
-      category: "Women's Collection",
-      price: 199.00,
-      oldPrice: 250.00,
-      description: 'Classic leather jacket with a modern twist. Perfect for adding an edge to any outfit.',
-      sku: 'WJ98765',
-      rating: 4.5,
-      reviews: 15,
-      featured: 1,
-      date: '2025-02-05',
-      tags: ['jackets', 'casual']
-    },
-    {
-      id: '13',
-      name: 'Striped Blouse',
-      category: "Women's Collection",
-      price: 45.00,
-      description: 'Elegant striped blouse with a modern cut. Perfect for office or casual wear.',
-      sku: 'WB13579',
-      rating: 4.2,
-      reviews: 19,
-      featured: 0,
-      date: '2025-03-01',
-      tags: ['shirts', 'formal']
-    },
-    {
-      id: '14',
-      name: 'High-Waisted Skirt',
-      category: "Women's Collection",
-      price: 75.00,
-      oldPrice: 90.00,
-      description: 'Stylish high-waisted skirt that flatters any figure. Made from quality fabric with a comfortable fit.',
-      sku: 'WS24680',
-      rating: 4.6,
-      reviews: 23,
-      featured: 0,
-      date: '2025-02-15',
-      tags: ['skirts', 'formal']
-    },
-    {
-      id: '25',
-      name: 'Maxi Dress',
-      category: "Women's Collection",
-      price: 95.00,
-      description: 'Elegant maxi dress perfect for summer evenings. Features a flowing design with a flattering silhouette.',
-      sku: 'WD12345',
-      rating: 4.7,
-      reviews: 36,
-      featured: 1,
-      date: '2025-03-10',
-      tags: ['dresses', 'casual']
-    },
-    {
-      id: '26',
-      name: 'Knit Cardigan',
-      category: "Women's Collection",
-      price: 65.00,
-      oldPrice: 80.00,
-      description: 'Cozy knit cardigan perfect for layering. Features a relaxed fit and soft fabric for maximum comfort.',
-      sku: 'WC67890',
-      rating: 4.4,
-      reviews: 28,
-      featured: 0,
-      date: '2025-04-01',
-      tags: ['sweaters', 'casual']
-    },
-    {
-      id: '27',
-      name: 'Tailored Blazer',
-      category: "Women's Collection",
-      price: 120.00,
-      description: 'Professional tailored blazer perfect for the office. Features a modern cut with classic details.',
-      sku: 'WB54321',
-      rating: 4.8,
-      reviews: 31,
-      featured: 1,
-      date: '2025-03-15',
-      tags: ['jackets', 'formal']
-    },
-    {
-      id: '28',
-      name: 'Ankle Boots',
-      category: "Women's Collection",
-      price: 150.00,
-      oldPrice: 180.00,
-      description: 'Stylish ankle boots made from premium leather. Features a comfortable heel and durable construction.',
-      sku: 'WA98765',
-      rating: 4.6,
-      reviews: 22,
-      featured: 0,
-      date: '2025-02-20',
-      tags: ['shoes', 'casual']
-    },
-    {
-      id: '29',
-      name: 'Statement Necklace',
-      category: "Women's Collection",
-      price: 40.00,
-      description: 'Eye-catching statement necklace that elevates any outfit. Features a unique design with quality materials.',
-      sku: 'WN13579',
-      rating: 4.3,
-      reviews: 17,
-      featured: 0,
-      date: '2025-04-05',
-      tags: ['accessories']
-    },
-    {
-      id: '30',
-      name: 'Crossbody Bag',
-      category: "Women's Collection",
-      price: 85.00,
-      oldPrice: 100.00,
-      description: 'Versatile crossbody bag perfect for everyday use. Features multiple compartments and a stylish design.',
-      sku: 'WB24680',
-      rating: 4.5,
-      reviews: 29,
-      featured: 0,
-      date: '2025-03-25',
-      tags: ['accessories']
-    }
-  ];
+  // Return empty array if API fails
+  return [];
 }

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
+  productID: {
+    type: String,
+    required: [true, 'Product ID is required'],
+    unique: true,
+    trim: true
+  },
   name: {
     type: String,
     required: [true, 'Product name is required'],
@@ -29,6 +35,14 @@ const productSchema = new mongoose.Schema({
       message: 'Please select a valid category'
     }
   },
+  type: {
+    type: String,
+    required: [true, 'Product type is required'],
+    enum: {
+      values: ['Shirts', 'Pants', 'Shoes', 'Jackets', 'Dresses', 'Accessories', 'Sweaters', 'T-shirts', 'Jeans', 'Skirts'],
+      message: 'Please select a valid product type'
+    }
+  },
   image: {
     type: String,
     required: true
@@ -43,15 +57,16 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Product SKU is required'],
     unique: true,
-    trim: true
+    trim: true,
+    ref: 'Inventory'
   },
-  rating: {
+  averageRating: {
     type: Number,
     default: 0,
     min: [0, 'Rating must be at least 0'],
     max: [5, 'Rating cannot exceed 5']
   },
-  reviews: {
+  totalReviews: {
     type: Number,
     default: 0
   },

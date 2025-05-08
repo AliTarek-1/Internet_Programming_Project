@@ -58,15 +58,242 @@ async function loadProductDetails(productId) {
     console.warn('Error fetching product from API, falling back to local data:', error);
   }
   
-  // Fallback to mock data if API fails
+  // If API fails, show error message
   if (!product) {
-    product = getMockProductById(productId);
+    console.error('Failed to load product data');
+    document.querySelector('.product-details').innerHTML = `
+      <div class="error-message">
+        <h3>Product Not Found</h3>
+        <p>We couldn't find the product you're looking for. Please try again later or contact customer support.</p>
+        <a href="products.html" class="btn">Back to Products</a>
+      </div>
+    `;
+    return;
   }
   
   if (product) {
-    // Update page with product details...
+    // Update page with product details
+    // Parse query parameters
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const name = product.name;
+    const price = product.price;
+    const oldPrice = product.oldPrice;
+    const category = product.category;
+    const desc = product.description;
+
+    // Inject data into HTML
+    if (name) {
+      document.getElementById("productTitle").textContent = name;
+      document.getElementById("product-name").textContent = name;
+    }
+
+    if (category) {
+      document.getElementById("product-category").textContent = category;
+      // Update breadcrumbs based on category
+      updateBreadcrumbs(category);
+    }
+
+    if (price) {
+      document.getElementById("currentPrice").textContent = `$${price.toFixed(2)}`;
+    }
+
+    if (oldPrice) {
+      document.getElementById("oldPrice").textContent = `$${oldPrice.toFixed(2)}`;
+    }
+
+    if (desc) {
+      document.getElementById("productDescription").textContent = desc;
+    }
+
+    if (id) {
+      document.getElementById("productSKU").textContent = `PRD${id}`;
+    }
+    
+    // Load product reviews
+    await loadProductReviews(product.productID || id);
+    
+    // Load related products
+    loadRelatedProducts(product.category);
   }
-}// Load product details from API or fallback to mock data
+} // Load product details from API or fallback to mock data
+
+// Load product reviews from the database
+async function loadProductReviews(productId) {
+  if (!productId) {
+    console.error('No product ID provided for reviews');
+    return;
+  }
+  
+  console.log(`Loading reviews for product ID: ${productId}`);
+  const reviewsContainer = document.getElementById('reviews-container');
+  const loadingElement = document.getElementById('reviews-loading');
+  const noReviewsElement = document.getElementById('no-reviews');
+  
+  if (!reviewsContainer) {
+    console.error('Reviews container not found');
+    return;
+  }
+  
+  try {
+    // Show loading state
+    if (loadingElement) loadingElement.style.display = 'block';
+    if (noReviewsElement) noReviewsElement.style.display = 'none';
+    
+    // Clear any existing reviews (except the loading and no-reviews elements)
+    const existingReviews = reviewsContainer.querySelectorAll('.review');
+    existingReviews.forEach(review => review.remove());
+    
+    // Fetch reviews from API
+    let reviews = [];
+    try {
+      if (window.apiService) {
+        console.log(`Attempting to fetch reviews for product ${productId}`);
+        const response = await fetch(`/api/reviews/product/${productId}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          reviews = data.reviews || [];
+          console.log(`Fetched ${reviews.length} reviews for product ${productId}:`, reviews);
+        } else {
+          console.warn(`Reviews API returned status ${response.status}. This may be normal if the API is not fully set up yet.`);
+        }
+      }
+    } catch (error) {
+      console.warn('Error fetching reviews, continuing without reviews:', error);
+    }
+    
+    // Hide loading state
+    if (loadingElement) loadingElement.style.display = 'none';
+    
+    // If no reviews, show the no-reviews message
+    if (reviews.length === 0) {
+      if (noReviewsElement) noReviewsElement.style.display = 'block';
+      return;
+    }
+    
+    // Generate HTML for each review and add to container
+    reviews.forEach(review => {
+      const reviewElement = document.createElement('div');
+      reviewElement.className = 'review';
+      
+      // Format date
+      const reviewDate = new Date(review.createdAt);
+      const formattedDate = reviewDate.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      // Generate star rating HTML
+      const rating = review.rating || 0;
+      const starsHtml = generateStarRating(rating);
+      
+      reviewElement.innerHTML = `
+        <div class="review-header">
+          <div class="reviewer-info">
+            <h4>${review.username || 'Anonymous'}</h4>
+            <span class="review-date">${formattedDate}</span>
+          </div>
+          <div class="review-rating">
+            ${starsHtml}
+          </div>
+        </div>
+        <h5>${review.title || 'Review'}</h5>
+        <p>${review.comment || 'No comment provided.'}</p>
+      `;
+      
+      reviewsContainer.appendChild(reviewElement);
+    });
+    
+    // Update review summary statistics if available
+    updateReviewSummary(reviews);
+    
+  } catch (error) {
+    console.error('Error loading reviews:', error);
+    if (loadingElement) loadingElement.style.display = 'none';
+    if (noReviewsElement) {
+      noReviewsElement.style.display = 'block';
+      noReviewsElement.innerHTML = `<p>Error loading reviews. Please try again later.</p>`;
+    }
+  }
+}
+
+// Generate HTML for star rating
+function generateStarRating(rating) {
+  let starsHtml = '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    starsHtml += '<i class="fas fa-star"></i>';
+  }
+  
+  // Add half star if needed
+  if (hasHalfStar) {
+    starsHtml += '<i class="fas fa-star-half-alt"></i>';
+  }
+  
+  // Add empty stars
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  for (let i = 0; i < emptyStars; i++) {
+    starsHtml += '<i class="far fa-star"></i>';
+  }
+  
+  return starsHtml;
+}
+
+// Update review summary statistics
+function updateReviewSummary(reviews) {
+  if (!reviews || reviews.length === 0) return;
+  
+  // Calculate average rating
+  const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+  const averageRating = totalRating / reviews.length;
+  
+  // Count ratings by star level
+  const ratingCounts = [0, 0, 0, 0, 0]; // 1-5 stars
+  reviews.forEach(review => {
+    const rating = Math.floor(review.rating || 0);
+    if (rating >= 1 && rating <= 5) {
+      ratingCounts[rating - 1]++;
+    }
+  });
+  
+  // Update average rating display
+  const ratingNumberElement = document.querySelector('.average-rating .rating-number');
+  if (ratingNumberElement) {
+    ratingNumberElement.textContent = averageRating.toFixed(1);
+  }
+  
+  // Update star display
+  const starsElement = document.querySelector('.average-rating .stars');
+  if (starsElement) {
+    starsElement.innerHTML = generateStarRating(averageRating);
+  }
+  
+  // Update review count
+  const reviewCountElement = document.querySelector('.average-rating span:last-child');
+  if (reviewCountElement) {
+    reviewCountElement.textContent = `Based on ${reviews.length} review${reviews.length !== 1 ? 's' : ''}`;
+  }
+  
+  // Update rating bars
+  for (let i = 0; i < 5; i++) {
+    const barElement = document.querySelector(`.rating-bar:nth-child(${5-i}) .bar`);
+    const countElement = document.querySelector(`.rating-bar:nth-child(${5-i}) span:last-child`);
+    
+    if (barElement) {
+      const percentage = reviews.length > 0 ? (ratingCounts[i] / reviews.length) * 100 : 0;
+      barElement.style.width = `${percentage}%`;
+    }
+    
+    if (countElement) {
+      countElement.textContent = ratingCounts[i];
+    }
+  }
+}
 
 // Update breadcrumb links based on product category
 function updateBreadcrumbs(category) {
@@ -221,18 +448,19 @@ function initAddToCart() {
     
     let product = null;
     
-    // Try to fetch from API first
+    // Fetch from API
     try {
       if (window.apiService) {
         product = await window.apiService.fetchProductById(productId);
       }
     } catch (error) {
-      console.warn('Error fetching product from API, falling back to local data:', error);
+      console.error('Error fetching product from API:', error);
     }
     
-    // Fallback to mock data if API fails
+    // If product not found, show error
     if (!product) {
-      product = getMockProductById(productId);
+      alert('Product not found or unavailable');
+      return;
     }
     
     if (!product) return;
@@ -290,7 +518,7 @@ function addProductToCart(product, quantity, size, color) {
 }
 
 // Update cart count in navbar
-function updateCartCount() {
+function updateCartCountDisplay() {
   const cartCountElement = document.querySelector('.cart-count');
   if (cartCountElement) {
     const count = localStorage.getItem('cartCount') || 0;
@@ -300,88 +528,91 @@ function updateCartCount() {
 
 // Initialize review form
 function initReviewForm() {
-  const reviewForm = document.querySelector('.review-form');
-  const ratingStars = document.querySelectorAll('.rating-selector i');
-  
-  // Handle star rating selection
-  ratingStars.forEach((star, index) => {
-    star.addEventListener('click', () => {
-      // Reset all stars
-      ratingStars.forEach(s => {
-        s.className = 'far fa-star';
-      });
-      
-      // Fill stars up to selected index
-      for (let i = 0; i <= index; i++) {
-        ratingStars[i].className = 'fas fa-star';
-      }
-    });
-    
-    star.addEventListener('mouseover', () => {
-      // Reset all stars
-      ratingStars.forEach(s => {
-        s.className = 'far fa-star';
-      });
-      
-      // Fill stars up to hovered index
-      for (let i = 0; i <= index; i++) {
-        ratingStars[i].className = 'fas fa-star';
-      }
-    });
-  });
-  
-  // Reset stars when mouse leaves rating selector
-  document.querySelector('.rating-selector').addEventListener('mouseleave', () => {
-    // Get number of active stars
-    const activeStars = document.querySelectorAll('.rating-selector i.fas').length;
-    
-    // Reset all stars
-    ratingStars.forEach(s => {
-      s.className = 'far fa-star';
-    });
-    
-    // Fill active stars
-    for (let i = 0; i < activeStars; i++) {
-      ratingStars[i].className = 'fas fa-star';
-    }
-  });
-  
-  // Handle form submission
-  reviewForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const rating = document.querySelectorAll('.rating-selector i.fas').length;
-    const title = document.getElementById('review-title').value;
-    const content = document.getElementById('review-content').value;
-    
-    if (rating === 0) {
-      alert('Please select a rating');
-      return;
-    }
-    
-    // In a real application, this would send the review to a server
-    console.log('Review submitted:', { rating, title, content });
-    
-    // Reset form
-    reviewForm.reset();
-    ratingStars.forEach(s => {
-      s.className = 'far fa-star';
-    });
-    
-    // Show success message
-    alert('Thank you for your review!');
-  const productsGrid = document.querySelector('.related-products .products-grid');
-  
-  // Clear existing products
-  productsGrid.innerHTML = '';
-  
-  // Add related products to grid
-  relatedProducts.forEach(product => {
-    const productCard = createProductCard(product);
-    productsGrid.appendChild(productCard);
-  });
-}
+  const ratingStars = document.querySelectorAll(".rating-selector i");
+  const reviewForm = document.querySelector(".review-form");
+  const reviewsContainer = document.querySelector(".customer-reviews");
+  const ratingCount = document.getElementById("ratingCount");
+  const ratingNumber = document.querySelector(".rating-number");
+  const ratingStarsDisplay = document.querySelector(".average-rating .stars");
 
+  let selectedRating = 0;
+  let totalReviews = 24;
+  let totalRating = 4.5 * totalReviews;
+
+  ratingStars.forEach((star, index) => {
+    star.addEventListener("mouseover", () => highlightStars(index));
+    star.addEventListener("mouseout", () => highlightStars(selectedRating - 1));
+    star.addEventListener("click", () => {
+      selectedRating = index + 1;
+      highlightStars(index);
+    });
+  });
+
+  function highlightStars(index) {
+    ratingStars.forEach((star, i) => {
+      star.className = i <= index ? "fas fa-star" : "far fa-star";
+    });
+  }
+
+  function getCurrentFormattedDate() {
+    return new Date().toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  reviewForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = document.getElementById("review-title").value.trim();
+    const content = document.getElementById("review-content").value.trim();
+
+    if (selectedRating === 0) return alert("Please select a star rating.");
+    if (!title || !content) return alert("Please fill out both fields.");
+
+    const reviewHTML = `
+      <div class="review">
+        <div class="review-header">
+          <div class="reviewer-info">
+            <h4>You</h4>
+            <span class="review-date">${getCurrentFormattedDate()}</span>
+          </div>
+          <div class="review-rating">
+            ${'<i class="fas fa-star"></i>'.repeat(selectedRating)}
+            ${'<i class="far fa-star"></i>'.repeat(5 - selectedRating)}
+          </div>
+        </div>
+        <h5>${title}</h5>
+        <p>${content}</p>
+      </div>
+    `;
+    reviewsContainer.insertAdjacentHTML("afterbegin", reviewHTML);
+
+    totalReviews++;
+    totalRating += selectedRating;
+    const newAverage = (totalRating / totalReviews).toFixed(1);
+    ratingNumber.textContent = newAverage;
+    ratingCount.textContent = `(${totalReviews} reviews)`;
+    updateStarDisplay(newAverage);
+
+    reviewForm.reset();
+    highlightStars(-1);
+    selectedRating = 0;
+  });
+
+  function updateStarDisplay(average) {
+    ratingStarsDisplay.innerHTML = "";
+    for (let i = 1; i <= 5; i++) {
+      if (i <= Math.floor(average)) {
+        ratingStarsDisplay.innerHTML += '<i class="fas fa-star"></i>';
+      } else if (i - average < 1) {
+        ratingStarsDisplay.innerHTML += '<i class="fas fa-star-half-alt"></i>';
+      } else {
+        ratingStarsDisplay.innerHTML += '<i class="far fa-star"></i>';
+      }
+    }
+  }
+}
 // Create product card element
 function createProductCard(product) {
   const productCard = document.createElement('div');
@@ -421,223 +652,65 @@ function createProductCard(product) {
   
   // Add event listener to "Add to Cart" button
   const addToCartBtn = productCard.querySelector('.add-to-cart');
-  addToCartBtn.addEventListener('click', (e) => {
+  addToCartBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     
     const productId = addToCartBtn.getAttribute('data-id');
-    const product = getMockProductById(productId);
+    let product = null;
+    
+    try {
+      if (window.apiService) {
+        product = await window.apiService.fetchProductById(productId);
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
     
     if (product) {
       addProductToCart(product, 1, 'M', '');
-      updateCartCount();
+      updateCartCountDisplay();
       alert('Product added to cart!');
+    } else {
+      alert('Could not add product to cart. Please try again.');
     }
   });
   
   return productCard;
 }
 
-// Mock product data (in a real application, this would come from an API)
-function getMockProducts() {
-  return [
-    {
-      id: '1',
-      name: 'Blue Denim Jeans',
-      category: "Women's Collection",
-      price: 125.00,
-      oldPrice: 150.00,
-      description: 'Premium quality denim jeans with a modern slim fit design. Perfect for casual everyday wear.',
-      sku: 'WJ12345',
-      rating: 4.5,
-      reviews: 24
-    },
-    {
-      id: '2',
-      name: 'Floral Shirt',
-      category: "Women's Collection",
-      price: 55.00,
-      description: 'Lightweight floral print shirt made from breathable cotton. Ideal for summer days.',
-      sku: 'WS67890',
-      rating: 4.0,
-      reviews: 18
-    },
-    {
-      id: '3',
-      name: 'Summer Dress',
-      category: "Women's Collection",
-      price: 89.00,
-      oldPrice: 120.00,
-      description: 'Elegant summer dress with a floral pattern. Made from lightweight fabric for maximum comfort.',
-      sku: 'WD54321',
-      rating: 5.0,
-      reviews: 32
-    },
-    {
-      id: '4',
-      name: 'Leather Jacket',
-      category: "Women's Collection",
-      price: 199.00,
-      oldPrice: 250.00,
-      description: 'Classic leather jacket with a modern twist. Perfect for adding an edge to any outfit.',
-      sku: 'WJ98765',
-      rating: 4.5,
-      reviews: 15
-    },
-    {
-      id: '5',
-      name: 'Classic White Shirt',
-      category: "Men's Collection",
-      price: 65.00,
-      description: 'Timeless white shirt made from premium cotton. A wardrobe essential for every man.',
-      sku: 'MS12345',
-      rating: 4.8,
-      reviews: 42
-    },
-    {
-      id: '6',
-      name: 'Navy Blue Blazer',
-      category: "Men's Collection",
-      price: 175.00,
-      oldPrice: 220.00,
-      description: 'Sophisticated navy blue blazer perfect for formal occasions. Tailored fit with premium details.',
-      sku: 'MB67890',
-      rating: 4.7,
-      reviews: 28
-    },
-    {
-      id: '7',
-      name: 'Slim Fit Chinos',
-      category: "Men's Collection",
-      price: 85.00,
-      description: 'Versatile slim fit chinos that transition seamlessly from casual to smart casual occasions.',
-      sku: 'MC54321',
-      rating: 4.5,
-      reviews: 36
-    },
-    {
-      id: '8',
-      name: 'Wool Sweater',
-      category: "Men's Collection",
-      price: 95.00,
-      oldPrice: 120.00,
-      description: 'Warm and comfortable wool sweater, perfect for colder days. Features a classic design.',
-      sku: 'MS98765',
-      rating: 4.3,
-      reviews: 22
-    },
-    {
-      id: '9',
-      name: 'Dinosaur T-Shirt',
-      category: "Children's Collection",
-      price: 25.00,
-      description: 'Fun dinosaur print t-shirt made from soft cotton. Perfect for active kids.',
-      sku: 'CT12345',
-      rating: 4.9,
-      reviews: 48
-    },
-    {
-      id: '10',
-      name: 'Colorful Sneakers',
-      category: "Children's Collection",
-      price: 45.00,
-      oldPrice: 60.00,
-      description: 'Comfortable and colorful sneakers designed for growing feet. Durable and easy to clean.',
-      sku: 'CS67890',
-      rating: 4.7,
-      reviews: 33
-    },
-    {
-      id: '11',
-      name: 'Denim Overalls',
-      category: "Children's Collection",
-      price: 55.00,
-      description: 'Cute and practical denim overalls. Perfect for playtime and everyday wear.',
-      sku: 'CD54321',
-      rating: 4.6,
-      reviews: 27
-    },
-    {
-      id: '12',
-      name: 'Hooded Jacket',
-      category: "Children's Collection",
-      price: 65.00,
-      oldPrice: 80.00,
-      description: 'Warm hooded jacket with fun details. Water-resistant and perfect for outdoor adventures.',
-      sku: 'CJ98765',
-      rating: 4.8,
-      reviews: 39
-    },
-    // Additional Women's Collection products
-    {
-      id: '13',
-      name: 'Striped Blouse',
-      category: "Women's Collection",
-      price: 45.00,
-      description: 'Elegant striped blouse with a modern cut. Perfect for office or casual wear.',
-      sku: 'WB13579',
-      rating: 4.2,
-      reviews: 19
-    },
-    {
-      id: '14',
-      name: 'High-Waisted Skirt',
-      category: "Women's Collection",
-      price: 75.00,
-      oldPrice: 90.00,
-      description: 'Stylish high-waisted skirt that flatters any figure. Made from quality fabric with a comfortable fit.',
-      sku: 'WS24680',
-      rating: 4.6,
-      reviews: 23
-    },
-    // Additional Men's Collection products
-    {
-      id: '15',
-      name: 'Casual Polo Shirt',
-      category: "Men's Collection",
-      price: 40.00,
-      description: 'Classic polo shirt with a modern fit. Perfect for casual occasions and everyday wear.',
-      sku: 'MP13579',
-      rating: 4.4,
-      reviews: 31
-    },
-    {
-      id: '16',
-      name: 'Leather Belt',
-      category: "Men's Collection",
-      price: 35.00,
-      oldPrice: 45.00,
-      description: 'Premium leather belt with a classic buckle. A timeless accessory for any outfit.',
-      sku: 'MB24680',
-      rating: 4.7,
-      reviews: 26
-    },
-    // Additional Children's Collection products
-    {
-      id: '17',
-      name: 'Patterned Leggings',
-      category: "Children's Collection",
-      price: 20.00,
-      description: 'Comfortable patterned leggings for active kids. Stretchy and durable for everyday play.',
-      sku: 'CL13579',
-      rating: 4.5,
-      reviews: 29
-    },
-    {
-      id: '18',
-      name: 'Cartoon Character Pajamas',
-      category: "Children's Collection",
-      price: 30.00,
-      oldPrice: 40.00,
-      description: 'Soft and cozy pajamas featuring popular cartoon characters. Perfect for a good night\'s sleep.',
-      sku: 'CP24680',
-      rating: 4.9,
-      reviews: 37
+
+
+
+
+// Load related products based on category
+async function loadRelatedProducts(category) {
+  let relatedProducts = [];
+  
+  try {
+    if (window.apiService) {
+      // Fetch products by category and limit to 4
+      relatedProducts = await window.apiService.fetchProductsByCategory(category, { limit: 4 });
     }
-  ];
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+  }
+  
+  const productsGrid = document.querySelector('.related-products .products-grid');
+  if (!productsGrid) return;
+  
+  // Clear existing products
+  productsGrid.innerHTML = '';
+  
+  if (relatedProducts.length === 0) {
+    productsGrid.innerHTML = '<p class="no-products">No related products found.</p>';
+    return;
+  }
+  
+  // Add related products to grid
+  relatedProducts.forEach(product => {
+    const productCard = createProductCard(product);
+    productsGrid.appendChild(productCard);
+  });
 }
 
-// Get mock product by ID
-function getMockProductById(productId) {
-  const products = getMockProducts();
-  return products.find(product => product.id === productId);
-}
+

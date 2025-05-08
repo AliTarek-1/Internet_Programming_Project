@@ -28,7 +28,13 @@ function loadScript(src) {
 
 // Load products into the products grid
 async function loadProducts() {
+  console.log('[DEBUG] Starting to load products');
   const productsGrid = document.querySelector('.products-grid');
+  
+  if (!productsGrid) {
+    console.error('[DEBUG] Products grid element not found');
+    return;
+  }
   
   // Show loading indicator
   productsGrid.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i><p>Loading products...</p></div>';
@@ -36,19 +42,34 @@ async function loadProducts() {
   // Get URL parameters for category filtering
   const urlParams = new URLSearchParams(window.location.search);
   const categoryParam = urlParams.get('category');
+  console.log(`[DEBUG] Category parameter from URL: ${categoryParam || 'none'}`);
   
   // Get all men's products
+  console.log('[DEBUG] Calling getMensProducts()');
   let products = await getMensProducts();
+  console.log(`[DEBUG] Received ${products ? products.length : 0} products from getMensProducts()`);
+  console.log('[DEBUG] First few products:', products.slice(0, 2));
   
   // Filter products by category if specified in URL
   if (categoryParam) {
+    console.log(`[DEBUG] Filtering products by category: ${categoryParam}`);
+    const originalCount = products.length;
+    
     products = products.filter(product => {
       // Convert parameter to lowercase for case-insensitive comparison
       const paramCategory = categoryParam.toLowerCase();
       
       // Check if any of the product tags match the parameter category
-      return product.tags && product.tags.some(tag => tag.toLowerCase() === paramCategory);
+      const hasTags = product.tags && Array.isArray(product.tags);
+      console.log(`[DEBUG] Product ${product.name} has tags: ${hasTags ? 'yes' : 'no'}`);
+      
+      if (hasTags) {
+        return product.tags.some(tag => tag.toLowerCase() === paramCategory);
+      }
+      return false;
     });
+    
+    console.log(`[DEBUG] After filtering: ${products.length} products (from ${originalCount})`);
     
     // Update the category filter dropdown to match URL parameter
     const categoryFilter = document.querySelector('.category-filter');
@@ -72,7 +93,8 @@ async function loadProducts() {
   productsGrid.innerHTML = '';
   
   // Show message if no products found
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
+    console.log('[DEBUG] No products found, showing message');
     const noProductsMessage = document.createElement('div');
     noProductsMessage.className = 'no-products-message';
     noProductsMessage.innerHTML = `
@@ -86,50 +108,104 @@ async function loadProducts() {
   }
   
   // Add products to grid
-  products.forEach(product => {
+  console.log(`[DEBUG] Adding ${products.length} products to grid`);
+  products.forEach((product, index) => {
+    console.log(`[DEBUG] Creating product card for product ${index + 1}: ${product.name}`);
     const productCard = createProductCard(product);
     productsGrid.appendChild(productCard);
   });
+  console.log('[DEBUG] Finished adding products to grid');
+}
+
+// Generate star rating HTML based on rating value
+function generateStarRating(rating) {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  
+  let starsHtml = '';
+  
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    starsHtml += '<i class="fas fa-star"></i>';
+  }
+  
+  // Add half star if needed
+  if (halfStar) {
+    starsHtml += '<i class="fas fa-star-half-alt"></i>';
+  }
+  
+  // Add empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    starsHtml += '<i class="far fa-star"></i>';
+  }
+  
+  return starsHtml;
 }
 
 // Create product card element
 function createProductCard(product) {
+  console.log(`[DEBUG] Creating product card for:`, product);
+  
+  if (!product || typeof product !== 'object') {
+    console.error('[DEBUG] Invalid product data:', product);
+    return document.createElement('div');
+  }
+  
   const productCard = document.createElement('div');
   productCard.className = 'product-card';
+  productCard.setAttribute('data-id', product._id || product.productID || '');
   
+  // Ensure we have valid image path
+  let imagePath = product.image || '/images/product-placeholder.jpg';
+  
+  // If the image path doesn't start with '/', add the base path
+  if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) {
+    imagePath = '/images/product-placeholder.jpg';
+  }
+  
+  // Handle discount calculation
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
   
+  // Create the product card structure
   productCard.innerHTML = `
     <div class="product-image">
+      ${imagePath ? `<img src="${imagePath}" alt="${product.name}" class="product-img">` : `
       <div class="product-placeholder">
         <i class="fas fa-tshirt"></i>
       </div>
+      `}
       ${hasDiscount ? '<span class="discount-badge">Sale</span>' : ''}
       <div class="quick-view">
-        <button class="quick-view-btn" data-id="${product.id}">Quick View</button>
-        <a href="product-details.html?id=${product.id}" class="view-details-btn">View Details</a>
+        <button class="quick-view-btn" data-id="${product._id || product.productID}">Quick View</button>
+        <a href="product-details.html?id=${product._id || product.productID}" class="view-details-btn">View Details</a>
       </div>
     </div>
     <div class="product-info">
-      <h3><a href="product-details.html?id=${product.id}">${product.name}</a></h3>
+      <h3><a href="product-details.html?id=${product._id || product.productID}">${product.name}</a></h3>
       <p class="category">${product.category}</p>
       <div class="price">
         <span class="current">$${product.price.toFixed(2)}</span>
         ${hasDiscount ? `<span class="old">$${product.oldPrice.toFixed(2)}</span>` : ''}
       </div>
       <div class="rating">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="${product.rating >= 4.5 ? 'fas' : 'far'} fa-star"></i>
-        <span>(${product.reviews})</span>
+        ${generateStarRating(product.averageRating || product.rating || 0)}
+        <span class="review-count">(${product.totalReviews || product.reviews || 0})</span>
       </div>
-      <button class="add-to-cart" data-id="${product.id}">
+      <button class="add-to-cart" data-id="${product._id || product.productID}">
         <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
     </div>
   `;
+  
+  // Add error handler for the image
+  const productImg = productCard.querySelector('.product-img');
+  if (productImg) {
+    productImg.addEventListener('error', function() {
+      this.src = '/images/product-placeholder.jpg';
+      this.parentElement.classList.add('image-error');
+    });
+  }
   
   // Add event listener to "Add to Cart" button
   const addToCartBtn = productCard.querySelector('.add-to-cart');
@@ -203,10 +279,13 @@ function initQuickView() {
 }
 
 // Open quick view modal for a product
-function openQuickView(productId) {
-  const product = getProductById(productId);
+async function openQuickView(productId) {
+  const product = await getProductById(productId);
   
-  if (!product) return;
+  if (!product) {
+    console.error('Product not found');
+    return;
+  }
   
   // Update modal content with product details
   document.getElementById('modal-product-name').textContent = product.name;
@@ -261,7 +340,15 @@ async function filterProducts() {
   const sortValue = sortFilter.value;
   
   // Get all products
-  let products = getMensProducts();
+  let products = await getMensProducts();
+  
+  // Ensure products is an array before filtering and sorting
+  if (!Array.isArray(products)) {
+    console.error('[DEBUG] Products is not an array:', products);
+    products = [];
+  }
+  
+  console.log(`[DEBUG] Got ${products.length} products for filtering`);
   
   // Filter by search term
   if (searchTerm) {
@@ -279,20 +366,24 @@ async function filterProducts() {
     });
   }
   
+  console.log(`[DEBUG] After filtering: ${products.length} products, sorting by: ${sortValue}`);
+  
   // Sort products
-  switch (sortValue) {
-    case 'price-low':
-      products.sort((a, b) => a.price - b.price);
-      break;
-    case 'price-high':
-      products.sort((a, b) => b.price - a.price);
-      break;
-    case 'newest':
-      products.sort((a, b) => new Date(b.date) - new Date(a.date));
-      break;
-    default: // 'featured'
-      products.sort((a, b) => b.featured - a.featured);
-      break;
+  if (products.length > 0) {
+    switch (sortValue) {
+      case 'price-low':
+        products.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        products.sort((a, b) => b.price - a.price);
+        break;
+      case 'newest':
+        products.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+        break;
+      default: // 'featured'
+        products.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        break;
+    }
   }
   
   // Update products grid
@@ -400,194 +491,40 @@ function showNotification(message) {
 }
 
 // Get product by ID
-function getProductById(productId) {
-  const products = getAllProducts();
-  return products.find(product => product.id === productId);
+async function getProductById(productId) {
+  try {
+    if (window.apiService) {
+      return await window.apiService.fetchProductById(productId);
+    }
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+  }
+  return null;
 }
 
 // Get all men's products
 async function getMensProducts() {
-  // Try to fetch from API first
+  console.log('[DEBUG] getMensProducts() called');
   try {
     if (window.apiService) {
+      console.log('[DEBUG] apiService exists, calling fetchProductsByCategory');
       const products = await window.apiService.fetchProductsByCategory("Men's Collection");
+      console.log(`[DEBUG] fetchProductsByCategory returned:`, products);
+      
       if (products && products.length > 0) {
+        console.log(`[DEBUG] Returning ${products.length} products`);
         return products;
+      } else {
+        console.log('[DEBUG] No products returned from API');
       }
+    } else {
+      console.error('[DEBUG] apiService not found');
     }
   } catch (error) {
-    console.warn('Error fetching men\'s products from API, falling back to local data:', error);
+    console.error('[DEBUG] Error fetching men\'s products from API:', error);
   }
   
-  // Fallback to local data if API fails or returns empty
-  return getAllProducts().filter(product => product.category.includes("Men's"));
-}
-
-// Mock product data (in a real application, this would come from an API)
-function getAllProducts() {
-  return [
-    // Men's Collection
-    {
-      id: '5',
-      name: 'Classic White Shirt',
-      category: "Men's Collection",
-      price: 65.00,
-      description: 'Timeless white shirt made from premium cotton. A wardrobe essential for every man.',
-      sku: 'MS12345',
-      rating: 4.8,
-      reviews: 42,
-      featured: 1,
-      date: '2025-01-15',
-      tags: ['shirts', 'formal']
-    },
-    {
-      id: '6',
-      name: 'Navy Blue Blazer',
-      category: "Men's Collection",
-      price: 175.00,
-      oldPrice: 220.00,
-      description: 'Sophisticated navy blue blazer perfect for formal occasions. Tailored fit with premium details.',
-      sku: 'MB67890',
-      rating: 4.7,
-      reviews: 28,
-      featured: 1,
-      date: '2025-02-10',
-      tags: ['jackets', 'formal']
-    },
-    {
-      id: '7',
-      name: 'Slim Fit Chinos',
-      category: "Men's Collection",
-      price: 85.00,
-      description: 'Versatile slim fit chinos that transition seamlessly from casual to smart casual occasions.',
-      sku: 'MC54321',
-      rating: 4.5,
-      reviews: 36,
-      featured: 0,
-      date: '2025-01-20',
-      tags: ['pants', 'casual']
-    },
-    {
-      id: '8',
-      name: 'Wool Sweater',
-      category: "Men's Collection",
-      price: 95.00,
-      oldPrice: 120.00,
-      description: 'Warm and comfortable wool sweater, perfect for colder days. Features a classic design.',
-      sku: 'MS98765',
-      rating: 4.3,
-      reviews: 22,
-      featured: 0,
-      date: '2025-02-05',
-      tags: ['sweaters', 'casual']
-    },
-    {
-      id: '15',
-      name: 'Casual Polo Shirt',
-      category: "Men's Collection",
-      price: 40.00,
-      description: 'Classic polo shirt with a modern fit. Perfect for casual occasions and everyday wear.',
-      sku: 'MP13579',
-      rating: 4.4,
-      reviews: 31,
-      featured: 0,
-      date: '2025-03-01',
-      tags: ['shirts', 'casual']
-    },
-    {
-      id: '16',
-      name: 'Leather Belt',
-      category: "Men's Collection",
-      price: 35.00,
-      oldPrice: 45.00,
-      description: 'Premium leather belt with a classic buckle. A timeless accessory for any outfit.',
-      sku: 'MB24680',
-      rating: 4.7,
-      reviews: 26,
-      featured: 0,
-      date: '2025-02-15',
-      tags: ['accessories']
-    },
-    {
-      id: '19',
-      name: 'Denim Jacket',
-      category: "Men's Collection",
-      price: 110.00,
-      description: 'Classic denim jacket with a modern fit. Perfect for layering in any season.',
-      sku: 'MJ12345',
-      rating: 4.6,
-      reviews: 33,
-      featured: 1,
-      date: '2025-03-10',
-      tags: ['jackets', 'casual']
-    },
-    {
-      id: '20',
-      name: 'Graphic T-Shirt',
-      category: "Men's Collection",
-      price: 30.00,
-      oldPrice: 40.00,
-      description: 'Comfortable cotton t-shirt featuring a unique graphic design. Great for casual everyday wear.',
-      sku: 'MT67890',
-      rating: 4.2,
-      reviews: 45,
-      featured: 0,
-      date: '2025-04-01',
-      tags: ['shirts', 'casual']
-    },
-    {
-      id: '21',
-      name: 'Slim Fit Jeans',
-      category: "Men's Collection",
-      price: 75.00,
-      description: 'Classic slim fit jeans made from premium denim. Versatile and comfortable for everyday wear.',
-      sku: 'MJ54321',
-      rating: 4.5,
-      reviews: 38,
-      featured: 1,
-      date: '2025-03-15',
-      tags: ['pants', 'casual']
-    },
-    {
-      id: '22',
-      name: 'Formal Dress Shoes',
-      category: "Men's Collection",
-      price: 120.00,
-      oldPrice: 150.00,
-      description: 'Elegant leather dress shoes perfect for formal occasions. Features a classic design with modern comfort.',
-      sku: 'MS98765',
-      rating: 4.8,
-      reviews: 29,
-      featured: 0,
-      date: '2025-02-20',
-      tags: ['shoes', 'formal']
-    },
-    {
-      id: '23',
-      name: 'Patterned Socks',
-      category: "Men's Collection",
-      price: 15.00,
-      description: 'Colorful patterned socks made from comfortable cotton blend. Add a touch of personality to any outfit.',
-      sku: 'MS13579',
-      rating: 4.3,
-      reviews: 52,
-      featured: 0,
-      date: '2025-04-05',
-      tags: ['accessories']
-    },
-    {
-      id: '24',
-      name: 'Leather Wallet',
-      category: "Men's Collection",
-      price: 45.00,
-      oldPrice: 60.00,
-      description: 'Premium leather wallet with multiple card slots and a sleek design. Perfect for everyday use.',
-      sku: 'MW24680',
-      rating: 4.7,
-      reviews: 41,
-      featured: 0,
-      date: '2025-03-25',
-      tags: ['accessories']
-    }
-  ];
+  // Return empty array if API fails
+  console.log('[DEBUG] Returning empty array');
+  return [];
 }
