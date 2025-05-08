@@ -1,0 +1,41 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("admin-register-form");
+  const errorMsg = document.getElementById("error-msg");
+
+  if (!form) {
+    console.error("Form not found in the DOM!");
+    return;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const adminID = document.getElementById("adminID").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    try {
+      const res = await fetch("/register-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, adminID, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorMsg.textContent = data.message || "Registration failed.";
+        return;
+      }
+
+      alert("Admin registered successfully. Redirecting to login...");
+      window.location.href = "/admin-login.html";
+    } catch (err) {
+      console.error(err);
+      errorMsg.textContent = "An error occurred. Please try again.";
+    }
+  });
+});

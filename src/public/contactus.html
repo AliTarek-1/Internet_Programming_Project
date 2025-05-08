@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact Us - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/contact.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Contact Us</h1>
+        <p>We're here to help and answer any questions you might have</p>
+      </div>
+    </section>
+
+    <!-- Contact Info Section -->
+    <section class="contact-info">
+      <div class="container">
+        <div class="section-header">
+          <h5>Have any queries?</h5>
+          <h2>We're here to help</h2>
+          <p>
+            Our team is always ready to assist you with any questions or
+            concerns you may have.
+          </p>
+        </div>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3>Customer Support</h3>
+            <p>Available 24/7 to assist you with any questions or concerns.</p>
+            <a href="tel:18001234567">1800 123 4567</a>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email Us</h3>
+            <p>Send us an email and we'll get back to you within 24 hours.</p>
+            <a href="mailto:support@brandstore.com">support@brandstore.com</a>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Visit Us</h3>
+            <p>123 Business Street, Suite 100, New York, NY 10001</p>
+            <a href="#" class="map-link">View on Map</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section">
+      <div class="container">
+        <div class="form-container">
+          <div class="form-left">
+            <h5>Don't be a stranger!</h5>
+            <h2>You tell us. We listen.</h2>
+            <p>
+              We value your feedback and are committed to providing the best
+              possible service. Whether you have a question, suggestion, or
+              concern, we're here to help.
+            </p>
+            <div class="form-features">
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>24/7 Customer Support</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Quick Response Time</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Professional Assistance</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-right">
+            <form id="contactForm">
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Your Name"
+                  required
+                />
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Your Email"
+                  required
+                />
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  placeholder="Subject"
+                  required
+                />
+                <i class="fas fa-tag"></i>
+              </div>
+              <div class="form-group">
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Your Message"
+                  required
+                ></textarea>
+                <i class="fas fa-comment"></i>
+              </div>
+              <button type="submit" class="submit-btn">
+                <span>Send Message</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Frequently Asked Questions</h2>
+          <p>Find quick answers to common questions</p>
+        </div>
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How can I track my order?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                You can track your order by logging into your account and
+                visiting the "My Orders" section. You'll receive tracking
+                information via email once your order is shipped.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>What is your return policy?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                We offer a 30-day return policy for all items. Items must be
+                unused and in their original packaging. Please contact our
+                customer service for return instructions.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Do you ship internationally?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes, we ship to most countries worldwide. Shipping costs and
+                delivery times vary depending on the destination. You can check
+                the shipping rates during checkout.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Stay Updated</h2>
+          <p>Subscribe to our newsletter for the latest updates and offers</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" required />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/contact.js"></script>
+  </body>
+</html>

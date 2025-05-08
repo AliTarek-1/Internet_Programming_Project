@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/order-confirmation.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Page Content Wrapper -->
+    <div class="page-wrapper">
+      <section class="confirmation-section">
+        <div class="container">
+          <!-- Success Message -->
+          <div class="success-message">
+            <div class="success-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Thank You for Your Order!</h1>
+            <p>Your order has been successfully placed.</p>
+          </div>
+
+          <!-- Order Details -->
+          <div class="order-details">
+            <div class="order-header">
+              <h2>Order Details</h2>
+              <div class="order-meta">
+                <p>Order #: <span id="orderId"></span></p>
+                <p>Date: <span id="orderDate"></span></p>
+              </div>
+            </div>
+
+            <!-- Shipping Information -->
+            <div class="info-section">
+              <h3>Shipping Information</h3>
+              <div id="shippingInfo" class="info-content"></div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="info-section">
+              <h3>Payment Information</h3>
+              <div id="paymentInfo" class="info-content"></div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="info-section">
+              <h3>Order Summary</h3>
+              <div class="order-items" id="orderItems"></div>
+              <div class="order-totals">
+                <div class="total-row">
+                  <span>Subtotal</span>
+                  <span id="subtotal"></span>
+                </div>
+                <div class="total-row">
+                  <span>Shipping</span>
+                  <span id="shipping"></span>
+                </div>
+                <div class="total-row">
+                  <span>Tax</span>
+                  <span id="tax"></span>
+                </div>
+                <div
+                  class="total-row discount"
+                  id="discountRow"
+                  style="display: none"
+                >
+                  <span>Discount</span>
+                  <span id="discount"></span>
+                </div>
+                <div class="total-row grand-total">
+                  <span>Total</span>
+                  <span id="total"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a href="HomePage.html" class="btn btn-primary">
+              <i class="fas fa-shopping-bag"></i>
+              Continue Shopping
+            </a>
+            <button onclick="printOrder()" class="btn btn-secondary">
+              <i class="fas fa-print"></i>
+              Print Order
+            </button>
+          </div>
+
+          <!-- Support Information -->
+          <div class="support-info">
+            <h3>Need Help?</h3>
+            <p>
+              If you have any questions about your order, please contact our
+              customer support:
+            </p>
+            <div class="contact-options">
+              <a href="tel:+1234567890" class="contact-option">
+                <i class="fas fa-phone"></i>
+                <span>Call Us</span>
+              </a>
+              <a href="mailto:support@brandstore.com" class="contact-option">
+                <i class="fas fa-envelope"></i>
+                <span>Email Us</span>
+              </a>
+              <a href="#" class="contact-option">
+                <i class="fas fa-comments"></i>
+                <span>Live Chat</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/order-confirmation.js"></script>
+  </body>
+</html>

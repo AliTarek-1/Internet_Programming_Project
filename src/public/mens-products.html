@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Men's Collection - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/products.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="category-badge">Men's Collection</span>
+        <h1>Stylish Essentials for Modern Men</h1>
+        <p>Discover premium quality clothing designed for comfort and style</p>
+      </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters">
+      <div class="container">
+        <div class="search-box">
+          <input type="text" placeholder="Search for products..." />
+          <i class="fas fa-search"></i>
+        </div>
+
+        <div class="filter-options">
+          <select class="category-filter">
+            <option value="">All Categories</option>
+            <option value="shirts">Shirts</option>
+            <option value="pants">Pants</option>
+            <option value="jackets">Jackets</option>
+            <option value="accessories">Accessories</option>
+          </select>
+
+          <select class="sort-filter">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Men's Collection</h2>
+          <p>Quality clothing and accessories for the modern man</p>
+        </div>
+
+        <div class="products-grid">
+          <!-- Products will be dynamically loaded here from products.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Section -->
+    <section class="trending-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Trending This Season</h2>
+          <p>Our most popular picks for the season</p>
+        </div>
+        <div class="trending-categories">
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h3>Casual Shirts</h3>
+            <p>Perfect for everyday wear</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>Formal Wear</h3>
+            <p>Make a statement at work</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-hiking"></i>
+            </div>
+            <h3>Activewear</h3>
+            <p>Performance meets style</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+          <div class="category-card">
+            <div class="category-icon">
+              <i class="fas fa-mitten"></i>
+            </div>
+            <h3>Accessories</h3>
+            <p>Complete your look</p>
+            <a href="#" class="category-link"
+              >Explore <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Subscribe to Our Newsletter</h2>
+          <p>Get the latest updates on new products and exclusive offers</p>
+
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email Address" required />
+            <button type="submit">
+              Subscribe <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/debug-api.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/mens-products.js"></script>
+  </body>
+</html>
