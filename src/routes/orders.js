@@ -107,4 +107,75 @@ router.get('/', async (req, res) => {
   }
 });
 
+/**
+ * Update order status
+ * PATCH /api/orders/:orderId/status
+ */
+router.patch('/:orderId/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const order = await Order.findOneAndUpdate(
+      { orderId: req.params.orderId },
+      { status },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+
+    // Here you would add logic to send email notifications
+    // when status changes to "shipped" or "delivered"
+
+    res.json({
+      success: true,
+      order
+    });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error updating order status'
+    });
+  }
+});
+
+/**
+ * Issue refund for an order
+ * POST /api/orders/:orderId/refund
+ */
+router.post('/:orderId/refund', async (req, res) => {
+  try {
+    const order = await Order.findOneAndUpdate(
+      { orderId: req.params.orderId },
+      { status: 'refunded' },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+
+    // Here you would integrate with your payment processor
+    // to actually process the refund
+
+    res.json({
+      success: true,
+      order
+    });
+  } catch (error) {
+    console.error('Error processing refund:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error processing refund'
+    });
+  }
+});
+
 module.exports = router; 

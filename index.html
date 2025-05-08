@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -41,19 +41,42 @@
       </table>
     </section>
 
-    <section id="orders">
-      <h2>Order Management</h2>
-      <table>
-        <thead>
-          <tr><th>Order ID</th><th>Customer</th><th>Status</th><th>Action</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>#1001</td><td>Jane Doe</td><td>Pending</td><td><button onclick="markShipped(this)">Ship</button></td></tr>
-          <tr><td>#1002</td><td>John Smith</td><td>Shipped</td><td><button disabled>Shipped</button></td></tr>
-        </tbody>
-      </table>
-    </section>
-
+<section id="orders">
+  <h2>Order Management</h2>
+  <div class="order-controls">
+    <button id="refresh-orders">Refresh Orders</button>
+    <div class="filter-controls">
+      <label>
+        <input type="checkbox" class="status-filter" value="pending" checked> Pending
+      </label>
+      <label>
+        <input type="checkbox" class="status-filter" value="processing" checked> Processing
+      </label>
+      <label>
+        <input type="checkbox" class="status-filter" value="shipped" checked> Shipped
+      </label>
+    </div>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Shipping Address</th>
+          <th>Payment</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="orders-table-body">
+        <!-- Orders will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+</section>
   </div>
 
   <script src="scripts/dashboard.js"></script>
