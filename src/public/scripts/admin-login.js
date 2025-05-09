@@ -8,13 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    errorMsg.textContent = "";
-
-    if (!email || !password) {
-      errorMsg.textContent = "Please enter both email and password.";
-      return;
-    }
-
     try {
       const res = await fetch("/admin-login", {
         method: "POST",
@@ -24,20 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
 
-      if (!res.ok || !data.success) {
+      if (!res.ok) {
         errorMsg.textContent = data.message || "Invalid email or password.";
         return;
       }
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/admin-dashboard.html";
-      } else {
-        errorMsg.textContent = "Login failed. No token received.";
-      }
+      // ✅ Save JWT token to localStorage
+      localStorage.setItem("token", data.token);
+
+      alert("Login successful. Redirecting to dashboard...");
+      window.location.href = "/admin-dashboard.html"; // ✅ Correct redirection
     } catch (err) {
-      console.error("Login Error:", err);
-      errorMsg.textContent = "Server error. Please try again later.";
+      errorMsg.textContent = "Login error. Try again.";
     }
   });
 });

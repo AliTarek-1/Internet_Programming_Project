@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndRenderProducts();
   renderInventory();
-  bindFormSubmit(); // Initial form submission handler
+  bindFormSubmit();
   fetchAndRenderOrders();
+  fetchAndRenderPromotions();
+  bindPromotionFormSubmit();
 });
 
+// Product Form Handling
 function bindFormSubmit(product = null) {
   const form = document.getElementById("add-product-form");
 
@@ -12,18 +15,18 @@ function bindFormSubmit(product = null) {
     e.preventDefault();
 
     const formData = {
-      productID: "PROD-" + Date.now(), // or any unique generator
+      productID: "PROD-" + Date.now(),
       name: document.getElementById("name").value.trim(),
       description: document.getElementById("description").value.trim(),
       price: parseFloat(document.getElementById("price").value),
-      oldPrice: 0, // optional
-      category: document.getElementById("category").value.trim(), // must match enum
-      type: "Shirts", // hardcoded or from a dropdown that matches enum
-      image: document.getElementById("image").value.trim(), // not images[0]
+      oldPrice: 0,
+      category: document.getElementById("category").value.trim(),
+      type: "Shirts",
+      image: document.getElementById("image").value.trim(),
       inventory: parseInt(document.getElementById("stock").value),
-      sku: document.getElementById("sku").value.trim(), // <- new required input
-      tags: [], // optional
-      featured: false, // optional
+      sku: document.getElementById("sku").value.trim(),
+      tags: [],
+      featured: false,
     };
 
     const url = product ? `/api/products/${product._id}` : "/api/products";
@@ -53,11 +56,10 @@ function bindFormSubmit(product = null) {
   });
 }
 
+// Products Section
 async function fetchAndRenderProducts() {
   const res = await fetch("/api/products", {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
 
   if (!res.ok) return alert("Failed to load products");
@@ -72,7 +74,7 @@ async function fetchAndRenderProducts() {
       <b>${product.name || "Unnamed Product"}</b> (${
       product.category || "No category"
     })<br>
-      $${product.price ?? "N/A"} - Stock: ${product.stock ?? "?"}<br>
+      $${product.price ?? "N/A"} - Stock: ${product.inventory ?? "?"}<br>
       ${product.description ? `<i>${product.description}</i><br>` : ""}
       ${
         product.images?.[0]
@@ -101,9 +103,7 @@ async function deleteProduct(id) {
 
   const res = await fetch(`/api/products/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
 
   if (res.ok) {
@@ -133,43 +133,81 @@ function editProduct(product) {
   bindFormSubmit(product);
 }
 
+// Inventory Section with Low Stock Alerts and Restock
 async function renderInventory() {
   const res = await fetch("/api/inventory", {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
 
   if (!res.ok) return alert("Failed to load inventory");
 
-  const { data } = await res.json(); // ✅ Fix: not `products`, it's `data`
+  const { data } = await res.json();
   const tbody = document.querySelector("#inventory-table tbody");
   tbody.innerHTML = "";
 
   data.forEach((item) => {
     const row = document.createElement("tr");
 
+    let statusColor = "green";
+    let alertMessage = "";
+    if (item.status === "Out of Stock") {
+      statusColor = "red";
+      alertMessage = "⚠️ Out of Stock!";
+    } else if (item.status === "Low Stock") {
+      statusColor = "orange";
+      alertMessage = "⚠️ Low Stock!";
+    }
+
     row.innerHTML = `
       <td>${item.productName}</td>
       <td>${item.quantity}</td>
-      <td style="color: ${
-        item.status === "Out of Stock"
-          ? "red"
-          : item.status === "Low Stock"
-          ? "orange"
-          : "green"
-      }">${item.status}</td>
+      <td style="color: ${statusColor}; font-weight: bold;">
+        ${item.status} ${alertMessage}
+      </td>
     `;
+
+    const restockBtn = document.createElement("button");
+    restockBtn.textContent = "Restock";
+    restockBtn.classList.add("btn", "btn-primary");
+    restockBtn.addEventListener("click", () => restockItem(item.SKU));
+    const restockCell = document.createElement("td");
+    restockCell.appendChild(restockBtn);
+    row.appendChild(restockCell);
 
     tbody.appendChild(row);
   });
 }
 
-async function fetchAndRenderOrders() {
-  const res = await fetch("/api/orders", {
+async function restockItem(sku) {
+  const quantity = prompt("Enter quantity to add:");
+
+  if (!quantity || isNaN(quantity) || quantity <= 0) {
+    alert("Invalid quantity.");
+    return;
+  }
+
+  const res = await fetch(`/api/inventory/${sku}/restock`, {
+    method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
+    body: JSON.stringify({ quantity: parseInt(quantity) }),
+  });
+
+  if (res.ok) {
+    alert("Stock updated successfully!");
+    renderInventory();
+  } else {
+    const error = await res.json();
+    alert("Failed to restock: " + error.message);
+  }
+}
+
+// Orders Section (Already Correct)
+async function fetchAndRenderOrders() {
+  const res = await fetch("/api/orders", {
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
 
   if (!res.ok) return alert("Failed to load orders");
@@ -181,22 +219,18 @@ async function fetchAndRenderOrders() {
   orders.forEach((order) => {
     const row = document.createElement("tr");
 
-    // Order ID
     const idCell = document.createElement("td");
     idCell.textContent = order.orderId;
     row.appendChild(idCell);
 
-    // Customer
     const customerCell = document.createElement("td");
     customerCell.textContent = order.customer?.fullName || "Unknown";
     row.appendChild(customerCell);
 
-    // Status
     const statusCell = document.createElement("td");
     statusCell.textContent = order.status;
     row.appendChild(statusCell);
 
-    // Actions
     const actionCell = document.createElement("td");
 
     const shipBtn = document.createElement("button");
@@ -235,6 +269,7 @@ async function updateOrderStatus(orderId, status) {
     },
     body: JSON.stringify({ status }),
   });
+
   if (res.ok) {
     alert("Order status updated");
     fetchAndRenderOrders();
@@ -247,10 +282,9 @@ async function updateOrderStatus(orderId, status) {
 async function sendOrderConfirmation(orderId) {
   const res = await fetch(`/api/orders/${orderId}/confirm`, {
     method: "POST",
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
+
   if (res.ok) {
     alert("Confirmation email sent");
   } else {
@@ -262,10 +296,9 @@ async function sendOrderConfirmation(orderId) {
 async function issueRefund(orderId) {
   const res = await fetch(`/api/orders/${orderId}/refund`, {
     method: "POST",
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   });
+
   if (res.ok) {
     alert("Order refunded successfully");
     fetchAndRenderOrders();
@@ -273,4 +306,88 @@ async function issueRefund(orderId) {
     const error = await res.json();
     alert("Failed to refund order: " + error.error);
   }
+}
+
+async function fetchAndRenderPromotions() {
+  try {
+    const res = await fetch("/api/discount");
+    if (!res.ok) return alert("Failed to load promotions.");
+
+    const { discount } = await res.json();
+    const container = document.getElementById("promotion-list");
+    container.innerHTML = "<h3>Active Promotions</h3>";
+
+    discount.forEach((promo) => {
+      const promoDiv = document.createElement("div");
+
+      const title = document.createElement("b");
+      title.textContent = `${promo.title} (${promo.discount_type})`;
+
+      const discountValue = document.createElement("p");
+      discountValue.textContent = `Discount: ${promo.value} ${
+        promo.discount_type === "percentage" ? "%" : "$"
+      }`;
+
+      const code = document.createElement("p");
+      code.textContent = `Code: ${promo.code || "No code required"}`;
+
+      const validUntil = document.createElement("i");
+      validUntil.textContent = `Valid Until: ${new Date(
+        promo.end_date
+      ).toLocaleDateString()}`;
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.addEventListener("click", () => deletePromotion(promo._id));
+
+      promoDiv.append(title, discountValue, code, validUntil, deleteBtn);
+      container.appendChild(promoDiv);
+    });
+  } catch (err) {
+    alert("Error loading promotions.");
+  }
+}
+
+async function deletePromotion(id) {
+  const res = await fetch(`/api/discount/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    alert("Promotion deleted!");
+    fetchAndRenderPromotions();
+  } else {
+    alert("Failed to delete promotion.");
+  }
+}
+
+function bindPromotionFormSubmit() {
+  const form = document.getElementById("add-promotion-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      title: document.getElementById("promo-title").value.trim(),
+      discount_type: document.getElementById("promo-type").value,
+      value: parseFloat(document.getElementById("promo-value").value),
+      code: document.getElementById("promo-code").value.trim() || undefined,
+      start_date: document.getElementById("promo-start").value,
+      end_date: document.getElementById("promo-end").value,
+      usage_limit:
+        parseInt(document.getElementById("promo-usage").value) || 100,
+      status: "active",
+    };
+
+    const res = await fetch("/api/discount", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      alert("Promotion added!");
+      form.reset();
+      fetchAndRenderPromotions();
+    } else {
+      const error = await res.json();
+      alert("Failed to add promotion: " + error.message);
+    }
+  });
 }

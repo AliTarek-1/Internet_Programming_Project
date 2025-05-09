@@ -88,6 +88,40 @@ router.post("/register-admin", async (req, res) => {
 });
 
 // -------------------------------------------
+// Admin Login
+// -------------------------------------------
+router.post("/admin-login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // 1. Find admin by email
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).json({ message: "Admin not found." });
+    }
+
+    // 2. Compare password
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password." });
+    }
+
+    // 3. Create JWT Token
+    const token = jwt.sign(
+      { id: admin._id, role: "admin" },
+      process.env.JWT_SECRET || "fallbacksecret", // Make sure .env contains JWT_SECRET
+      { expiresIn: "1h" }
+    );
+
+    // 4. Respond with token
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error("Login Error:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
+// -------------------------------------------
 // Regular User Signup
 // -------------------------------------------
 router.post("/signup", async (req, res) => {

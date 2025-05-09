@@ -94,6 +94,7 @@ app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/inventory", require("./routes/inventoryRoutes"));
+app.use("/api/discounts", require("./routes/discountRoutes"));
 
 //app.use("/api/inventory", inventoryRoutes); // ✅ this is the key part
 
