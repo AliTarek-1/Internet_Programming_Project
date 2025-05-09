@@ -318,8 +318,11 @@ exports.getProductsByCategory = async (req, res) => {
   try {
     const { category } = req.params;
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
+    const limit = parseInt(req.query.limit, 10) || 100; // Increased limit to ensure we get all products
     const startIndex = (page - 1) * limit;
+    const subcategory = req.query.subcategory;
+    
+    console.log(`[DEBUG] Getting products for category: ${category}, subcategory: ${subcategory || 'none'}`);
     
     // Validate category
     const validCategories = ["Men's Collection", "Women's Collection", "Children's Collection"];
@@ -329,18 +332,37 @@ exports.getProductsByCategory = async (req, res) => {
     if (!matchedCategory) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid category'
+        message: 'Invalid category',
+        products: [] // Always include products property even when empty
       });
     }
     
+    // Build query object
+    let query = { category: matchedCategory };
+    
+    // Add subcategory filtering if provided
+    if (subcategory) {
+      // Check in multiple fields where subcategory info might be stored
+      query.$or = [
+        { type: { $regex: subcategory, $options: 'i' } },
+        { tags: { $elemMatch: { $regex: subcategory, $options: 'i' } } },
+        { name: { $regex: subcategory, $options: 'i' } },
+        { description: { $regex: subcategory, $options: 'i' } }
+      ];
+    }
+    
+    console.log(`[DEBUG] Query:`, JSON.stringify(query));
+    
     // Find products by category
-    const products = await Product.find({ category: matchedCategory })
+    const products = await Product.find(query)
       .sort(req.query.sort || '-createdAt')
       .skip(startIndex)
       .limit(limit);
     
+    console.log(`[DEBUG] Found ${products.length} products for ${matchedCategory}`);
+    
     // Get total count
-    const totalProducts = await Product.countDocuments({ category: matchedCategory });
+    const totalProducts = await Product.countDocuments(query);
     
     // Pagination
     const pagination = {};
@@ -359,19 +381,21 @@ exports.getProductsByCategory = async (req, res) => {
       };
     }
     
+    // Always return data in the 'products' property to match frontend expectations
     res.status(200).json({
       success: true,
       count: products.length,
       pagination,
       totalProducts,
-      products: products // Changed from 'data' to 'products' to match frontend expectations
+      products: products
     });
   } catch (error) {
     console.error('Get Products By Category Error:', error);
     res.status(500).json({
       success: false,
       message: 'Error retrieving products by category',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      products: [] // Always include products property even when empty
     });
   }
 };

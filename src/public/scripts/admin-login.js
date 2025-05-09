@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
               // Store token in localStorage
               localStorage.setItem('adminToken', data.token);
+              console.log('Admin login successful:', data.admin);
               // Redirect to dashboard
               window.location.href = '/admin/dashboard.html';
             } else {

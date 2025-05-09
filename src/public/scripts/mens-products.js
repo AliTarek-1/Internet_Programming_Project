@@ -54,18 +54,42 @@ async function loadProducts() {
   if (categoryParam) {
     console.log(`[DEBUG] Filtering products by category: ${categoryParam}`);
     const originalCount = products.length;
+    const paramCategory = categoryParam.toLowerCase();
     
     products = products.filter(product => {
-      // Convert parameter to lowercase for case-insensitive comparison
-      const paramCategory = categoryParam.toLowerCase();
+      // Check in multiple places where category info might be stored
       
-      // Check if any of the product tags match the parameter category
+      // 1. Check in tags array
       const hasTags = product.tags && Array.isArray(product.tags);
-      console.log(`[DEBUG] Product ${product.name} has tags: ${hasTags ? 'yes' : 'no'}`);
-      
-      if (hasTags) {
-        return product.tags.some(tag => tag.toLowerCase() === paramCategory);
+      if (hasTags && product.tags.some(tag => tag.toLowerCase() === paramCategory)) {
+        console.log(`[DEBUG] Product ${product.name} matched by tags`);
+        return true;
       }
+      
+      // 2. Check in category field
+      if (product.category && product.category.toLowerCase().includes(paramCategory)) {
+        console.log(`[DEBUG] Product ${product.name} matched by category field`);
+        return true;
+      }
+      
+      // 3. Check in subcategory field
+      if (product.subcategory && product.subcategory.toLowerCase() === paramCategory) {
+        console.log(`[DEBUG] Product ${product.name} matched by subcategory field`);
+        return true;
+      }
+      
+      // 4. Check in product name
+      if (product.name && product.name.toLowerCase().includes(paramCategory)) {
+        console.log(`[DEBUG] Product ${product.name} matched by name`);
+        return true;
+      }
+      
+      // 5. Check in product type
+      if (product.type && product.type.toLowerCase() === paramCategory) {
+        console.log(`[DEBUG] Product ${product.name} matched by type`);
+        return true;
+      }
+      
       return false;
     });
     
@@ -360,10 +384,46 @@ async function filterProducts() {
   
   // Filter by category
   if (categoryValue) {
+    console.log(`[DEBUG] Filtering by category: ${categoryValue}`);
+    
     products = products.filter(product => {
-      // For 'shirts', 'pants', 'jackets', etc. - check the tags array
-      return product.tags && product.tags.some(tag => tag.toLowerCase() === categoryValue);
+      // Check in multiple places where category info might be stored
+      
+      // 1. Check in tags array
+      const hasTags = product.tags && Array.isArray(product.tags);
+      if (hasTags && product.tags.some(tag => tag.toLowerCase() === categoryValue)) {
+        console.log(`[DEBUG] Product ${product.name} matched by tags`);
+        return true;
+      }
+      
+      // 2. Check in category field
+      if (product.category && product.category.toLowerCase().includes(categoryValue)) {
+        console.log(`[DEBUG] Product ${product.name} matched by category field`);
+        return true;
+      }
+      
+      // 3. Check in subcategory field
+      if (product.subcategory && product.subcategory.toLowerCase() === categoryValue) {
+        console.log(`[DEBUG] Product ${product.name} matched by subcategory field`);
+        return true;
+      }
+      
+      // 4. Check in product name
+      if (product.name && product.name.toLowerCase().includes(categoryValue)) {
+        console.log(`[DEBUG] Product ${product.name} matched by name`);
+        return true;
+      }
+      
+      // 5. Check in product type
+      if (product.type && product.type.toLowerCase() === categoryValue) {
+        console.log(`[DEBUG] Product ${product.name} matched by type`);
+        return true;
+      }
+      
+      return false;
     });
+    
+    console.log(`[DEBUG] Found ${products.length} products matching category: ${categoryValue}`);
   }
   
   console.log(`[DEBUG] After filtering: ${products.length} products, sorting by: ${sortValue}`);

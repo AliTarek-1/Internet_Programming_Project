@@ -152,7 +152,13 @@ router.post("/signup", async (req, res, next) => {
 
     // Create a new User instance
     console.log('👤 Creating new user instance');
+    
+    // Generate a unique userID
+    const userID = `user_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    console.log('🔑 Generated userID:', userID);
+    
     const user = new User({
+      userID, // Add the generated userID
       username,
       email,
       password, // Password will be encrypted below
@@ -189,17 +195,54 @@ router.post("/signup", async (req, res, next) => {
       throw saveError; // Re-throw to be caught by the outer catch block
     }
 
-    // Use the helper function to send token response
+    // Generate JWT token and send response
     console.log('🎟️ Generating token response...');
-    sendTokenResponse(user, 201, res);
-    console.log('✅ Token response sent');
+    const token = generateToken(user);
+    
+    // Remove password from output
+    user.password = undefined;
+    
+    // Set cookie
+    res.cookie('token', token, cookieOptions);
+    
+    // Send success response with token and user data
+    res.status(201).json({
+      success: true,
+      message: 'Registration successful! You are now logged in.',
+      token,
+      user: {
+        id: user._id,
+        userID: user.userID,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+    
+    console.log('✅ Token response sent - User automatically signed in');
   } catch (error) {
     console.error("❌ Signup Error:", error);
     console.error("Stack trace:", error.stack);
+    
+    // More detailed error information
+    const errorDetails = {
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      keyValue: error.keyValue, // For duplicate key errors
+      validationErrors: error.errors ? Object.keys(error.errors).map(key => ({
+        field: key,
+        message: error.errors[key].message,
+        kind: error.errors[key].kind
+      })) : undefined
+    };
+    
+    console.error("Detailed error information:", JSON.stringify(errorDetails, null, 2));
+    
     res.status(500).json({
       success: false,
       message: "An error occurred during registration.",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' ? errorDetails : undefined
     });
   }
 });

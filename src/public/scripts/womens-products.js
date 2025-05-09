@@ -42,13 +42,14 @@ async function loadProducts() {
   
   // Filter products by category if specified in URL
   if (categoryParam) {
-    products = products.filter(product => {
-      // Convert both to lowercase for case-insensitive comparison
-      const productCategory = product.category.toLowerCase();
-      const paramCategory = categoryParam.toLowerCase();
-      
-      // Check if the product category contains the parameter category
-      return productCategory.includes(paramCategory);
+    console.log(`[DEBUG] URL parameter category: ${categoryParam}`);
+    
+    // Use the more detailed filterProducts function with the category parameter
+    products = await filterProducts(products, {
+      category: categoryParam,
+      search: '',
+      price: '',
+      sort: 'default'
     });
     
     // Update the category filter dropdown to match URL parameter
@@ -302,55 +303,147 @@ function initFilters() {
 }
 
 // Filter and sort products
-async function filterProducts() {
-  const searchInput = document.querySelector('.search-box input');
-  const categoryFilter = document.querySelector('.category-filter');
-  const sortFilter = document.querySelector('.sort-filter');
+async function filterProducts(productsToFilter, filterOptions) {
+  // Handle both UI filtering and programmatic filtering
+  let searchTerm = '';
+  let categoryValue = '';
+  let sortValue = 'default';
+  let priceRange = '';
   
-  const searchTerm = searchInput.value.toLowerCase();
-  const categoryValue = categoryFilter.value;
-  const sortValue = sortFilter.value;
+  // If filterOptions is provided, use those values
+  if (filterOptions) {
+    searchTerm = filterOptions.search || '';
+    categoryValue = filterOptions.category || '';
+    sortValue = filterOptions.sort || 'default';
+    priceRange = filterOptions.price || '';
+  } else {
+    // Otherwise get values from UI elements
+    const searchInput = document.querySelector('.search-box input');
+    const categoryFilter = document.querySelector('.category-filter');
+    const sortFilter = document.querySelector('.sort-filter');
+    
+    searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    categoryValue = categoryFilter ? categoryFilter.value : '';
+    sortValue = sortFilter ? sortFilter.value : 'default';
+  }
   
-  // Get all women's products
-  let filteredProducts = await getWomensProducts();
+  // Use provided products or fetch them if not provided
+  let filteredProducts = productsToFilter || await getWomensProducts();
   
   // Filter by search term
   if (searchTerm) {
     filteredProducts = filteredProducts.filter(product => 
-      product.name.toLowerCase().includes(searchTerm) || 
-      product.description.toLowerCase().includes(searchTerm)
+      (product.name && product.name.toLowerCase().includes(searchTerm)) || 
+      (product.description && product.description.toLowerCase().includes(searchTerm))
     );
   }
   
   // Filter by category
   if (categoryValue) {
-    filteredProducts = filteredProducts.filter(product => 
-      product.category.toLowerCase().includes(categoryValue) ||
-      (product.tags && product.tags.some(tag => tag.toLowerCase().includes(categoryValue)))
-    );
+    console.log(`[DEBUG] Filtering by category: ${categoryValue}`);
+    
+    // Define comprehensive category mapping to standardize filtering
+    const categoryMapping = {
+      'dresses': ['dress', 'gown', 'frock', 'wrap dress'],
+      'tops': ['top', 'blouse', 'shirt', 'tee', 't-shirt', 'sweater', 'blazer', 'jacket'],
+      'bottoms': ['pants', 'jeans', 'skirts', 'skirt', 'trousers', 'leggings', 'shorts'],
+      'pants': ['pants', 'jeans', 'trousers', 'leggings', 'shorts'],
+      'skirts': ['skirt', 'skirts'],
+      'shoes': ['shoes', 'boots', 'sandals', 'heels', 'flats', 'sneakers', 'footwear'],
+      'accessories': ['accessories', 'jewelry', 'necklace', 'bracelet', 'earrings', 'handbag', 'purse', 'bag', 'scarf']
+    };
+    
+    // Get the normalized category value and related keywords
+    const normalizedCategory = categoryValue.toLowerCase();
+    const categoryKeywords = categoryMapping[normalizedCategory] || [normalizedCategory];
+    
+    console.log(`[DEBUG] Using category keywords:`, categoryKeywords);
+    
+    // Filter products that match the category keywords
+    filteredProducts = filteredProducts.filter(product => {
+      // First, ensure the product is from the women's collection
+      const isWomensProduct = product.category && 
+        product.category.toLowerCase().includes("women");
+      
+      if (!isWomensProduct) {
+        console.log(`[DEBUG] Skipping non-women's product: ${product.name}`);
+        return false;
+      }
+      
+      // Check if product subcategory matches any of our keywords
+      if (product.subcategory) {
+        const matchesSubcategory = categoryKeywords.some(keyword => 
+          product.subcategory.toLowerCase().includes(keyword)
+        );
+        
+        if (matchesSubcategory) {
+          console.log(`[DEBUG] Product matched by subcategory: ${product.name} (${product.subcategory})`);
+          return true;
+        }
+      }
+      
+      // Check product name, type, and tags
+      const name = (product.name || '').toLowerCase();
+      const type = (product.type || '').toLowerCase();
+      const desc = (product.description || '').toLowerCase();
+      
+      // Check if any of the keywords match the product properties
+      const matchesKeywords = categoryKeywords.some(keyword => 
+        name.includes(keyword) || 
+        type.includes(keyword) || 
+        desc.includes(keyword) ||
+        (product.tags && Array.isArray(product.tags) && 
+         product.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(keyword)))
+      );
+      
+      if (matchesKeywords) {
+        console.log(`[DEBUG] Product matched by keywords: ${product.name}`);
+        return true;
+      }
+      
+      // If we have a 'pants' category, also check for 'bottoms' as a fallback
+      if (normalizedCategory === 'pants' && product.subcategory === 'bottoms') {
+        console.log(`[DEBUG] Pants category matched bottoms subcategory: ${product.name}`);
+        return true;
+      }
+      
+      return false;
+    });
+    
+    console.log(`[DEBUG] Filtered products count: ${filteredProducts.length}`);
   }
-  
+
   // Sort products
   switch (sortValue) {
     case 'price-low':
-      filteredProducts.sort((a, b) => a.price - b.price);
+      filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
       break;
     case 'price-high':
-      filteredProducts.sort((a, b) => b.price - a.price);
+      filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
       break;
-    case 'newest':
-      filteredProducts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    case 'rating':
+      filteredProducts = filteredProducts.sort((a, b) => b.averageRating - a.averageRating);
       break;
     default: // 'featured'
-      filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      filteredProducts = filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
       break;
   }
+
+  // If this is a UI-triggered filter, update the products grid
+  if (!productsToFilter) {
+    updateProductsGrid(filteredProducts);
+  }
   
-  // Update products grid
+  // Return the filtered products array
+  return filteredProducts;
+}
+
+// Update products grid with filtered products
+function updateProductsGrid(products) {
   const productsGrid = document.querySelector('.products-grid');
   productsGrid.innerHTML = '';
   
-  if (filteredProducts.length === 0) {
+  if (products.length === 0) {
     // Show no results message
     const noResults = document.createElement('div');
     noResults.className = 'no-results';
@@ -362,7 +455,7 @@ async function filterProducts() {
     productsGrid.appendChild(noResults);
   } else {
     // Add filtered products to grid
-    filteredProducts.forEach(product => {
+    products.forEach(product => {
       const productCard = createProductCard(product);
       productsGrid.appendChild(productCard);
     });
@@ -460,9 +553,82 @@ async function getProductById(productId) {
 async function getWomensProducts() {
   try {
     if (window.apiService) {
+      console.log('[DEBUG] Fetching women\'s products');
       const products = await window.apiService.fetchProductsByCategory("Women's Collection");
-      if (products && products.length > 0) {
-        return products;
+      console.log('[DEBUG] Fetched products:', products);
+      
+      if (products && Array.isArray(products) && products.length > 0) {
+        // Add debug-api.js to help diagnose API issues
+        if (!window.debugApiLoaded && !document.querySelector('script[src="/scripts/debug-api.js"]')) {
+          console.log('[DEBUG] Adding debug-api.js script');
+          const debugScript = document.createElement('script');
+          debugScript.src = '/scripts/debug-api.js';
+          document.head.appendChild(debugScript);
+          window.debugApiLoaded = true;
+        }
+        
+        // Add subcategory property for easier filtering
+        return products.map(product => {
+          // Ensure we have a valid product object
+          if (!product || typeof product !== 'object') {
+            console.error('[DEBUG] Invalid product data:', product);
+            return null;
+          }
+          
+          const p = {...product};
+          
+          // Make sure this is a women's product
+          if (!p.category || !p.category.toLowerCase().includes('women')) {
+            console.log(`[DEBUG] Skipping non-women's product: ${p.name || 'Unknown'}`);
+            p.category = "Women's Collection"; // Force correct category
+          }
+          
+          // Extract subcategory from product type or tags
+          if (product.type) {
+            p.subcategory = product.type.toLowerCase();
+          } else if (product.tags && Array.isArray(product.tags) && product.tags.length > 0) {
+            // Get the first tag that matches one of our subcategories
+            const subcategories = ['dress', 'tops', 'pants', 'skirts', 'shoes', 'accessories'];
+            const matchingTag = product.tags.find(tag => 
+              subcategories.some(subcat => tag.toLowerCase().includes(subcat))
+            );
+            
+            if (matchingTag) {
+              p.subcategory = matchingTag.toLowerCase();
+            } else {
+              p.subcategory = product.tags[0].toLowerCase();
+            }
+          } else {
+            // Try to extract subcategory from the product name or description
+            const name = (product.name || '').toLowerCase();
+            const desc = (product.description || '').toLowerCase();
+            
+            // Define subcategory mapping with keywords
+            const subcategoryMap = {
+              'dress': ['dress', 'gown', 'frock', 'wrap dress', 'maxi', 'mini dress'],
+              'tops': ['top', 'blouse', 'shirt', 'tee', 't-shirt', 'sweater', 'blazer', 'jacket', 'cardigan', 'hoodie'],
+              'pants': ['pants', 'jeans', 'trousers', 'leggings', 'shorts', 'joggers', 'sweatpants', 'slacks'],
+              'skirts': ['skirt', 'midi', 'mini skirt', 'maxi skirt', 'pleated'],
+              'shoes': ['shoes', 'boots', 'sandals', 'heels', 'flats', 'sneakers', 'footwear', 'pumps', 'loafers'],
+              'accessories': ['accessories', 'jewelry', 'necklace', 'bracelet', 'earrings', 'handbag', 'purse', 'bag', 'scarf', 'hat', 'belt', 'watch']
+            };
+            
+            // Check each subcategory's keywords against the product name and description
+            let foundSubcategory = 'other';
+            
+            for (const [subcategory, keywords] of Object.entries(subcategoryMap)) {
+              if (keywords.some(keyword => name.includes(keyword) || desc.includes(keyword))) {
+                foundSubcategory = subcategory;
+                break;
+              }
+            }
+            
+            p.subcategory = foundSubcategory;
+            console.log(`[DEBUG] Assigned subcategory for ${product.name}: ${p.subcategory}`);
+          }
+          
+          return p;
+        }).filter(p => p !== null); // Remove any null products
       }
     }
   } catch (error) {

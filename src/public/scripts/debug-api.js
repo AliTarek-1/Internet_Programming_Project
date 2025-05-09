@@ -5,6 +5,12 @@
  * It can be included in any HTML page to add debugging capabilities
  */
 
+// Check if the script has already been loaded to prevent duplicate initialization
+if (window.debugApiInitialized) {
+  console.log('Debug API already initialized, skipping...');
+} else {
+  window.debugApiInitialized = true;
+
 // Create a debug container to show API responses
 function createDebugContainer() {
   const container = document.createElement('div');
@@ -197,3 +203,6 @@ window.apiDebug = {
     }
   }
 };
+
+// Close the if-else block that checks for initialization
+}

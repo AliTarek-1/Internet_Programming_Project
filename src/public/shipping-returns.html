@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping & Returns | BrandStore</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/info-pages.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Shipping & Returns</h1>
+    </div>
+
+    <div class="info-content">
+      <section class="info-section">
+        <h2>Shipping Information</h2>
+        <div class="info-card">
+          <h3>Shipping Methods</h3>
+          <table class="info-table">
+            <thead>
+              <tr>
+                <th>Shipping Method</th>
+                <th>Delivery Time</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Standard Shipping</td>
+                <td>3-5 Business Days</td>
+                <td>EGP 50.00</td>
+              </tr>
+              <tr>
+                <td>Express Shipping</td>
+                <td>1-2 Business Days</td>
+                <td>EGP 100.00</td>
+              </tr>
+              <tr>
+                <td>Same Day Delivery</td>
+                <td>Same Day (Order before 12 PM)</td>
+                <td>EGP 150.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-card">
+          <h3>Free Shipping</h3>
+          <p>Free standard shipping is available on orders over EGP 1000.</p>
+          <p>This offer applies to standard shipping only and is valid for deliveries within Egypt.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>International Shipping</h3>
+          <p>We currently ship to the following countries:</p>
+          <ul>
+            <li>Saudi Arabia</li>
+            <li>United Arab Emirates</li>
+            <li>Kuwait</li>
+            <li>Jordan</li>
+            <li>Lebanon</li>
+          </ul>
+          <p>International shipping rates and delivery times vary by country. Please see the checkout page for specific rates.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Tracking Your Order</h3>
+          <p>Once your order has been shipped, you will receive a confirmation email with a tracking number.</p>
+          <p>You can track your order by:</p>
+          <ol>
+            <li>Visiting our <a href="track-order.html">Track Order</a> page</li>
+            <li>Logging into your account and viewing your order history</li>
+            <li>Contacting our customer service team</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <h2>Returns Policy</h2>
+        <div class="info-card">
+          <h3>Return Eligibility</h3>
+          <p>You may return most new, unopened items within 30 days of delivery for a full refund.</p>
+          <p>Items must be returned in their original packaging and in the same condition as when you received them.</p>
+          <p>The following items cannot be returned:</p>
+          <ul>
+            <li>Intimate apparel</li>
+            <li>Swimwear</li>
+            <li>Sale items marked as "Final Sale"</li>
+            <li>Gift cards</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>Return Process</h3>
+          <p>To initiate a return, please follow these steps:</p>
+          <ol>
+            <li>Log in to your account and go to your order history</li>
+            <li>Select the order containing the item(s) you wish to return</li>
+            <li>Click on "Return Items" and follow the instructions</li>
+            <li>Print the return label and attach it to your package</li>
+            <li>Drop off the package at any authorized shipping location</li>
+          </ol>
+          <p>You can also initiate a return by contacting our customer service team.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Refunds</h3>
+          <p>Once we receive and inspect your return, we will notify you about the status of your refund.</p>
+          <p>If approved, your refund will be processed and a credit will automatically be applied to your original method of payment within 5-7 business days.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Exchanges</h3>
+          <p>If you need to exchange an item for a different size or color, please return the original item and place a new order for the desired item.</p>
+          <p>This ensures the fastest processing time and availability of your preferred item.</p>
+        </div>
+      </section>
+
+      <div class="contact-box">
+        <h3>Need Help?</h3>
+        <p>If you have any questions about shipping or returns, please contact our customer service team:</p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:support@brandstore.com">support@brandstore.com</a></p>
+        <p><i class="fas fa-phone"></i> +20 123 456 7890</p>
+        <a href="contactus.html" class="btn-primary">Contact Us</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar-placeholder"></div>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load navbar
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+          
+          // Initialize navbar after loading
+          if (typeof initializeNavbar === 'function') {
+            initializeNavbar();
+          } else {
+            const navbarScript = document.createElement('script');
+            navbarScript.src = 'scripts/navbar.js';
+            document.head.appendChild(navbarScript);
+          }
+        });
+      
+      // Load cart sidebar
+      fetch('components/cart-sidebar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('cart-sidebar-placeholder').innerHTML = data;
+          
+          // Initialize cart sidebar after loading
+          const cartScript = document.createElement('script');
+          cartScript.src = 'scripts/cart.js';
+          document.head.appendChild(cartScript);
+        });
+      
+      // Load footer
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    });
+  </script>
+</body>
+</html>

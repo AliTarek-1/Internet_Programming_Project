@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessories | BrandStore</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/products.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Accessories</h1>
+      <p>Explore our collection of stylish accessories to complete your look.</p>
+    </div>
+
+    <div class="filter-container">
+      <div class="filter-section">
+        <h3>Filter By</h3>
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div class="filter-options">
+            <label><input type="checkbox" name="category" value="bags"> Bags</label>
+            <label><input type="checkbox" name="category" value="jewelry"> Jewelry</label>
+            <label><input type="checkbox" name="category" value="belts"> Belts</label>
+            <label><input type="checkbox" name="category" value="hats"> Hats</label>
+            <label><input type="checkbox" name="category" value="sunglasses"> Sunglasses</label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <div class="filter-options">
+            <label><input type="checkbox" name="price" value="0-50"> $0 - $50</label>
+            <label><input type="checkbox" name="price" value="50-100"> $50 - $100</label>
+            <label><input type="checkbox" name="price" value="100-200"> $100 - $200</label>
+            <label><input type="checkbox" name="price" value="200+"> $200+</label>
+          </div>
+        </div>
+        <button class="btn-primary apply-filters">Apply Filters</button>
+      </div>
+    </div>
+
+    <div class="products-container" id="products-grid">
+      <!-- Products will be loaded dynamically via JavaScript -->
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading products...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar-placeholder"></div>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script src="scripts/api.js"></script>
+  <script src="scripts/products.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load navbar
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+          
+          // Initialize navbar after loading
+          if (typeof initializeNavbar === 'function') {
+            initializeNavbar();
+          } else {
+            const navbarScript = document.createElement('script');
+            navbarScript.src = 'scripts/navbar.js';
+            document.head.appendChild(navbarScript);
+          }
+        });
+      
+      // Load cart sidebar
+      fetch('components/cart-sidebar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('cart-sidebar-placeholder').innerHTML = data;
+          
+          // Initialize cart sidebar after loading
+          const cartScript = document.createElement('script');
+          cartScript.src = 'scripts/cart.js';
+          document.head.appendChild(cartScript);
+        });
+      
+      // Load footer
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-placeholder').innerHTML = data;
+        });
+        
+      // Initialize products with accessories category
+      setTimeout(() => {
+        if (typeof loadProducts === 'function') {
+          loadProducts('accessories');
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>

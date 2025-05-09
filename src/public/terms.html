@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions | BrandStore</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/info-pages.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Terms & Conditions</h1>
+      <p>Last Updated: May 1, 2025</p>
+    </div>
+
+    <div class="info-content">
+      <section class="info-section">
+        <div class="terms-section">
+          <h2>1. Introduction</h2>
+          <p>Welcome to BrandStore. These Terms and Conditions govern your use of our website and the purchase of products from our online store. By accessing our website or placing an order, you agree to be bound by these Terms and Conditions.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>2. Definitions</h2>
+          <p>"Company", "we", "us", or "our" refers to BrandStore.</p>
+          <p>"Website" refers to brandstore.com and all related subdomains.</p>
+          <p>"Customer", "you", or "your" refers to the person accessing the Website or placing an order.</p>
+          <p>"Products" refers to the items offered for sale on the Website.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>3. Account Registration</h2>
+          <p>To place an order, you may need to register for an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</p>
+          <p>You agree to provide accurate and complete information when creating an account and to update your information to keep it accurate and current.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>4. Orders and Payment</h2>
+          <p>All orders are subject to acceptance and availability. We reserve the right to refuse any order without giving reason.</p>
+          <p>Prices for Products are as quoted on the Website and are subject to change without notice.</p>
+          <p>Payment must be made in full at the time of ordering. We accept various payment methods as indicated on the Website.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>5. Shipping and Delivery</h2>
+          <p>Delivery times are estimates only and commence from the date of shipping, not the date of order.</p>
+          <p>We are not responsible for delays in delivery caused by circumstances beyond our control.</p>
+          <p>Risk of loss and damage for Products passes to you upon delivery.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>6. Returns and Refunds</h2>
+          <p>Our returns policy forms part of these Terms and Conditions. Please refer to our <a href="shipping-returns.html">Shipping & Returns</a> page for more information.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>7. Intellectual Property</h2>
+          <p>All content on the Website, including text, graphics, logos, images, and software, is the property of BrandStore or its content suppliers and is protected by copyright and other intellectual property laws.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>8. Privacy Policy</h2>
+          <p>Our Privacy Policy, which sets out how we will use your information, forms part of these Terms and Conditions. Please refer to our <a href="privacy.html">Privacy Policy</a> page for more information.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>9. Limitation of Liability</h2>
+          <p>To the fullest extent permitted by law, BrandStore shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Website.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>10. Changes to Terms and Conditions</h2>
+          <p>We reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately upon posting on the Website. Your continued use of the Website after any changes indicates your acceptance of the modified Terms and Conditions.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>11. Contact Us</h2>
+          <p>If you have any questions about these Terms and Conditions, please contact us at:</p>
+          <p>Email: <a href="mailto:legal@brandstore.com">legal@brandstore.com</a></p>
+          <p>Phone: +20 123 456 7890</p>
+          <p>Address: 123 Fashion Street, Cairo, Egypt</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar-placeholder"></div>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load navbar
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+          
+          // Initialize navbar after loading
+          if (typeof initializeNavbar === 'function') {
+            initializeNavbar();
+          } else {
+            const navbarScript = document.createElement('script');
+            navbarScript.src = 'scripts/navbar.js';
+            document.head.appendChild(navbarScript);
+          }
+        });
+      
+      // Load cart sidebar
+      fetch('components/cart-sidebar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('cart-sidebar-placeholder').innerHTML = data;
+          
+          // Initialize cart sidebar after loading
+          const cartScript = document.createElement('script');
+          cartScript.src = 'scripts/cart.js';
+          document.head.appendChild(cartScript);
+        });
+      
+      // Load footer
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    });
+  </script>
+</body>
+</html>

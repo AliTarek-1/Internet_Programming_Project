@@ -439,47 +439,55 @@ function initOptionButtons() {
 // Initialize add to cart button
 function initAddToCart() {
   const addToCartBtn = document.getElementById('addToCartBtn');
+  if (!addToCartBtn) return;
   
-  addToCartBtn.addEventListener('click', async () => {
+  addToCartBtn.addEventListener('click', async function() {
+    // Get product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
     
-    if (!productId) return;
+    if (!productId) {
+      console.error('No product ID found');
+      return;
+    }
     
+    // Get quantity
+    const quantity = parseInt(document.getElementById('quantityInput')?.value || 1);
+    
+    // Get product data
     let product = null;
     
-    // Fetch from API
     try {
       if (window.apiService) {
         product = await window.apiService.fetchProductById(productId);
       }
     } catch (error) {
-      console.error('Error fetching product from API:', error);
+      console.error('Error fetching product:', error);
     }
     
-    // If product not found, show error
-    if (!product) {
-      alert('Product not found or unavailable');
-      return;
+    if (product) {
+      // Add to cart
+      addProductToCart(product, quantity, 'One Size', '');
+      
+      // Update cart count in navbar
+      updateCartCountDisplay();
+      
+      // Show success message
+      
+      // Open cart sidebar and ensure cart items are loaded
+      if (typeof window.openCartSidebar === 'function') {
+        // First update the cart items in the sidebar
+        if (typeof window.initCartSidebar === 'function' && 
+            typeof window.initCartSidebar.loadCartItems === 'function') {
+          window.initCartSidebar.loadCartItems();
+        }
+        
+        // Then open the cart sidebar
+        window.openCartSidebar();
+      }
+    } else {
+      alert('Could not add product to cart. Please try again.');
     }
-    
-    if (!product) return;
-    
-    const quantity = parseInt(document.getElementById('quantityInput').value);
-    const size = document.querySelector('.size-options .option-btn.active')?.textContent || 'M';
-    const colorElement = document.querySelector('.color-options .color-btn.active');
-    const color = colorElement ? colorElement.style.backgroundColor : '';
-    
-    // Add to cart (in localStorage)
-    addProductToCart(product, quantity, size, color);
-    
-    // Open cart sidebar instead of showing alert
-    if (typeof openCartSidebar === 'function') {
-      openCartSidebar();
-    }
-    
-    // Update cart count in navbar
-    updateCartCountDisplay();
   });
 }
 
@@ -618,15 +626,40 @@ function createProductCard(product) {
   const productCard = document.createElement('div');
   productCard.className = 'product-card';
   
+  // Handle different product ID formats (id, _id, or productID)
+  const productId = product.id || product._id || product.productID;
+  
+  // Check if product has a discount
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
+  
+  // Handle product image
+  let productImage = '';
+  if (product.image) {
+    productImage = `<img src="${product.image}" alt="${product.name}" />`;
+  } else {
+    productImage = `<div class="product-placeholder"><i class="fas fa-tshirt"></i></div>`;
+  }
+  
+  // Generate star rating based on product rating
+  const rating = product.rating || 4;
+  const reviewCount = product.reviews || 0;
+  let starsHtml = '';
+  
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(rating)) {
+      starsHtml += '<i class="fas fa-star"></i>';
+    } else if (i - rating < 1) {
+      starsHtml += '<i class="fas fa-star-half-alt"></i>';
+    } else {
+      starsHtml += '<i class="far fa-star"></i>';
+    }
+  }
   
   productCard.innerHTML = `
     <div class="product-image">
-      <div class="product-placeholder">
-        <i class="fas fa-tshirt"></i>
-      </div>
+      ${productImage}
       <div class="quick-view">
-        <a href="product-details.html?id=${product.id}">View Details</a>
+        <a href="product-details.html?id=${productId}">View Details</a>
       </div>
     </div>
     <div class="product-info">
@@ -637,14 +670,10 @@ function createProductCard(product) {
         ${hasDiscount ? `<span class="old">$${product.oldPrice.toFixed(2)}</span>` : ''}
       </div>
       <div class="rating">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="${product.rating >= 4.5 ? 'fas' : 'far'} fa-star"></i>
-        <span>(${product.reviews})</span>
+        ${starsHtml}
+        <span>(${reviewCount})</span>
       </div>
-      <button class="add-to-cart" data-id="${product.id}">
+      <button class="add-to-cart" data-id="${productId}">
         <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
     </div>
@@ -669,7 +698,6 @@ function createProductCard(product) {
     if (product) {
       addProductToCart(product, 1, 'M', '');
       updateCartCountDisplay();
-      alert('Product added to cart!');
     } else {
       alert('Could not add product to cart. Please try again.');
     }

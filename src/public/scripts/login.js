@@ -31,6 +31,92 @@ document.addEventListener("DOMContentLoaded", () => {
     errorContainer.appendChild(error);
   }
 
+  // Handle forgot password link
+  const forgotPasswordLink = document.querySelector('.forgot-password');
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      
+      // Create modal for password reset
+      const modalOverlay = document.createElement('div');
+      modalOverlay.className = 'modal-overlay';
+      modalOverlay.style.position = 'fixed';
+      modalOverlay.style.top = '0';
+      modalOverlay.style.left = '0';
+      modalOverlay.style.width = '100%';
+      modalOverlay.style.height = '100%';
+      modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+      modalOverlay.style.display = 'flex';
+      modalOverlay.style.justifyContent = 'center';
+      modalOverlay.style.alignItems = 'center';
+      modalOverlay.style.zIndex = '1000';
+      
+      const modalContent = document.createElement('div');
+      modalContent.className = 'modal-content';
+      modalContent.style.backgroundColor = 'white';
+      modalContent.style.padding = '2rem';
+      modalContent.style.borderRadius = '8px';
+      modalContent.style.maxWidth = '400px';
+      modalContent.style.width = '90%';
+      
+      modalContent.innerHTML = `
+        <h3 style="margin-top: 0;">Reset Password</h3>
+        <p>Enter your email address and we'll send you a link to reset your password.</p>
+        <div style="margin-bottom: 1rem;">
+          <input type="email" id="reset-email" placeholder="Enter your email" value="${email}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <button id="cancel-reset" style="padding: 10px 15px; background: #f1f1f1; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+          <button id="submit-reset" style="padding: 10px 15px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Send Reset Link</button>
+        </div>
+      `;
+      
+      modalOverlay.appendChild(modalContent);
+      document.body.appendChild(modalOverlay);
+      
+      // Focus on email input
+      const resetEmailInput = document.getElementById('reset-email');
+      resetEmailInput.focus();
+      
+      // Handle cancel button
+      document.getElementById('cancel-reset').addEventListener('click', () => {
+        document.body.removeChild(modalOverlay);
+      });
+      
+      // Handle submit button
+      document.getElementById('submit-reset').addEventListener('click', async () => {
+        const resetEmail = resetEmailInput.value.trim();
+        if (!resetEmail || !isValidEmail(resetEmail)) {
+          alert('Please enter a valid email address');
+          return;
+        }
+        
+        // Here you would normally send a request to the server
+        // For now, we'll just simulate a successful password reset email
+        document.body.removeChild(modalOverlay);
+        
+        // Show success message
+        showSuccess('Password reset link sent to your email. Please check your inbox.');
+      });
+    });
+  }
+
+  function showSuccess(message) {
+    // Clear any existing errors first
+    errorContainer.innerHTML = '';
+    
+    const success = document.createElement('div');
+    success.className = 'success-message';
+    success.style.backgroundColor = '#d4edda';
+    success.style.color = '#155724';
+    success.style.padding = '10px';
+    success.style.marginBottom = '15px';
+    success.style.borderRadius = '4px';
+    success.textContent = message;
+    errorContainer.appendChild(success);
+  }
+
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
   

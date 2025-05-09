@@ -5,8 +5,11 @@
  * to fetch products and other data.
  */
 
-// Base API URL
-const API_BASE_URL = '/api';
+// Base API URL - use window object to prevent redeclaration errors
+window.API_BASE_URL = window.API_BASE_URL || '/api';
+
+// Use the global API_BASE_URL without redeclaring it
+var API_BASE_URL = window.API_BASE_URL;
 
 /**
  * Fetch all products from the API

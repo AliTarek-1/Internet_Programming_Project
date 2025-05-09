@@ -25,7 +25,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:", "https://accounts.google.com", "https://*.googleusercontent.com"],
       frameSrc: ["'self'", "https://www.google.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
-      connectSrc: ["'self'", "https://accounts.google.com", "https://*.googleapis.com"],
+      connectSrc: ["'self'", "https://accounts.google.com", "https://*.googleapis.com", "http://localhost:8000"],
       scriptSrcElem: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
       formAction: ["'self'", "https://accounts.google.com"],
       objectSrc: ["'none'"]
@@ -47,6 +47,9 @@ app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
+app.use("/api/inventory", require("./routes/inventoryRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/test", require("./routes/testRoutes"));
 
 app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));
