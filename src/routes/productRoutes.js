@@ -18,12 +18,8 @@ router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
 // Protected routes - only admins can create, update, delete products
-//router.post("/", verifyToken, restrictTo('admin'), createProduct);
-//router.put("/:id", verifyToken, restrictTo('admin'), updateProduct);
-//router.delete("/:id", verifyToken, restrictTo('admin'), deleteProduct);
-
-router.post("/", verifyToken, createProduct);
-router.put("/:id", verifyToken, updateProduct);
-router.delete("/:id", verifyToken, deleteProduct);
+router.post("/", verifyToken, restrictTo("admin"), createProduct);
+router.put("/:id", verifyToken, restrictTo("admin"), updateProduct);
+router.delete("/:id", verifyToken, restrictTo("admin"), deleteProduct);
 
 module.exports = router;

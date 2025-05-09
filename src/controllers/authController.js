@@ -5,8 +5,7 @@ const path = require("path");
 const { verifyToken } = require("./verifyToken");
 
 const User = require("../models/User");
-const Admin = require("../models/admin"); // Admin model
-
+const Admin = require("../models/Admin"); // ✅ <-- Add this
 require("dotenv").config();
 
 const cookieOptions = {
@@ -52,8 +51,8 @@ router.post("/register-admin", async (req, res) => {
         .json({ success: false, message: "All fields are required." });
     }
 
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
+    const existing = await Admin.findOne({ email });
+    if (existing) {
       return res
         .status(400)
         .json({ success: false, message: "Email already exists." });
@@ -62,63 +61,29 @@ router.post("/register-admin", async (req, res) => {
     const admin = new Admin({ adminID, name, email, password });
     await admin.save();
 
-    const token = generateToken(admin);
+    const token = jwt.sign(
+      { id: admin._id, role: admin.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
+
     res.status(201).json({
       success: true,
       token,
       admin: {
         id: admin._id,
+        adminID: admin.adminID,
         name: admin.name,
         email: admin.email,
-        role: admin.role,
       },
     });
   } catch (err) {
-    console.error("Register Admin Error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error during admin registration.",
-    });
-  }
-});
-
-// -------------------------------------------
-// Admin Login
-// -------------------------------------------
-router.post("/admin-login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const admin = await Admin.findOne({ email });
-    if (!admin) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password." });
-    }
-
-    const isMatch = await admin.comparePassword(password);
-    if (!isMatch) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password." });
-    }
-
-    const token = generateToken(admin);
-    res.status(200).json({
-      success: true,
-      token,
-      admin: {
-        id: admin._id,
-        name: admin.name,
-        email: admin.email,
-        role: admin.role,
-      },
-    });
-  } catch (err) {
-    console.error("Admin Login Error:", err);
+    console.error("❌ ERROR during /register-admin:", err);
     res
       .status(500)
-      .json({ success: false, message: "Server error during admin login." });
+      .json({ success: false, message: "Server error during registration." });
   }
 });
 

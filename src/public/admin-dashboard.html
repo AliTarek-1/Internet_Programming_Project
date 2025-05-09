@@ -1,47 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard | BrandStore</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
 
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="styles/admin-dashboard.css" />
-  </head>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#backlog">Product Backlog</a>
+    <a href="#inventory">Inventory</a>
+    <a href="#orders">Order Management</a>
+  </div>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">
-          <img src="images/ourLogo.png" alt="Logo" style="width: 40px" />
-          Admin Dashboard
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#" id="logout-btn">Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+  <div class="main">
+    <h1>Admin Dashboard</h1>
 
-    <div class="container mt-4">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Welcome to Admin Dashboard</h2>
-          <p>You are logged in as an administrator.</p>
-        </div>
-      </div>
-    </div>
+    <section id="backlog">
+      <h2>Product Backlog</h2>
+   <form id="add-product-form">
+  <input type="text" id="productID" placeholder="Product ID (e.g., PROD-001)" required>
+  <input type="text" id="name" placeholder="Name" required>
+  <input type="text" id="description" placeholder="Description" required>
+  <input type="number" id="price" placeholder="Price" step="0.01" required>
+  <input type="text" id="image" placeholder="Image URL" required>
+  <input type="text" id="category" placeholder="Category (e.g., Children's Collection)" required>
+  <input type="text" id="type" placeholder="Type (e.g., T-shirts)" required>
+  <input type="number" id="stock" placeholder="Inventory Stock" required>
+  <input type="text" id="sku" placeholder="SKU (e.g., CHD-TSHIRT-001)" required>
+  <button type="submit">Add Product</button>
+</form>
 
-    <script src="vendor/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="scripts/admin-dashboard.js"></script>
-  </body>
+
+
+      <div id="product-list" style="margin-top: 2rem;"></div>
+    </section>
+
+    <section id="inventory">
+        <h2>Inventory Management</h2>
+        <table id="inventory-table">
+          <thead>
+            <tr><th>Product</th><th>Stock</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </section>
+      
+
+    <section id="orders">
+  <h2>Order Management</h2>
+  <table id="orders-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Orders will be populated here -->
+    </tbody>
+  </table>
+</section>
+
+  </div>
+
+  <script src="scripts/dashboard.js"></script>
+</body>
 </html>

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchAndRenderProducts();
   renderInventory();
   bindFormSubmit(); // Initial form submission handler
+  fetchAndRenderOrders();
 });
 
 function bindFormSubmit(product = null) {
@@ -11,12 +12,18 @@ function bindFormSubmit(product = null) {
     e.preventDefault();
 
     const formData = {
-      name: document.getElementById("name").value,
-      description: document.getElementById("description").value,
+      productID: "PROD-" + Date.now(), // or any unique generator
+      name: document.getElementById("name").value.trim(),
+      description: document.getElementById("description").value.trim(),
       price: parseFloat(document.getElementById("price").value),
-      images: [document.getElementById("image").value],
-      category: document.getElementById("category").value,
-      stock: parseInt(document.getElementById("stock").value),
+      oldPrice: 0, // optional
+      category: document.getElementById("category").value.trim(), // must match enum
+      type: "Shirts", // hardcoded or from a dropdown that matches enum
+      image: document.getElementById("image").value.trim(), // not images[0]
+      inventory: parseInt(document.getElementById("stock").value),
+      sku: document.getElementById("sku").value.trim(), // <- new required input
+      tags: [], // optional
+      featured: false, // optional
     };
 
     const url = product ? `/api/products/${product._id}` : "/api/products";
@@ -135,30 +142,135 @@ async function renderInventory() {
 
   if (!res.ok) return alert("Failed to load inventory");
 
-  const { products } = await res.json();
+  const { data } = await res.json(); // ✅ Fix: not `products`, it's `data`
   const tbody = document.querySelector("#inventory-table tbody");
   tbody.innerHTML = "";
 
-  products.forEach((product) => {
-    const status =
-      product.stock === 0
-        ? "Out of Stock"
-        : product.stock <= 10
-        ? "Low Stock"
-        : "In Stock";
-
+  data.forEach((item) => {
     const row = document.createElement("tr");
+
     row.innerHTML = `
-      <td>${product.name || "Unnamed"}</td>
-      <td>${product.stock ?? "N/A"}</td>
+      <td>${item.productName}</td>
+      <td>${item.quantity}</td>
       <td style="color: ${
-        status === "Out of Stock"
+        item.status === "Out of Stock"
           ? "red"
-          : status === "Low Stock"
+          : item.status === "Low Stock"
           ? "orange"
           : "green"
-      }">${status}</td>
+      }">${item.status}</td>
     `;
+
     tbody.appendChild(row);
   });
+}
+
+async function fetchAndRenderOrders() {
+  const res = await fetch("/api/orders", {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  });
+
+  if (!res.ok) return alert("Failed to load orders");
+
+  const { orders } = await res.json();
+  const tbody = document.querySelector("#orders-table tbody");
+  tbody.innerHTML = "";
+
+  orders.forEach((order) => {
+    const row = document.createElement("tr");
+
+    // Order ID
+    const idCell = document.createElement("td");
+    idCell.textContent = order.orderId;
+    row.appendChild(idCell);
+
+    // Customer
+    const customerCell = document.createElement("td");
+    customerCell.textContent = order.customer?.fullName || "Unknown";
+    row.appendChild(customerCell);
+
+    // Status
+    const statusCell = document.createElement("td");
+    statusCell.textContent = order.status;
+    row.appendChild(statusCell);
+
+    // Actions
+    const actionCell = document.createElement("td");
+
+    const shipBtn = document.createElement("button");
+    shipBtn.textContent = "Mark as Shipped";
+    shipBtn.classList.add("btn", "btn-primary");
+    shipBtn.addEventListener("click", () =>
+      updateOrderStatus(order.orderId, "shipped")
+    );
+    actionCell.appendChild(shipBtn);
+
+    const confirmBtn = document.createElement("button");
+    confirmBtn.textContent = "Send Confirmation";
+    confirmBtn.classList.add("btn", "btn-primary");
+    confirmBtn.addEventListener("click", () =>
+      sendOrderConfirmation(order.orderId)
+    );
+    actionCell.appendChild(confirmBtn);
+
+    const refundBtn = document.createElement("button");
+    refundBtn.textContent = "Refund";
+    refundBtn.classList.add("btn", "btn-primary");
+    refundBtn.addEventListener("click", () => issueRefund(order.orderId));
+    actionCell.appendChild(refundBtn);
+
+    row.appendChild(actionCell);
+    tbody.appendChild(row);
+  });
+}
+
+async function updateOrderStatus(orderId, status) {
+  const res = await fetch(`/api/orders/${orderId}/status`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    body: JSON.stringify({ status }),
+  });
+  if (res.ok) {
+    alert("Order status updated");
+    fetchAndRenderOrders();
+  } else {
+    const error = await res.json();
+    alert("Failed to update status: " + error.error);
+  }
+}
+
+async function sendOrderConfirmation(orderId) {
+  const res = await fetch(`/api/orders/${orderId}/confirm`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  });
+  if (res.ok) {
+    alert("Confirmation email sent");
+  } else {
+    const error = await res.json();
+    alert("Failed to send confirmation: " + error.error);
+  }
+}
+
+async function issueRefund(orderId) {
+  const res = await fetch(`/api/orders/${orderId}/refund`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  });
+  if (res.ok) {
+    alert("Order refunded successfully");
+    fetchAndRenderOrders();
+  } else {
+    const error = await res.json();
+    alert("Failed to refund order: " + error.error);
+  }
 }

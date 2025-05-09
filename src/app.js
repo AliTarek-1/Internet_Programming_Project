@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-
+//const inventoryRoutes = require("./controllers/inventoryController");
 // Load environment variables
 dotenv.config();
 
@@ -93,18 +93,16 @@ app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
-app.use("/api/inventory", require("./controllers/inventoryController"));
+app.use("/api/inventory", require("./routes/inventoryRoutes"));
 
-app.get("/login-admin.html", function (req, res) {
+//app.use("/api/inventory", inventoryRoutes); // ✅ this is the key part
+
+app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));
 });
 
-app.get("/register-admin.html", function (req, res) {
+app.get("/register", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "register-admin.html"));
-});
-
-app.get("/admin-dashboard.html", function (req, res) {
-  res.sendFile(path.join(__dirname, "public", "admin-dashboard.html"));
 });
 
 app.get("/", function (req, res) {

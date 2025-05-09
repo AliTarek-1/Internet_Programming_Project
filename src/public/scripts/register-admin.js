@@ -2,12 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("admin-register-form");
   const errorMsg = document.getElementById("error-msg");
 
-  if (!form) {
-    console.error("Form not found in the DOM!");
-    return;
-  }
-
-  form.addEventListener("submit", async (e) => {
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
@@ -18,9 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch("/register-admin", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, adminID, email, password }),
       });
 
@@ -31,11 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      alert("Admin registered successfully. Redirecting to login...");
+      alert("Admin registered successfully. Redirecting...");
       window.location.href = "/admin-login.html";
     } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "An error occurred. Please try again.";
+      errorMsg.textContent = "Registration error. Try again.";
     }
   });
 });
