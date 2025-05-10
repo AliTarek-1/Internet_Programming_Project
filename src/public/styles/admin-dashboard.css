@@ -158,3 +158,36 @@
     color: #66b2ff;
   }
   
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+  }
+  
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .navbar-brand img {
+    margin-right: 10px;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  #logout-btn {
+    cursor: pointer;
+  }
+  
+  #logout-btn:hover {
+    color: #dc3545 !important;
+  }
+  

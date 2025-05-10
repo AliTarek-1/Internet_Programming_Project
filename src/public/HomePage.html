@@ -18,16 +18,18 @@
     <link rel="stylesheet" href="styles/footer.css" />
   </head>
   <body>
+    <!-- Discount Announcement Banner -->
+    <div class="discount-banner">
+      <div class="banner-content">
+        🎉 Mega Sale: Up to <strong>50% OFF</strong> on selected products!
+        <a href="#discounted-products" class="discount-link">Shop Discounts</a>
+      </div>
+    </div>
+
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
-      <!-- Discount Announcement Banner -->
-      <div class="discount-banner" style="background-color: #e63946; color: white; text-align: center; padding: 10px; font-weight: 600;">
-        🎉 Mega Sale: Up to 50% OFF on selected products! <a href="#discounted-products" style="color: #ffd6a5; text-decoration: underline;">Shop Discounts</a>
-      </div>
-    
-      <!-- Existing content continues... -->
-    
+    <!-- Existing content continues... -->
 
     <!-- Cart Sidebar -->
     <div class="cart-sidebar">
@@ -133,31 +135,38 @@
       </div>
     </section>
 
-        <!-- Discounted Products -->
-        <section class="discounted-products" id="discounted-products">
-          <div class="container">
-            <div class="section-header">
-              <h2>Discounted Products</h2>
-              <p>Don’t miss out on these limited-time deals</p>
-            </div>
-            <div class="products-grid">
-              <!-- Example discounted product card -->
-              <div class="product-card">
-                <img src="images/discounted-product1.jpg" alt="Product" />
-                <h3>Trendy Sunglasses</h3>
-                <p class="original-price" style="text-decoration: line-through; color: gray;">$40.00</p>
-                <p class="discounted-price" style="color: red; font-weight: bold;">$20.00</p>
-                <a href="product-details.html?id=123&name=Premium+Shirt&price=125&oldPrice=150&category=Men&desc=High-quality+shirt+with+modern+fit" class="btn-primary">
-                  Buy Now
-                </a>
-                
-                
-              </div>
-              <!-- Add more discounted products here -->
-            </div>
+    <!-- Discounted Products -->
+    <section class="discounted-products" id="discounted-products">
+      <div class="container">
+        <div class="section-header">
+          <h2>Discounted Products</h2>
+          <p>Don’t miss out on these limited-time deals</p>
+        </div>
+        <div class="products-grid">
+          <!-- Example discounted product card -->
+          <div class="product-card">
+            <img src="images/discounted-product1.jpg" alt="Product" />
+            <h3>Trendy Sunglasses</h3>
+            <p
+              class="original-price"
+              style="text-decoration: line-through; color: gray"
+            >
+              $40.00
+            </p>
+            <p class="discounted-price" style="color: red; font-weight: bold">
+              $20.00
+            </p>
+            <a
+              href="product-details.html?id=123&name=Premium+Shirt&price=125&oldPrice=150&category=Men&desc=High-quality+shirt+with+modern+fit"
+              class="btn-primary"
+            >
+              Buy Now
+            </a>
           </div>
-        </section>
-    
+          <!-- Add more discounted products here -->
+        </div>
+      </div>
+    </section>
 
     <!-- Newsletter -->
     <section class="newsletter">

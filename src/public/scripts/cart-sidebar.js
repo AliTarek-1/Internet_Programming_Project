@@ -72,13 +72,12 @@ function initCartSidebar() {
   // Function to open cart sidebar
   function openCartSidebar() {
     if (cartSidebar && cartOverlay) {
-      // First load the cart items to ensure they're up to date
-      loadCartItems();
-      
-      // Then open the sidebar
       cartSidebar.classList.add('open');
       cartOverlay.classList.add('open');
       document.body.style.overflow = 'hidden'; // Prevent scrolling
+      
+      // Refresh cart items when opening
+      loadCartItems();
     }
   }
   

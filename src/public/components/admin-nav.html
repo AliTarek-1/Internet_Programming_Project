@@ -1,0 +1,33 @@
+<div class="sidebar">
+  <h2>Admin Panel</h2>
+  <a href="/admin-products.html">Product Backlog</a>
+  <a href="/admin-inventory.html">Inventory</a>
+  <a href="/admin-orders.html">Order Management</a>
+  <a href="/admin-promotions.html">Promotions</a>
+  <a href="/admin-dashboard.html">Dashboard Overview</a>
+</div>
+
+<div id="notification-container"></div>
+
+<script>
+  // Notification system
+  function showNotification(message, type = 'success') {
+    const container = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    container.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      notification.classList.add('fade-out');
+      setTimeout(() => {
+        container.removeChild(notification);
+      }, 500);
+    }, 5000);
+  }
+  
+  // Make notification function globally available
+  window.showNotification = showNotification;
+</script>

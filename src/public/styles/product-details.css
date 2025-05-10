@@ -596,6 +596,7 @@ body {
 .related-products {
   padding: 60px 0;
   background-color: var(--light-gray);
+<<<<<<< HEAD
   border-top: 1px solid var(--medium-gray);
 }
 
@@ -614,6 +615,12 @@ body {
   height: 3px;
   background-color: var(--primary-color);
   margin: 15px auto 0;
+}
+
+.related-products h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .products-grid {

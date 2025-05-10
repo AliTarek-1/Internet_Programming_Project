@@ -603,4 +603,68 @@ body {
 }
 
 
-  
+    /* Discount Banner Styling */
+      .discount-banner {
+          background-color: #e63946; /* Red background */
+          color: white; /* White text */
+          text-align: center;
+          padding: 12px;
+          font-weight: 600;
+          font-size: 18px;
+          position: fixed; /* Keeps it visible while scrolling */
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 9999; /* Higher than navbar */
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds depth */
+      }
+       
+      /* Text scrolling effect */
+      .banner-content {
+          white-space: nowrap;
+          display: inline-block;
+          padding-left: 50%; /* Reduce initial padding to start sooner */
+          animation: scrollBanner 15s linear infinite; /* Smooth scrolling */
+      }
+       
+      /* Banner animation */
+      @keyframes scrollBanner {
+          from {
+              transform: translateX(50%); /* Starts closer to viewport */
+          }
+          to {
+              transform: translateX(-100%);
+          }
+      }
+       
+      /* Styling for discount link */
+      .discount-link {
+          color: #ffd6a5; /* Light orange */
+          text-decoration: none;
+          font-weight: bold;
+          margin-left: 10px;
+          border: 2px solid #ffd6a5;
+          padding: 5px 10px;
+          border-radius: 5px;
+          transition: background 0.3s ease, color 0.3s ease;
+      }
+       
+      /* Link hover effect */
+      .discount-link:hover {
+          background: #ffd6a5;
+          color: #e63946;
+      }
+       
+      /* Fix navbar so it's below the banner */
+      .navbar {
+          position: fixed;
+          top: 50px; /* Push it down to avoid hiding */
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          z-index: 1000; /* Lower than banner */
+          padding: 1rem 2rem;
+      }

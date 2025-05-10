@@ -15,6 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="styles/footer.css" />
   </head>
   <body>
     <!-- Navbar Placeholder -->
@@ -54,23 +55,36 @@
       <!-- Search and Filter -->
       <div class="search-container">
         <i class="fas fa-search"></i>
-        <input type="text" id="faq-search" placeholder="Search for questions...">
+        <input
+          type="text"
+          id="faq-search"
+          placeholder="Search for questions..."
+        />
       </div>
-      
+
       <div class="faq-categories-nav">
         <button class="category-btn active" data-category="all">All</button>
         <button class="category-btn" data-category="Shopping">Shopping</button>
-        <button class="category-btn" data-category="Shipping & Delivery">Shipping</button>
-        <button class="category-btn" data-category="Returns & Exchanges">Returns</button>
-        <button class="category-btn" data-category="Account & Payment">Account</button>
+        <button class="category-btn" data-category="Shipping & Delivery">
+          Shipping
+        </button>
+        <button class="category-btn" data-category="Returns & Exchanges">
+          Returns
+        </button>
+        <button class="category-btn" data-category="Account & Payment">
+          Account
+        </button>
       </div>
-      
-      <div class="no-results" style="display: none;">
+
+      <div class="no-results" style="display: none">
         <i class="fas fa-search"></i>
         <h3>No results found</h3>
-        <p>We couldn't find any FAQs matching your search. Try different keywords or browse by category.</p>
+        <p>
+          We couldn't find any FAQs matching your search. Try different keywords
+          or browse by category.
+        </p>
       </div>
-      
+
       <!-- Shopping FAQs -->
       <div class="faq-category">
         <h2>Shopping</h2>

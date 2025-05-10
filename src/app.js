@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-
+//const inventoryRoutes = require("./controllers/inventoryController");
 // Load environment variables
 dotenv.config();
 
@@ -15,23 +15,69 @@ dotenv.config();
 require("./database");
 
 // Middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://accounts.google.com"],
-      styleSrcElem: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://accounts.google.com"],
-      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https:", "https://accounts.google.com", "https://*.googleusercontent.com"],
-      frameSrc: ["'self'", "https://www.google.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
-      connectSrc: ["'self'", "https://accounts.google.com", "https://*.googleapis.com", "http://localhost:8000"],
-      scriptSrcElem: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://accounts.google.com", "https://*.googleusercontent.com"],
-      formAction: ["'self'", "https://accounts.google.com"],
-      objectSrc: ["'none'"]
-    }
-  }
-})); // Security headers with custom CSP
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          "https://cdnjs.cloudflare.com",
+          "https://accounts.google.com",
+          "https://*.googleusercontent.com",
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.googleapis.com",
+          "https://accounts.google.com",
+        ],
+        styleSrcElem: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.googleapis.com",
+          "https://accounts.google.com",
+        ],
+        fontSrc: [
+          "'self'",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.gstatic.com",
+        ],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https:",
+          "https://accounts.google.com",
+          "https://*.googleusercontent.com",
+        ],
+        frameSrc: [
+          "'self'",
+          "https://www.google.com",
+          "https://accounts.google.com",
+          "https://*.googleusercontent.com",
+        ],
+        connectSrc: [
+          "'self'",
+          "https://accounts.google.com",
+          "https://*.googleapis.com",
+        ],
+        scriptSrcElem: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://cdnjs.cloudflare.com",
+          "https://accounts.google.com",
+          "https://*.googleusercontent.com",
+        ],
+        formAction: ["'self'", "https://accounts.google.com"],
+        objectSrc: ["'none'"],
+      },
+    },
+  })
+); // Security headers with custom CSP
 app.use(cors()); // Enable CORS
 app.use(morgan("dev")); // HTTP request logger
 app.use(cookieParser()); // Parse cookies
@@ -48,8 +94,10 @@ app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/inventory", require("./routes/inventoryRoutes"));
+app.use("/api/discount", require("./routes/discountRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
-app.use("/api/test", require("./routes/testRoutes"));
+
+//app.use("/api/inventory", inventoryRoutes); // ✅ this is the key part
 
 app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "login-admin.html"));

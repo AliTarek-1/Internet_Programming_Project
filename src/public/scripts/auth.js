@@ -185,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Google Sign-In Integration
-/* Temporarily commented out until proper configuration
 document.addEventListener("DOMContentLoaded", function () {
   // Wait for Google script to load
   const checkGoogle = setInterval(() => {
@@ -268,4 +267,3 @@ function handleGoogleResponse(response) {
     alert(`Error during Google authentication: ${error.message}`);
   });
 }
-*/

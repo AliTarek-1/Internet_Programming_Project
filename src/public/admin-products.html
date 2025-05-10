@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - Product Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
+  </head>
+  <body>
+    <!-- Include Admin Navigation -->
+    <div id="admin-nav"></div>
+
+    <div class="main-content">
+      <h1>Product Management</h1>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Add New Product</h2>
+        </div>
+        <form id="add-product-form">
+          <input
+            type="text"
+            id="name"
+            placeholder="Product Name"
+            required
+          />
+          <textarea
+            id="description"
+            placeholder="Description"
+            rows="3"
+            required
+          ></textarea>
+          <input
+            type="number"
+            id="price"
+            placeholder="Price"
+            step="0.01"
+            required
+          />
+          <input 
+            type="text" 
+            id="image" 
+            placeholder="Image URL" 
+            required 
+          />
+          <select id="category" required>
+            <option value="">Select Category</option>
+            <option value="Men's Collection">Men's Collection</option>
+            <option value="Women's Collection">Women's Collection</option>
+            <option value="Children's Collection">Children's Collection</option>
+          </select>
+          <input
+            type="text"
+            id="type"
+            placeholder="Type (e.g., T-shirts, Pants)"
+            required
+          />
+          <input
+            type="number"
+            id="stock"
+            placeholder="Inventory Stock"
+            required
+          />
+          <input
+            type="text"
+            id="sku"
+            placeholder="SKU (e.g., MEN-TSHIRT-001)"
+            required
+          />
+          <button type="submit">Add Product</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Product List</h2>
+        </div>
+        <div id="product-list"></div>
+      </div>
+    </div>
+
+    <script>
+      // Load admin navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('components/admin-nav.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('admin-nav').innerHTML = html;
+            // Highlight current page in navigation
+            document.querySelector('.sidebar a[href="/admin-products.html"]').classList.add('active');
+          });
+      });
+    </script>
+    <script src="scripts/admin-products.js"></script>
+  </body>
+</html>

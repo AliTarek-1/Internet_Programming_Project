@@ -89,7 +89,6 @@ async function loadProducts() {
         console.log(`[DEBUG] Product ${product.name} matched by type`);
         return true;
       }
-      
       return false;
     });
     
@@ -384,6 +383,7 @@ async function filterProducts() {
   
   // Filter by category
   if (categoryValue) {
+<<<<<<< HEAD
     console.log(`[DEBUG] Filtering by category: ${categoryValue}`);
     
     products = products.filter(product => {

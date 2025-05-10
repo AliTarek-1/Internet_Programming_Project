@@ -90,7 +90,7 @@ router.get('/:orderId', async (req, res) => {
  * Get all orders
  * GET /api/orders
  */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const orders = await Order.find().sort({ date: -1 });
     res.json({
@@ -103,6 +103,114 @@ router.get('/', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || 'Error fetching orders'
+    });
+  }
+});
+
+/**
+ * Update order status
+ * PUT /api/orders/:orderId/status
+ */
+router.put('/:orderId/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        error: 'Status is required'
+      });
+    }
+    
+    const order = await Order.findOne({ orderId: req.params.orderId });
+    
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+    
+    order.status = status;
+    await order.save();
+    
+    res.json({
+      success: true,
+      order
+    });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error updating order status'
+    });
+  }
+});
+
+/**
+ * Send order confirmation
+ * POST /api/orders/:orderId/confirm
+ */
+router.post('/:orderId/confirm', async (req, res) => {
+  try {
+    const order = await Order.findOne({ orderId: req.params.orderId });
+    
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+    
+    // In a real application, you would send an email here
+    // For now, we'll just update a field on the order to simulate this
+    order.confirmationSent = true;
+    await order.save();
+    
+    res.json({
+      success: true,
+      message: 'Confirmation email sent'
+    });
+  } catch (error) {
+    console.error('Error sending confirmation:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error sending confirmation'
+    });
+  }
+});
+
+/**
+ * Issue refund for order
+ * POST /api/orders/:orderId/refund
+ */
+router.post('/:orderId/refund', async (req, res) => {
+  try {
+    const order = await Order.findOne({ orderId: req.params.orderId });
+    
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+    
+    // In a real application, you would process the refund through a payment gateway
+    // For now, we'll just update the order status
+    order.status = 'refunded';
+    order.refundedAt = new Date();
+    await order.save();
+    
+    res.json({
+      success: true,
+      message: 'Order refunded successfully',
+      order
+    });
+  } catch (error) {
+    console.error('Error refunding order:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error refunding order'
     });
   }
 });

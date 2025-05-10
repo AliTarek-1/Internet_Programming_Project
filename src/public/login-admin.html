@@ -3,10 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login to BrandStore</title>
-
-    <!-- Google Sign-In (can be removed for admin, but keeping for consistency) -->
-    <script src="https://accounts.google.com/gsi/client" defer></script>
+    <title>Admin Login | BrandStore</title>
 
     <!-- Fonts & Icons -->
     <link
@@ -15,80 +12,23 @@
     />
     <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="styles/style.css" />
-
-    <style>
-      body {
-        background: #f9f9f9;
-        font-family: 'Roboto', sans-serif;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .login-wrapper {
-        max-width: 400px;
-        width: 100%;
-        background: #fff;
-        padding: 40px;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-      }
-      .login-wrapper h3 {
-        margin-bottom: 30px;
-        font-weight: 600;
-        color: #333;
-      }
-      .form-group {
-        margin-bottom: 20px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #666;
-      }
-      .form-control {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: border-color 0.2s;
-      }
-      .form-control:focus {
-        border-color: #007bff;
-        outline: none;
-      }
-      .btn-primary {
-        background-color: #007bff;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 4px;
-        width: 100%;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-      .btn-primary:hover {
-        background-color: #0056b3;
-      }
-      .error-message {
-        color: #dc3545;
-        font-size: 12px;
-        margin-top: 4px;
-      }
-    </style>
+    <link rel="stylesheet" href="styles/admin-login.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
   </head>
 
   <body>
+    <div id="notification-container"></div>
+    
     <div class="login-wrapper">
       <div class="text-center mb-4">
-        <img src="https://placehold.co/600x800?text=BrandStore+Admin+Background" alt="BrandStore Admin Login" style="width: 60px" />
+        <img src="images/ourLogo.png" alt="Logo" style="width: 60px" />
       </div>
-      <h3 class="text-center">Login to Your Account</h3>
+      <h3 class="text-center">Admin Login</h3>
+      <p class="text-center">
+        Welcome back! Please enter your credentials to access the admin panel.
+      </p>
 
-      <form id="loginForm" novalidate>
+      <form id="admin-login-form" novalidate>
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -111,26 +51,37 @@
           />
         </div>
 
-        <p
-          id="text_error"
-          style="color: red; font-size: 0.9rem; margin-top: 10px"
-        ></p>
+        <p id="error-msg" class="error-message"></p>
 
         <button type="submit" class="btn btn-primary btn-block mt-3">
           Login
         </button>
 
-        <p class="text-center mt-3">
-          Don't have an account?
-          <a href="/register">Sign Up</a>
+        <p class="text-center mt-3 link-msg">
+          Don't have an account? <a href="/register-admin.html">Register</a>
         </p>
       </form>
     </div>
 
-    <!-- Scripts -->
-    <script src="vendor/jquery/dist/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="scripts/luna.js"></script>
+    <script>
+      // Notification system
+      function showNotification(message, type = 'success') {
+        const container = document.getElementById('notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        container.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          notification.classList.add('fade-out');
+          setTimeout(() => {
+            container.removeChild(notification);
+          }, 500);
+        }, 5000);
+      }
+    </script>
     <script src="scripts/admin-login.js"></script>
   </body>
 </html>

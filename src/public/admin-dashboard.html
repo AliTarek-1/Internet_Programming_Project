@@ -5,97 +5,86 @@
     <title>Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
   </head>
   <body>
-    <div class="sidebar">
-      <h2>Admin Panel</h2>
-      <a href="#backlog">Product Backlog</a>
-      <a href="#inventory">Inventory</a>
-      <a href="#orders">Order Management</a>
-    </div>
+    <!-- Include Admin Navigation -->
+    <div id="admin-nav"></div>
 
-    <div class="main">
-      <h1>Admin Dashboard</h1>
-
-      <section id="backlog">
-        <h2>Product Backlog</h2>
-        <form id="add-product-form">
-          <input type="text" id="name" placeholder="Name" required />
-          <input
-            type="text"
-            id="description"
-            placeholder="Description"
-            required
-          />
-          <input type="number" id="price" placeholder="Price" required />
-          <input type="text" id="image" placeholder="Image URL" />
-          <input type="text" id="category" placeholder="Category" required />
-          <input type="number" id="stock" placeholder="Stock" required />
-          <button type="submit">Add Product</button>
-        </form>
-
-        <div id="product-list" style="margin-top: 2rem"></div>
-      </section>
-
-      <section id="inventory">
-        <h2>Inventory Management</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Stock</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Phone Case</td>
-              <td>120</td>
-              <td>In Stock</td>
-            </tr>
-            <tr>
-              <td>USB Cable</td>
-              <td>15</td>
-              <td>Low Stock</td>
-            </tr>
-            <tr>
-              <td>Notebook</td>
-              <td>0</td>
-              <td>Out of Stock</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="orders">
-        <h2>Order Management</h2>
-        <table>
+    <div class="main-content">
+      <h1>Admin Dashboard Overview</h1>
+      
+      <div class="stats-container">
+        <div class="stat-card primary">
+          <h3>Total Products</h3>
+          <div class="value" id="total-products">0</div>
+          <a href="/admin-products.html">View All Products</a>
+        </div>
+        
+        <div class="stat-card warning">
+          <h3>Low Stock Items</h3>
+          <div class="value" id="low-stock">0</div>
+          <a href="/admin-inventory.html">View Inventory</a>
+        </div>
+        
+        <div class="stat-card success">
+          <h3>Total Orders</h3>
+          <div class="value" id="total-orders">0</div>
+          <a href="/admin-orders.html">Manage Orders</a>
+        </div>
+        
+        <div class="stat-card danger">
+          <h3>Active Promotions</h3>
+          <div class="value" id="active-promotions">0</div>
+          <a href="/admin-promotions.html">View Promotions</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Recent Orders</h2>
+          <a href="/admin-orders.html">View All Orders</a>
+        </div>
+        <table id="recent-orders-table">
           <thead>
             <tr>
               <th>Order ID</th>
+              <th>Date</th>
               <th>Customer</th>
+              <th>Total</th>
               <th>Status</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>#1001</td>
-              <td>Jane Doe</td>
-              <td>Pending</td>
-              <td><button onclick="markShipped(this)">Ship</button></td>
-            </tr>
-            <tr>
-              <td>#1002</td>
-              <td>John Smith</td>
-              <td>Shipped</td>
-              <td><button disabled>Shipped</button></td>
-            </tr>
+            <!-- Recent orders will be populated here -->
           </tbody>
         </table>
-      </section>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Low Stock Alerts</h2>
+          <a href="/admin-inventory.html">View All Inventory</a>
+        </div>
+        <div id="low-stock-alerts">
+          <!-- Low stock alerts will be populated here -->
+        </div>
+      </div>
     </div>
 
-    <script src="scripts/dashboard.js"></script>
+    <script>
+      // Load admin navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('components/admin-nav.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('admin-nav').innerHTML = html;
+            // Highlight current page in navigation
+            document.querySelector('.sidebar a[href="/admin-dashboard.html"]').classList.add('active');
+          });
+      });
+    </script>
+    <script src="scripts/admin-dashboard.js"></script>
   </body>
 </html>
