@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BrandStore - Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/HomePage.css" />
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+  </head>
+  <body>
+    <!-- Discount Announcement Banner -->
+    <div class="discount-banner">
+      <div class="banner-content">
+        🎉 Mega Sale: Up to <strong>50% OFF</strong> on selected products!
+        <a href="#discounted-products" class="discount-link">Shop Discounts</a>
+      </div>
+    </div>
+
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Existing content continues... -->
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Summer Collection 2025</h1>
+        <p>Discover the latest trends with up to 50% off</p>
+        <div class="hero-buttons">
+          <a href="products.html" class="btn-primary">Shop Now</a>
+          <a href="#featured" class="btn-secondary">Explore</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="featured-categories" id="featured">
+      <div class="container">
+        <div class="section-header">
+          <h2>Shop by Category</h2>
+          <p>Explore our curated collections</p>
+        </div>
+        <div class="categories-grid">
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/women-category.jpg" alt="Women's Collection" />
+            </div>
+            <div class="category-content">
+              <h3>Women's Collection</h3>
+              <p>Trendy styles for every occasion</p>
+              <a href="womens-products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/men-category.jpg" alt="Men's Collection" />
+            </div>
+            <div class="category-content">
+              <h3>Men's Collection</h3>
+              <p>Classic and contemporary styles</p>
+              <a href="products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+          <div class="category-card">
+            <div class="category-image">
+              <img src="images/accessories-category.jpg" alt="Accessories" />
+            </div>
+            <div class="category-content">
+              <h3>Accessories</h3>
+              <p>Complete your look</p>
+              <a href="products.html" class="category-btn">Shop Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Special Offers -->
+    <section class="special-offers">
+      <div class="container">
+        <div class="offer-card">
+          <div class="offer-content">
+            <span class="offer-tag">Limited Time</span>
+            <h2>Summer Sale</h2>
+            <p>Get up to 50% off on selected items</p>
+            <a href="products.html" class="btn-offer">Shop Now</a>
+          </div>
+          <div class="offer-image">
+            <img src="images/summer-sale.jpg" alt="Summer Sale" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Products</h2>
+          <p>Discover our best-selling items</p>
+        </div>
+        <div class="products-grid">
+          <!-- Product cards will be dynamically loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Discounted Products -->
+    <section class="discounted-products" id="discounted-products">
+      <div class="container">
+        <div class="section-header">
+          <h2>Discounted Products</h2>
+          <p>Don’t miss out on these limited-time deals</p>
+        </div>
+        <div class="products-grid">
+          <!-- Example discounted product card -->
+          <div class="product-card">
+            <img src="images/discounted-product1.jpg" alt="Product" />
+            <h3>Trendy Sunglasses</h3>
+            <p
+              class="original-price"
+              style="text-decoration: line-through; color: gray"
+            >
+              $40.00
+            </p>
+            <p class="discounted-price" style="color: red; font-weight: bold">
+              $20.00
+            </p>
+            <a
+              href="product-details.html?id=123&name=Premium+Shirt&price=125&oldPrice=150&category=Men&desc=High-quality+shirt+with+modern+fit"
+              class="btn-primary"
+            >
+              Buy Now
+            </a>
+          </div>
+          <!-- Add more discounted products here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Subscribe to Our Newsletter</h2>
+          <p>Get the latest updates on new products and upcoming sales</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/HomePage.js"></script>
+  </body>
+</html>

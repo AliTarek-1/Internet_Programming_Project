@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | BrandStore</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/info-pages.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Privacy Policy</h1>
+      <p>Last Updated: May 1, 2025</p>
+    </div>
+
+    <div class="info-content">
+      <section class="info-section">
+        <div class="terms-section">
+          <h2>1. Introduction</h2>
+          <p>At BrandStore, we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase.</p>
+          <p>Please read this Privacy Policy carefully. If you do not agree with the terms of this Privacy Policy, please do not access the website.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>2. Information We Collect</h2>
+          <h3>Personal Data</h3>
+          <p>We may collect personal identification information, including but not limited to:</p>
+          <ul>
+            <li>Name</li>
+            <li>Email address</li>
+            <li>Phone number</li>
+            <li>Shipping and billing address</li>
+            <li>Payment information</li>
+            <li>Date of birth</li>
+          </ul>
+
+          <h3>Non-Personal Data</h3>
+          <p>We may also collect non-personal identification information, including but not limited to:</p>
+          <ul>
+            <li>Browser type</li>
+            <li>Device type</li>
+            <li>Operating system</li>
+            <li>IP address</li>
+            <li>Cookies and usage data</li>
+          </ul>
+        </div>
+
+        <div class="terms-section">
+          <h2>3. How We Collect Information</h2>
+          <p>We collect information when you:</p>
+          <ul>
+            <li>Register on our website</li>
+            <li>Place an order</li>
+            <li>Subscribe to our newsletter</li>
+            <li>Respond to a survey</li>
+            <li>Fill out a form</li>
+            <li>Browse our website</li>
+          </ul>
+        </div>
+
+        <div class="terms-section">
+          <h2>4. How We Use Your Information</h2>
+          <p>We may use the information we collect for various purposes, including:</p>
+          <ul>
+            <li>To process and fulfill your orders</li>
+            <li>To improve our website and customer service</li>
+            <li>To personalize your user experience</li>
+            <li>To send periodic emails regarding your order or other products and services</li>
+            <li>To administer promotions, surveys, or other site features</li>
+            <li>To communicate with you about our products, services, and events</li>
+          </ul>
+        </div>
+
+        <div class="terms-section">
+          <h2>5. How We Protect Your Information</h2>
+          <p>We implement appropriate security measures to maintain the safety of your personal information. We use secure server technology and encryption to protect your payment information during transmission.</p>
+          <p>However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>6. Cookies</h2>
+          <p>We use cookies to enhance your experience on our website. Cookies are small files that a site or its service provider transfers to your computer's hard drive through your web browser that enables the site to recognize your browser and remember certain information.</p>
+          <p>You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies through your browser settings.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>7. Third-Party Disclosure</h2>
+          <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties except as described below:</p>
+          <ul>
+            <li>Service providers who assist us in operating our website, conducting our business, or servicing you</li>
+            <li>Trusted third parties who agree to keep this information confidential</li>
+            <li>When we believe release is appropriate to comply with the law or protect our rights</li>
+          </ul>
+        </div>
+
+        <div class="terms-section">
+          <h2>8. Your Rights</h2>
+          <p>You have the right to:</p>
+          <ul>
+            <li>Access your personal data</li>
+            <li>Correct inaccurate personal data</li>
+            <li>Request deletion of your personal data</li>
+            <li>Object to the processing of your personal data</li>
+            <li>Request restriction of processing your personal data</li>
+            <li>Request transfer of your personal data</li>
+            <li>Withdraw consent</li>
+          </ul>
+        </div>
+
+        <div class="terms-section">
+          <h2>9. Changes to This Privacy Policy</h2>
+          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+          <p>You are advised to review this Privacy Policy periodically for any changes.</p>
+        </div>
+
+        <div class="terms-section">
+          <h2>10. Contact Us</h2>
+          <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+          <p>Email: <a href="mailto:privacy@brandstore.com">privacy@brandstore.com</a></p>
+          <p>Phone: +20 123 456 7890</p>
+          <p>Address: 123 Fashion Street, Cairo, Egypt</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar-placeholder"></div>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load navbar
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+          
+          // Initialize navbar after loading
+          if (typeof initializeNavbar === 'function') {
+            initializeNavbar();
+          } else {
+            const navbarScript = document.createElement('script');
+            navbarScript.src = 'scripts/navbar.js';
+            document.head.appendChild(navbarScript);
+          }
+        });
+      
+      // Load cart sidebar
+      fetch('components/cart-sidebar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('cart-sidebar-placeholder').innerHTML = data;
+          
+          // Initialize cart sidebar after loading
+          const cartScript = document.createElement('script');
+          cartScript.src = 'scripts/cart.js';
+          document.head.appendChild(cartScript);
+        });
+      
+      // Load footer
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    });
+  </script>
+</body>
+</html>

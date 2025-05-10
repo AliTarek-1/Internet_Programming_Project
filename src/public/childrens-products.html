@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Children's Collection - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/products.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Children's Collection</h1>
+        <p>Colorful and comfortable clothing for kids of all ages</p>
+      </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters">
+      <div class="container">
+        <div class="search-box">
+          <input type="text" placeholder="Search for products..." />
+          <i class="fas fa-search"></i>
+        </div>
+
+        <div class="filter-options">
+          <select class="category-filter">
+            <option value="">All Categories</option>
+            <option value="tops">Tops</option>
+            <option value="bottoms">Bottoms</option>
+            <option value="outerwear">Outerwear</option>
+            <option value="accessories">Accessories</option>
+          </select>
+
+          <select class="sort-filter">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Children's Collection</h2>
+          <p>Fun and durable clothing for your little ones</p>
+        </div>
+
+        <div class="products-grid">
+          <!-- Products will be dynamically loaded here from products.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Subscribe to Our Newsletter</h2>
+          <p>Get the latest updates on new products and exclusive offers</p>
+
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email Address" required />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Shop</h3>
+            <ul>
+              <li><a href="womens-products.html">Women's Collection</a></li>
+              <li><a href="mens-products.html">Men's Collection</a></li>
+              <li>
+                <a href="childrens-products.html">Children's Collection</a>
+              </li>
+              <li><a href="#">New Arrivals</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Help</h3>
+            <ul>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Shipping & Returns</a></li>
+              <li><a href="#">Size Guide</a></li>
+              <li><a href="#">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 BrandStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/debug-api.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/childrens-products.js"></script>
+  </body>
+</html>

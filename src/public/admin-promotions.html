@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - Promotions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
+  </head>
+  <body>
+    <!-- Include Admin Navigation -->
+    <div id="admin-nav"></div>
+
+    <div class="main-content">
+      <h1>Promotions & Discounts</h1>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Add New Promotion</h2>
+        </div>
+        <form id="add-promotion-form">
+          <input type="text" id="promo-title" placeholder="Promotion Title" required />
+          <select id="promo-type" required>
+            <option value="percentage">Percentage Discount</option>
+            <option value="fixed">Fixed Amount Discount</option>
+            <option value="coupon">Coupon Code Discount</option>
+          </select>
+          <div id="coupon-settings" style="display: none;">
+            <h3>Coupon Settings</h3>
+            <div class="form-group">
+              <label for="min-purchase">Minimum Purchase Amount:</label>
+              <input type="number" id="min-purchase" placeholder="Minimum purchase amount (0 for none)" />
+            </div>
+            <div class="form-group">
+              <label for="coupon-limit-per-user">Usage Limit Per User:</label>
+              <input type="number" id="coupon-limit-per-user" placeholder="Limit per user (0 for unlimited)" />
+            </div>
+            <div class="form-group">
+              <label>Applicable Products:</label>
+              <select id="coupon-product-scope">
+                <option value="all">All Products</option>
+                <option value="category">Specific Category</option>
+                <option value="products">Selected Products</option>
+              </select>
+            </div>
+            <div id="category-selector" style="display: none;">
+              <label for="coupon-category">Select Category:</label>
+              <select id="coupon-category">
+                <option value="mens">Men's Collection</option>
+                <option value="womens">Women's Collection</option>
+                <option value="kids">Kids Collection</option>
+                <option value="accessories">Accessories</option>
+              </select>
+            </div>
+          </div>
+          <input type="number" id="promo-value" placeholder="Discount Value" required />
+          <input type="text" id="promo-code" placeholder="Coupon Code (Optional)" />
+          <div>
+            <label for="promo-start">Start Date:</label>
+            <input type="date" id="promo-start" required />
+          </div>
+          <div>
+            <label for="promo-end">End Date:</label>
+            <input type="date" id="promo-end" required />
+          </div>
+          <input
+            type="number"
+            id="promo-usage"
+            placeholder="Usage Limit (Default 100)"
+          />
+          <button type="submit" id="add-promotion-btn">Add Promotion</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Active Promotions</h2>
+        </div>
+        <div id="promotion-list"></div>
+      </div>
+    </div>
+
+    <script>
+      // Load admin navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('components/admin-nav.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('admin-nav').innerHTML = html;
+            // Highlight current page in navigation
+            document.querySelector('.sidebar a[href="/admin-promotions.html"]').classList.add('active');
+          });
+      });
+    </script>
+    <script src="scripts/admin-promotions.js"></script>
+  </body>
+</html>

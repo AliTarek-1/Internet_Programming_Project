@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Registration | BrandStore</title>
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="styles/admin-login.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
+  </head>
+
+  <body>
+    <div id="notification-container"></div>
+    
+    <div class="login-wrapper">
+      <div class="text-center mb-4">
+        <img src="images/ourLogo.png" alt="Logo" style="width: 60px" />
+      </div>
+      <h3 class="text-center">Admin Registration</h3>
+      <p class="text-center">
+        Create your admin account to access the admin panel.
+      </p>
+
+      <form id="admin-register-form" novalidate>
+        <div class="form-group">
+          <label for="adminID">Admin ID</label>
+          <input
+            type="text"
+            id="adminID"
+            class="form-control"
+            placeholder="Enter your admin ID"
+            required
+          />
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter your password"
+            required
+          />
+          <small class="form-text text-muted"
+            >Password must be at least 8 characters long</small
+          >
+        </div>
+
+        <p id="error-msg" class="error-message"></p>
+
+        <button type="submit" class="btn btn-primary btn-block mt-3">
+          Register
+        </button>
+
+        <p class="text-center mt-3 link-msg">
+          Already have an account? <a href="/login-admin.html">Login</a>
+        </p>
+      </form>
+    </div>
+
+    <script>
+      // Notification system
+      function showNotification(message, type = 'success') {
+        const container = document.getElementById('notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        container.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          notification.classList.add('fade-out');
+          setTimeout(() => {
+            container.removeChild(notification);
+          }, 500);
+        }, 5000);
+      }
+    </script>
+    <script src="scripts/register-admin.js"></script>
+  </body>
+</html>

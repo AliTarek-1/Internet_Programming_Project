@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FAQ - BrandStore</title>
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/faq.css" />
+    <link rel="stylesheet" href="styles/cart-sidebar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/footer.css" />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Cart Sidebar (will be loaded via JavaScript) -->
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <a href="checkout.html" class="checkout-btn">Checkout</a>
+        <a href="cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Frequently Asked Questions</h1>
+        <p>
+          Find answers to the most common questions about our products,
+          services, and policies.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-container">
+      <!-- Search and Filter -->
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          id="faq-search"
+          placeholder="Search for questions..."
+        />
+      </div>
+
+      <div class="faq-categories-nav">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="Shopping">Shopping</button>
+        <button class="category-btn" data-category="Shipping & Delivery">
+          Shipping
+        </button>
+        <button class="category-btn" data-category="Returns & Exchanges">
+          Returns
+        </button>
+        <button class="category-btn" data-category="Account & Payment">
+          Account
+        </button>
+      </div>
+
+      <div class="no-results" style="display: none">
+        <i class="fas fa-search"></i>
+        <h3>No results found</h3>
+        <p>
+          We couldn't find any FAQs matching your search. Try different keywords
+          or browse by category.
+        </p>
+      </div>
+
+      <!-- Shopping FAQs -->
+      <div class="faq-category">
+        <h2>Shopping</h2>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I place an order?</div>
+        <div class="faq-answer">
+          Placing an order is easy! Simply browse our catalog, select the items
+          you'd like to purchase, choose your size and quantity, and click "Add
+          to Cart." When you're ready to check out, click on the cart icon in
+          the top right corner, review your cart, and proceed to checkout.
+          You'll need to provide your shipping information and payment details
+          to complete your purchase.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need an account to shop?</div>
+        <div class="faq-answer">
+          While you can browse our products without an account, you'll need to
+          create one to complete a purchase. Creating an account allows you to
+          track your order, save your shipping information for future purchases,
+          and receive exclusive offers. It only takes a minute to sign up!
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How can I find my size?</div>
+        <div class="faq-answer">
+          We offer a comprehensive size guide for all our clothing items. You
+          can find the size guide link on each product page or in the "Help"
+          section of our website. Our size guides provide detailed measurements
+          to help you find the perfect fit. If you're between sizes, we
+          generally recommend sizing up.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          Can I modify or cancel my order after it's placed?
+        </div>
+        <div class="faq-answer">
+          You can modify or cancel your order within 1 hour of placing it. To do
+          so, log into your account, go to "Order History," find the order you'd
+          like to modify, and click "Cancel Order." For modifications, please
+          contact our customer service team immediately. After the 1-hour
+          window, we begin processing orders, and cancellations or modifications
+          may not be possible.
+        </div>
+      </div>
+
+      <!-- Shipping FAQs -->
+      <div class="faq-category">
+        <h2>Shipping & Delivery</h2>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How much does shipping cost?</div>
+        <div class="faq-answer">
+          We offer free standard shipping on all orders over $50. For orders
+          under $50, a flat shipping fee of $5.99 applies. Express shipping is
+          available for an additional charge and varies based on your location.
+          International shipping rates vary by country and can be calculated at
+          checkout.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          How long will it take to receive my order?
+        </div>
+        <div class="faq-answer">
+          Standard shipping typically takes 3-5 business days for delivery
+          within the continental United States. Express shipping is available
+          for 1-2 business day delivery. International shipping typically takes
+          7-14 business days, depending on the destination and customs
+          clearance. Please note that these are estimated delivery times and may
+          vary due to factors beyond our control, such as weather or customs
+          delays.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do you ship internationally?</div>
+        <div class="faq-answer">
+          Yes, we ship to most countries worldwide. International shipping rates
+          and delivery times vary by location. Please note that international
+          orders may be subject to customs duties and taxes upon arrival, which
+          are the responsibility of the recipient and not included in our
+          shipping charges.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How can I track my order?</div>
+        <div class="faq-answer">
+          Once your order ships, you'll receive a shipping confirmation email
+          with a tracking number. You can also track your order by logging into
+          your account and viewing your order history. For detailed tracking
+          information, click on the tracking number provided or visit our "Track
+          Order" page.
+        </div>
+      </div>
+
+      <!-- Returns & Exchanges FAQs -->
+      <div class="faq-category">
+        <h2>Returns & Exchanges</h2>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is your return policy?</div>
+        <div class="faq-answer">
+          We offer a 30-day return policy for all unworn, unwashed items in
+          their original condition with tags attached. Returns must be initiated
+          within 30 days of delivery. For full details, please visit our Returns
+          & Exchanges page.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I return or exchange an item?</div>
+        <div class="faq-answer">
+          To initiate a return or exchange, log into your account, go to "Order
+          History," find the order containing the item you want to return, and
+          click "Return Items." Follow the instructions to complete the return
+          process. You'll receive a return shipping label via email. For
+          exchanges, indicate the new size or item you'd like in the return
+          form.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I have to pay for return shipping?</div>
+        <div class="faq-answer">
+          Return shipping is free for exchanges or if you received a defective
+          or incorrect item. For regular returns, a flat return shipping fee of
+          $5.99 will be deducted from your refund. International returns are the
+          responsibility of the customer unless the item received was defective
+          or incorrect.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          How long does it take to process a refund?
+        </div>
+        <div class="faq-answer">
+          Once we receive your return, it typically takes 3-5 business days to
+          process. After processing, refunds are issued to your original payment
+          method and may take an additional 3-7 business days to appear on your
+          statement, depending on your bank or credit card company.
+        </div>
+      </div>
+
+      <!-- Account & Payment FAQs -->
+      <div class="faq-category">
+        <h2>Account & Payment</h2>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What payment methods do you accept?</div>
+        <div class="faq-answer">
+          We accept all major credit cards (Visa, Mastercard, American Express,
+          Discover), PayPal, and Apple Pay. We also offer a secure "Buy Now, Pay
+          Later" option through Affirm on orders over $50.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Is my payment information secure?</div>
+        <div class="faq-answer">
+          Absolutely. We use industry-standard encryption and secure payment
+          processors to ensure your payment information is protected. We never
+          store your full credit card details on our servers. Our website is
+          SSL-certified, as indicated by the lock icon in your browser's address
+          bar.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I reset my password?</div>
+        <div class="faq-answer">
+          If you've forgotten your password, click on the "Login" button, then
+          select "Forgot Password." Enter the email address associated with your
+          account, and we'll send you a link to reset your password. For
+          security reasons, the link expires after 24 hours.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          Can I update my shipping address after placing an order?
+        </div>
+        <div class="faq-answer">
+          You can update your shipping address within 1 hour of placing your
+          order. After that, if your order hasn't shipped yet, please contact
+          our customer service team immediately, and we'll do our best to
+          accommodate the change. Once an order has shipped, we cannot change
+          the delivery address.
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="scripts/navbar.js"></script>
+    <script src="scripts/cart-sidebar.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/faq.js"></script>
+  </body>
+</html>

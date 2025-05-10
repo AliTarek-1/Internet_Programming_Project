@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
+  </head>
+  <body>
+    <!-- Include Admin Navigation -->
+    <div id="admin-nav"></div>
+
+    <div class="main-content">
+      <h1>Admin Dashboard Overview</h1>
+      
+      <div class="stats-container">
+        <div class="stat-card primary">
+          <h3>Total Products</h3>
+          <div class="value" id="total-products">0</div>
+          <a href="/admin-products.html">View All Products</a>
+        </div>
+        
+        <div class="stat-card warning">
+          <h3>Low Stock Items</h3>
+          <div class="value" id="low-stock">0</div>
+          <a href="/admin-inventory.html">View Inventory</a>
+        </div>
+        
+        <div class="stat-card success">
+          <h3>Total Orders</h3>
+          <div class="value" id="total-orders">0</div>
+          <a href="/admin-orders.html">Manage Orders</a>
+        </div>
+        
+        <div class="stat-card danger">
+          <h3>Active Promotions</h3>
+          <div class="value" id="active-promotions">0</div>
+          <a href="/admin-promotions.html">View Promotions</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Recent Orders</h2>
+          <a href="/admin-orders.html">View All Orders</a>
+        </div>
+        <table id="recent-orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Recent orders will be populated here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>Low Stock Alerts</h2>
+          <a href="/admin-inventory.html">View All Inventory</a>
+        </div>
+        <div id="low-stock-alerts">
+          <!-- Low stock alerts will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load admin navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('components/admin-nav.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('admin-nav').innerHTML = html;
+            // Highlight current page in navigation
+            document.querySelector('.sidebar a[href="/admin-dashboard.html"]').classList.add('active');
+          });
+      });
+    </script>
+    <script src="scripts/admin-dashboard.js"></script>
+  </body>
+</html>
