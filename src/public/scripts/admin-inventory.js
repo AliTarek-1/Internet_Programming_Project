@@ -29,12 +29,20 @@ async function verifyToken() {
     }
 
     const data = await res.json();
-    if (data.role !== "admin" && data.role !== "superadmin") {
-      throw new Error("Not authorized");
-    }
     
-    return data;
+    // Check if the response has data property (from getAdminProfile)
+    const admin = data.data || data.admin || data;
+    
+    // Check if the user has admin privileges
+    if (admin && (admin.role === "admin" || admin.role === "superadmin")) {
+      // Valid admin user
+      console.log("Admin verified:", admin.name);
+      return admin;
+    } else {
+      throw new Error("Not authorized as admin");
+    }
   } catch (err) {
+    console.error("Token verification error:", err.message);
     localStorage.removeItem("token");
     window.location.href = "/login-admin.html";
   }

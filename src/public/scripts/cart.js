@@ -13,6 +13,9 @@ function loadCart() {
   const emptyCartMessage = document.getElementById('emptyCart');
   const cartSummary = document.getElementById('cartSummary');
   
+  // Debug cart data
+  console.log('Loading cart items:', cart);
+  
   // Clear previous items
   const existingItems = cartItemsContainer.querySelectorAll('.cart-item');
   existingItems.forEach(item => item.remove());
@@ -33,23 +36,46 @@ function loadCart() {
   
   // Add each item to the cart
   cart.forEach(product => {
-    const cartItem = document.importNode(template.content, true).querySelector('.cart-item');
+    // Skip invalid products
+    if (!product || !product.id) {
+      console.warn('Skipping invalid product in cart:', product);
+      return;
+    }
     
-    // Set product details
-    cartItem.querySelector('.item-name').textContent = product.name;
-    cartItem.querySelector('.item-category').textContent = product.category;
-    cartItem.querySelector('.item-price').textContent = `$${parseFloat(product.price).toFixed(2)}`;
-    cartItem.querySelector('.item-quantity input').value = product.quantity;
+    // Ensure product has valid data
+    const name = product.name || 'Unknown Product';
+    const category = product.category || 'Uncategorized';
+    const price = parseFloat(product.price) || 0;
+    const quantity = parseInt(product.quantity) || 1;
     
-    // Calculate and set total
-    const total = (parseFloat(product.price) * product.quantity).toFixed(2);
-    cartItem.querySelector('.item-total').textContent = `$${total}`;
-    
-    // Set data attribute for product ID
-    cartItem.dataset.id = product.id;
-    
-    // Add to container
-    cartItemsContainer.insertBefore(cartItem, emptyCartMessage);
+    try {
+      const cartItem = document.importNode(template.content, true).querySelector('.cart-item');
+      
+      // Set product details
+      cartItem.querySelector('.item-name').textContent = name;
+      cartItem.querySelector('.item-category').textContent = category;
+      cartItem.querySelector('.item-price').textContent = `$${price.toFixed(2)}`;
+      cartItem.querySelector('.item-quantity input').value = quantity;
+      
+      // Calculate and set total
+      const total = (price * quantity).toFixed(2);
+      cartItem.querySelector('.item-total').textContent = `$${total}`;
+      
+      // Set data attribute for product ID
+      cartItem.dataset.id = product.id;
+      
+      // Add product image if available
+      const imageElement = cartItem.querySelector('.item-image img');
+      if (imageElement && product.image) {
+        imageElement.src = product.image;
+        imageElement.alt = name;
+      }
+      
+      // Add to container
+      cartItemsContainer.insertBefore(cartItem, emptyCartMessage);
+    } catch (error) {
+      console.error('Error adding product to cart UI:', error, product);
+    }
   });
   
   // Update summary

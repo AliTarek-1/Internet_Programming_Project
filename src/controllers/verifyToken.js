@@ -92,24 +92,4 @@ function restrictTo(...roles) {
   };
 }
 
-function restrictTo(...roles) {
-  return (req, res, next) => {
-    if (!req.user || !req.userRole) {
-      return res.status(401).json({
-        success: false,
-        message: "Please log in to access this resource",
-      });
-    }
-
-    if (!roles.includes(req.userRole)) {
-      return res.status(403).json({
-        success: false,
-        message: "You do not have permission to perform this action",
-      });
-    }
-
-    next();
-  };
-}
-
 module.exports = { verifyToken, restrictTo };

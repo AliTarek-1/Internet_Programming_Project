@@ -28,11 +28,10 @@ function loadScript(src) {
 
 // Load products into the products grid
 async function loadProducts() {
-  console.log('[DEBUG] Starting to load products');
   const productsGrid = document.querySelector('.products-grid');
   
   if (!productsGrid) {
-    console.error('[DEBUG] Products grid element not found');
+    console.error('Products grid element not found');
     return;
   }
   
@@ -42,63 +41,34 @@ async function loadProducts() {
   // Get URL parameters for category filtering
   const urlParams = new URLSearchParams(window.location.search);
   const categoryParam = urlParams.get('category');
-  console.log(`[DEBUG] Category parameter from URL: ${categoryParam || 'none'}`);
   
-  // Get all men's products
-  console.log('[DEBUG] Calling getMensProducts()');
+  // Get products from API
   let products = await getMensProducts();
-  console.log(`[DEBUG] Received ${products ? products.length : 0} products from getMensProducts()`);
-  console.log('[DEBUG] First few products:', products.slice(0, 2));
   
-  // Filter products by category if specified in URL
+  // Filter by category if specified in URL
   if (categoryParam) {
-    console.log(`[DEBUG] Filtering products by category: ${categoryParam}`);
-    const originalCount = products.length;
     const paramCategory = categoryParam.toLowerCase();
-    
     products = products.filter(product => {
       // Check in multiple places where category info might be stored
+      const productCategory = (product.category || '').toLowerCase();
+      const productSubcategory = (product.subcategory || '').toLowerCase();
+      const productTags = product.tags || [];
+      const productName = (product.name || '').toLowerCase();
+      const productType = (product.type || '').toLowerCase();
       
-      // 1. Check in tags array
-      const hasTags = product.tags && Array.isArray(product.tags);
-      if (hasTags && product.tags.some(tag => tag.toLowerCase() === paramCategory)) {
-        console.log(`[DEBUG] Product ${product.name} matched by tags`);
-        return true;
-      }
-      
-      // 2. Check in category field
-      if (product.category && product.category.toLowerCase().includes(paramCategory)) {
-        console.log(`[DEBUG] Product ${product.name} matched by category field`);
-        return true;
-      }
-      
-      // 3. Check in subcategory field
-      if (product.subcategory && product.subcategory.toLowerCase() === paramCategory) {
-        console.log(`[DEBUG] Product ${product.name} matched by subcategory field`);
-        return true;
-      }
-      
-      // 4. Check in product name
-      if (product.name && product.name.toLowerCase().includes(paramCategory)) {
-        console.log(`[DEBUG] Product ${product.name} matched by name`);
-        return true;
-      }
-      
-      // 5. Check in product type
-      if (product.type && product.type.toLowerCase() === paramCategory) {
-        console.log(`[DEBUG] Product ${product.name} matched by type`);
-        return true;
-      }
-      return false;
+      return productCategory.includes(paramCategory) || 
+             productSubcategory.includes(paramCategory) || 
+             productName.includes(paramCategory) ||
+             productType === paramCategory ||
+             (Array.isArray(productTags) && productTags.some(tag => 
+               tag.toLowerCase().includes(paramCategory)));
     });
-    
-    console.log(`[DEBUG] After filtering: ${products.length} products (from ${originalCount})`);
     
     // Update the category filter dropdown to match URL parameter
     const categoryFilter = document.querySelector('.category-filter');
     if (categoryFilter) {
       Array.from(categoryFilter.options).forEach(option => {
-        if (option.value.toLowerCase() === categoryParam.toLowerCase()) {
+        if (option.value.toLowerCase() === paramCategory) {
           option.selected = true;
         }
       });
@@ -112,12 +82,11 @@ async function loadProducts() {
     }
   }
   
-  // Clear existing products
+  // Clear loading indicator
   productsGrid.innerHTML = '';
   
   // Show message if no products found
   if (!products || products.length === 0) {
-    console.log('[DEBUG] No products found, showing message');
     const noProductsMessage = document.createElement('div');
     noProductsMessage.className = 'no-products-message';
     noProductsMessage.innerHTML = `
@@ -131,13 +100,10 @@ async function loadProducts() {
   }
   
   // Add products to grid
-  console.log(`[DEBUG] Adding ${products.length} products to grid`);
-  products.forEach((product, index) => {
-    console.log(`[DEBUG] Creating product card for product ${index + 1}: ${product.name}`);
+  products.forEach(product => {
     const productCard = createProductCard(product);
     productsGrid.appendChild(productCard);
   });
-  console.log('[DEBUG] Finished adding products to grid');
 }
 
 // Generate star rating HTML based on rating value
@@ -168,10 +134,8 @@ function generateStarRating(rating) {
 
 // Create product card element
 function createProductCard(product) {
-  console.log(`[DEBUG] Creating product card for:`, product);
-  
   if (!product || typeof product !== 'object') {
-    console.error('[DEBUG] Invalid product data:', product);
+    console.error('Invalid product data');
     return document.createElement('div');
   }
   
@@ -180,7 +144,13 @@ function createProductCard(product) {
   productCard.setAttribute('data-id', product._id || product.productID || '');
   
   // Ensure we have valid image path
-  let imagePath = product.image || '/images/product-placeholder.jpg';
+  let imagePath = product.image || '/images/products/product-placeholder.jpg';
+  
+  // Fix image paths that are returning 404
+  if (imagePath.includes('/images/products/mens/')) {
+    // Use a placeholder image instead
+    imagePath = '/images/products/product-placeholder.jpg';
+  }
   
   // If the image path doesn't start with '/', add the base path
   if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) {
@@ -232,16 +202,20 @@ function createProductCard(product) {
   
   // Add event listener to "Add to Cart" button
   const addToCartBtn = productCard.querySelector('.add-to-cart');
-  addToCartBtn.addEventListener('click', (e) => {
+  addToCartBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     
     const productId = addToCartBtn.getAttribute('data-id');
-    const product = getProductById(productId);
+    // Use await to get the product data
+    const product = await getProductById(productId);
     
     if (product) {
       addProductToCart(product, 1, 'M', '');
       updateCartCount();
-      showNotification('Product added to cart!');
+      showNotification(`${product.name} added to cart!`);
+    } else {
+      console.error('Could not retrieve product data for ID:', productId);
+      showNotification('Error adding product to cart', 'error');
     }
   });
   
@@ -288,14 +262,18 @@ function initQuickView() {
   // Add to cart from modal
   const modalAddToCartBtn = document.querySelector('.modal-add-to-cart');
   if (modalAddToCartBtn) {
-    modalAddToCartBtn.addEventListener('click', () => {
+    modalAddToCartBtn.addEventListener('click', async () => {
       const productId = modalAddToCartBtn.getAttribute('data-id');
-      const product = getProductById(productId);
+      // Use await to get the product data
+      const product = await getProductById(productId);
       
       if (product) {
         addProductToCart(product, 1, 'M', '');
         showNotification(`${product.name} added to cart`);
         document.querySelector('.quick-view-modal').style.display = 'none';
+      } else {
+        console.error('Could not retrieve product data for ID:', productId);
+        showNotification('Error adding product to cart', 'error');
       }
     });
   }
@@ -383,7 +361,6 @@ async function filterProducts() {
   
   // Filter by category
   if (categoryValue) {
-<<<<<<< HEAD
     console.log(`[DEBUG] Filtering by category: ${categoryValue}`);
     
     products = products.filter(product => {
@@ -471,28 +448,41 @@ async function filterProducts() {
 
 // Add product to cart in localStorage
 function addProductToCart(product, quantity, size, color) {
+  // Debug product data
+  console.log('Adding product to cart:', product);
+  
+  // Validate product data
+  if (!product) {
+    console.error('Cannot add undefined product to cart');
+    return;
+  }
+  
+  // Ensure product has all required properties
+  const productToAdd = {
+    id: product._id || product.id || generateProductId(product.name || 'Product'),
+    name: product.name || 'Unknown Product',
+    price: parseFloat(product.price) || 0,
+    category: product.category || 'Uncategorized',
+    image: product.image || '/images/product-placeholder.jpg',
+    size: size || 'M',
+    color: color || '',
+    quantity: quantity || 1
+  };
+  
   // Get existing cart or initialize empty array
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   
   // Check if product already exists in cart
   const existingProductIndex = cart.findIndex(item => 
-    item.id === product.id && item.size === size && item.color === color
+    item.id === productToAdd.id && item.size === productToAdd.size && item.color === productToAdd.color
   );
   
   if (existingProductIndex !== -1) {
     // Update quantity if product already in cart
-    cart[existingProductIndex].quantity += quantity;
+    cart[existingProductIndex].quantity += productToAdd.quantity;
   } else {
     // Add new product to cart
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: parseFloat(product.price), // Ensure price is stored as a number
-      category: product.category,
-      size: size,
-      color: color,
-      quantity: quantity
-    });
+    cart.push(productToAdd);
   }
   
   // Save updated cart to localStorage
@@ -501,6 +491,20 @@ function addProductToCart(product, quantity, size, color) {
   // Update cart count
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   localStorage.setItem('cartCount', cartCount);
+  
+  console.log('Cart updated:', cart);
+}
+
+// Generate a unique product ID
+function generateProductId(name) {
+  // Create a slug from the name
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  
+  // Add a timestamp and random number for uniqueness
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000);
+  
+  return `${slug}-${timestamp}-${random}`;
 }
 
 // Update cart count in navbar
@@ -519,7 +523,7 @@ function updateCartCount() {
 }
 
 // Show notification
-function showNotification(message) {
+function showNotification(message, type = 'success') {
   // Check if notification container exists
   let notificationContainer = document.querySelector('.notification-container');
   
@@ -527,16 +531,56 @@ function showNotification(message) {
   if (!notificationContainer) {
     notificationContainer = document.createElement('div');
     notificationContainer.className = 'notification-container';
+    notificationContainer.style.position = 'fixed';
+    notificationContainer.style.bottom = '20px';
+    notificationContainer.style.right = '20px';
+    notificationContainer.style.zIndex = '9999';
     document.body.appendChild(notificationContainer);
   }
   
   // Create notification
   const notification = document.createElement('div');
-  notification.className = 'notification';
-  notification.innerHTML = `
-    <i class="fas fa-check-circle"></i>
-    <span>${message}</span>
-  `;
+  notification.className = `notification notification-${type}`;
+  
+  // Set styles based on type
+  notification.style.padding = '12px 20px';
+  notification.style.margin = '10px';
+  notification.style.borderRadius = '4px';
+  notification.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  notification.style.display = 'flex';
+  notification.style.alignItems = 'center';
+  notification.style.transition = 'all 0.3s ease';
+  
+  // Set color based on type
+  if (type === 'success') {
+    notification.style.backgroundColor = '#4CAF50';
+    notification.style.color = 'white';
+    notification.innerHTML = `
+      <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+      <span>${message}</span>
+    `;
+  } else if (type === 'error') {
+    notification.style.backgroundColor = '#F44336';
+    notification.style.color = 'white';
+    notification.innerHTML = `
+      <i class="fas fa-exclamation-circle" style="margin-right: 10px;"></i>
+      <span>${message}</span>
+    `;
+  } else if (type === 'warning') {
+    notification.style.backgroundColor = '#FF9800';
+    notification.style.color = 'white';
+    notification.innerHTML = `
+      <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+      <span>${message}</span>
+    `;
+  } else {
+    notification.style.backgroundColor = '#2196F3';
+    notification.style.color = 'white';
+    notification.innerHTML = `
+      <i class="fas fa-info-circle" style="margin-right: 10px;"></i>
+      <span>${message}</span>
+    `;
+  }
   
   // Add notification to container
   notificationContainer.appendChild(notification);
@@ -544,6 +588,8 @@ function showNotification(message) {
   // Remove notification after 3 seconds
   setTimeout(() => {
     notification.classList.add('fade-out');
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateX(100px)';
     setTimeout(() => {
       notification.remove();
     }, 300);
@@ -564,27 +610,20 @@ async function getProductById(productId) {
 
 // Get all men's products
 async function getMensProducts() {
-  console.log('[DEBUG] getMensProducts() called');
   try {
     if (window.apiService) {
-      console.log('[DEBUG] apiService exists, calling fetchProductsByCategory');
       const products = await window.apiService.fetchProductsByCategory("Men's Collection");
-      console.log(`[DEBUG] fetchProductsByCategory returned:`, products);
       
       if (products && products.length > 0) {
-        console.log(`[DEBUG] Returning ${products.length} products`);
         return products;
-      } else {
-        console.log('[DEBUG] No products returned from API');
       }
     } else {
-      console.error('[DEBUG] apiService not found');
+      console.error('API service not found');
     }
   } catch (error) {
-    console.error('[DEBUG] Error fetching men\'s products from API:', error);
+    console.error('Error fetching men\'s products from API:', error);
   }
   
   // Return empty array if API fails
-  console.log('[DEBUG] Returning empty array');
   return [];
 }

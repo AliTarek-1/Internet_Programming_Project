@@ -43,23 +43,52 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Initialize orders page functionality
  */
-function initOrdersPage() {
-  // Check if user is logged in
-  if (!checkAuthentication()) {
-    return; // Stop initialization if not authenticated
+async function initOrdersPage() {
+  try {
+    // Initialize loading indicator
+    initLoadingIndicator();
+    
+    // Show loading indicator
+    showLoadingIndicator();
+    
+    // Load API script first
+    try {
+      // Check if API script is already loaded
+      if (!window.apiService) {
+        await loadScript('scripts/api.js');
+        console.log('API script loaded successfully');
+      }
+    } catch (apiError) {
+      console.error('Error loading API script:', apiError);
+      // Continue anyway - we have fallback methods
+    }
+    
+    // Load user data
+    await loadUserData();
+    
+    // Load orders
+    await loadOrders();
+    
+    // Add event listeners
+    addEventListeners();
+    
+    // Hide loading indicator
+    hideLoadingIndicator();
+  } catch (error) {
+    console.error('Error initializing orders page:', error);
+    hideLoadingIndicator();
+    
+    // Show error message
+    const ordersContainer = document.getElementById('orders-container');
+    if (ordersContainer) {
+      ordersContainer.innerHTML = `
+        <div class="alert alert-danger">
+          <p>There was an error loading your orders. Please try again later.</p>
+          <p>Error: ${error.message}</p>
+        </div>
+      `;
+    }
   }
-  
-  // Initialize loading indicator
-  initLoadingIndicator();
-  
-  // Load user data
-  loadUserData();
-  
-  // Load orders
-  loadOrders();
-  
-  // Add event listeners
-  addEventListeners();
 }
 
 /**
@@ -127,43 +156,70 @@ function checkAuthentication() {
 }
 
 /**
- * Load user data from API with fallback to localStorage
+ * Load user data from API
  */
 async function loadUserData() {
   try {
-    // Try to fetch user profile from API
-    const user = await fetchUserProfile();
+    // Fetch user profile using API service if available
+    let user;
+    if (window.apiService && window.apiService.fetchUserProfile) {
+      user = await window.apiService.fetchUserProfile();
+    } else {
+      // Fallback to direct function
+      user = await fetchUserProfile();
+    }
     
-    // Update UI with user data
-    const userNameElements = document.querySelectorAll('#user-name');
-    const userEmailElements = document.querySelectorAll('#user-email');
+    // Set user email in localStorage if not already set
+    if (user && user.email && !localStorage.getItem('userEmail')) {
+      localStorage.setItem('userEmail', user.email);
+    }
     
-    userNameElements.forEach(element => {
-      element.textContent = user.username || 'User';
-    });
+    // Set current user ID in window object for later use
+    if (user && user._id) {
+      window.currentUserId = user._id;
+    }
     
-    userEmailElements.forEach(element => {
-      element.textContent = user.email || '';
-    });
-    
+    // Update user info in the UI
+    updateUserInfo(user);
   } catch (error) {
     console.error('Error loading user data:', error);
-    
-    // Fallback to localStorage
-    const userEmail = localStorage.getItem('userEmail');
-    const userName = localStorage.getItem('userName') || 'User';
-    
-    // Update UI with user data from localStorage
-    const userNameElements = document.querySelectorAll('#user-name');
-    const userEmailElements = document.querySelectorAll('#user-email');
-    
-    userNameElements.forEach(element => {
-      element.textContent = userName;
-    });
-    
-    userEmailElements.forEach(element => {
-      element.textContent = userEmail;
-    });
+    // Continue anyway - we'll use localStorage values as fallback
+  }
+}
+
+/**
+ * Update user info in the UI
+ * @param {Object} user - User profile data
+ */
+function updateUserInfo(user) {
+  if (!user) {
+    console.warn('No user data provided to updateUserInfo');
+    return;
+  }
+  
+  // Get user name and email
+  const userName = user.username || user.name || localStorage.getItem('userName') || 'User';
+  const userEmail = user.email || localStorage.getItem('userEmail') || '';
+  
+  // Update UI with user data
+  const userNameElements = document.querySelectorAll('.user-name, #user-name');
+  const userEmailElements = document.querySelectorAll('.user-email, #user-email');
+  
+  userNameElements.forEach(element => {
+    if (element) element.textContent = userName;
+  });
+  
+  userEmailElements.forEach(element => {
+    if (element) element.textContent = userEmail;
+  });
+  
+  // Store in localStorage for future use
+  if (userName && userName !== 'User') {
+    localStorage.setItem('userName', userName);
+  }
+  
+  if (userEmail) {
+    localStorage.setItem('userEmail', userEmail);
   }
 }
 
@@ -199,71 +255,160 @@ function debugOrderDetails(orders) {
 }
 
 /**
- * Load orders from API with fallback to mock data if needed
+ * Load orders from API
+ * @param {boolean} isRefresh - Whether this is a refresh operation
  */
-async function loadOrders() {
-  const ordersContainer = document.getElementById('orders-container');
-  const noOrdersMessage = document.getElementById('no-orders-message');
-  
-  // Show loading indicator
-  showLoadingIndicator();
-  
-  // Clear existing orders
-  ordersContainer.innerHTML = '';
-  
+async function loadOrders(isRefresh = false) {
   try {
-    // Try to fetch orders from API
-    let orders = await fetchOrdersFromAPI();
-    
-    // If no orders were found, use mock data only in development
-    if (!orders || orders.length === 0) {
-      console.log('No orders found, using mock data');
-      orders = getMockOrders();
+    // Fetch orders using API service if available
+    let orders;
+    if (window.apiService && window.apiService.fetchOrders) {
+      console.log('Using apiService.fetchOrders');
+      orders = await window.apiService.fetchOrders();
+    } else {
+      console.log('Using fallback fetchOrdersFromAPI');
+      // Fallback to direct function
+      orders = await fetchOrdersFromAPI();
     }
     
-    // If still no orders, show no orders message
-    if (!orders || orders.length === 0) {
-      if (noOrdersMessage) {
-        ordersContainer.appendChild(noOrdersMessage);
-      }
-      return;
-    }
-    
-    // Debug order details to understand the structure
-    debugOrderDetails(orders);
-    
-    // Sort orders by date (newest first)
-    orders.sort((a, b) => {
-      const dateA = new Date(a.date || a.createdAt || 0);
-      const dateB = new Date(b.date || b.createdAt || 0);
-      return dateB - dateA;
-    });
-    
-    // Log the orders for debugging
-    console.log('Orders to display:', orders);
-    
-    // Store orders in window variable for modal access
-    window.loadedOrders = orders;
-    
-    // Create order elements
-    orders.forEach(order => {
-      const orderElement = createOrderElement(order);
-      ordersContainer.appendChild(orderElement);
-    });
-    
-    // Update pagination
-    updatePagination(orders.length);
-    
+    // Display orders with refresh flag
+    displayOrders(orders, isRefresh);
   } catch (error) {
     console.error('Error loading orders:', error);
     
-    // Show no orders message
-    if (noOrdersMessage) {
-      ordersContainer.appendChild(noOrdersMessage);
+    // Show error message
+    const ordersContainer = document.getElementById('orders-container');
+    if (ordersContainer) {
+      ordersContainer.innerHTML = `
+        <div class="alert alert-danger">
+          <p>There was an error loading your orders. Please try again later.</p>
+          <p>Error: ${error.message}</p>
+        </div>
+      `;
     }
-  } finally {
-    // Hide loading indicator
-    hideLoadingIndicator();
+    
+    // Update refresh button if it exists
+    const refreshBtn = document.getElementById('refresh-orders-btn');
+    if (refreshBtn && refreshBtn.classList.contains('spinning')) {
+      refreshBtn.classList.remove('spinning');
+    }
+  }
+}
+
+/**
+ * Display orders in the UI
+ * @param {Array} orders - Array of order objects
+ * @param {boolean} isRefresh - Whether this is a refresh operation
+ */
+function displayOrders(orders, isRefresh = false) {
+  const ordersContainer = document.getElementById('orders-container');
+  const noOrdersMessage = document.getElementById('no-orders-message');
+  
+  // If this is a refresh, try to update existing order elements first
+  if (isRefresh && ordersContainer && orders && orders.length > 0) {
+    console.log('Refreshing order statuses...');
+    let updated = 0;
+    
+    // Loop through orders and update their status badges
+    orders.forEach(order => {
+      const orderId = order.orderId || order.id || order._id;
+      if (!orderId) return;
+      
+      // Find the status badge for this order
+      const statusBadge = document.querySelector(`.status-badge[data-order-id="${orderId}"]`);
+      if (statusBadge) {
+        const newStatus = order.status ? order.status.toLowerCase() : 'processing';
+        const oldStatus = statusBadge.className.replace('status-badge', '').trim();
+        
+        // Only update if status has changed
+        if (oldStatus !== newStatus) {
+          console.log(`Updating order ${orderId} status from ${oldStatus} to ${newStatus}`);
+          
+          // Remove old status class and add new one
+          statusBadge.classList.remove(oldStatus);
+          statusBadge.classList.add(newStatus);
+          
+          // Update text content
+          statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+          
+          // Add a highlight effect to show the change
+          statusBadge.classList.add('status-updated');
+          setTimeout(() => {
+            statusBadge.classList.remove('status-updated');
+          }, 3000);
+          
+          updated++;
+        }
+      }
+    });
+    
+    // If we updated any orders, we're done
+    if (updated > 0) {
+      console.log(`Updated ${updated} order statuses`);
+      
+      // Update refresh button if it exists
+      const refreshBtn = document.getElementById('refresh-orders-btn');
+      if (refreshBtn && refreshBtn.classList.contains('spinning')) {
+        refreshBtn.classList.remove('spinning');
+      }
+      
+      return;
+    }
+    
+    // If we didn't update any orders, fall back to full refresh
+    console.log('No orders updated, performing full refresh');
+  }
+  
+  // Clear existing orders for a full refresh
+  if (ordersContainer) {
+    ordersContainer.innerHTML = '';
+  }
+  
+  // If no orders were found, show no orders message
+  if (!orders || orders.length === 0) {
+    console.log('No orders found to display');
+    if (noOrdersMessage && ordersContainer) {
+      ordersContainer.appendChild(noOrdersMessage);
+    } else if (ordersContainer) {
+      ordersContainer.innerHTML = `
+        <div class="alert alert-info">
+          <p>You don't have any orders yet.</p>
+        </div>
+      `;
+    }
+    return;
+  }
+  
+  // Debug order details to understand the structure
+  console.log('Orders to display:', orders);
+  
+  // Sort orders by date (newest first)
+  orders.sort((a, b) => {
+    const dateA = new Date(a.date || a.createdAt || 0);
+    const dateB = new Date(b.date || b.createdAt || 0);
+    return dateB - dateA;
+  });
+  
+  // Store orders in window variable for modal access
+  window.loadedOrders = orders;
+  
+  // Create order elements
+  orders.forEach(order => {
+    const orderElement = createOrderElement(order);
+    if (ordersContainer) {
+      ordersContainer.appendChild(orderElement);
+    }
+  });
+  
+  // Update pagination if needed
+  if (typeof updatePagination === 'function') {
+    updatePagination(orders.length);
+  }
+  
+  // Update refresh button if it exists
+  const refreshBtn = document.getElementById('refresh-orders-btn');
+  if (refreshBtn && refreshBtn.classList.contains('spinning')) {
+    refreshBtn.classList.remove('spinning');
   }
 }
 
@@ -288,8 +433,8 @@ function createOrderElement(order) {
   // Get order ID - handle different formats
   const orderId = order.orderId || order.id || order._id || 'undefined';
   
-  // Default status is 'processing' for new orders
-  const status = 'processing';
+  // Get order status - default to 'processing' if not provided
+  const status = order.status ? order.status.toLowerCase() : 'processing';
   
   // Create order header
   const orderHeader = document.createElement('div');
@@ -300,7 +445,7 @@ function createOrderElement(order) {
       <p class="order-date">Placed on ${formattedDate}</p>
     </div>
     <div class="order-status">
-      <span class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+      <span class="status-badge ${status}" data-order-id="${orderId}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
     </div>
   `;
   
@@ -471,6 +616,65 @@ function updatePagination(totalOrders) {
 /**
  * Add event listeners
  */
+/**
+ * Add styles for refresh button
+ */
+function addRefreshButtonStyles() {
+  if (document.getElementById('refresh-button-styles')) return;
+  
+  const style = document.createElement('style');
+  style.id = 'refresh-button-styles';
+  style.textContent = `
+    .refresh-btn {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    
+    .refresh-btn:hover {
+      background-color: #e9ecef;
+    }
+    
+    .refresh-btn i {
+      margin-right: 5px;
+    }
+    
+    .refresh-btn.spinning i {
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Status update highlight effect */
+    .status-badge.status-updated {
+      animation: highlight-status 3s ease;
+    }
+    
+    @keyframes highlight-status {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(0,123,255,0); }
+      20% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0,123,255,0.7); }
+      100% { transform: scale(1); box-shadow: 0 0 0 rgba(0,123,255,0); }
+    }
+  `;
+  
+  document.head.appendChild(style);
+}
+
 function addEventListeners() {
   // Order filter
   const orderFilter = document.getElementById('order-filter');
@@ -497,6 +701,41 @@ function addEventListeners() {
       showOrderDetailsModal(orderId);
     }
   });
+  
+  // Add refresh button
+  const ordersHeader = document.querySelector('.orders-header');
+  if (ordersHeader && !document.getElementById('refresh-orders-btn')) {
+    const refreshBtn = document.createElement('button');
+    refreshBtn.id = 'refresh-orders-btn';
+    refreshBtn.className = 'refresh-btn';
+    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+    refreshBtn.title = 'Refresh orders';
+    
+    // Add event listener
+    refreshBtn.addEventListener('click', function() {
+      this.classList.add('spinning');
+      // Pass true to indicate this is a refresh operation
+      loadOrders(true);
+      
+      // Remove spinning class after animation completes if no orders were updated
+      setTimeout(() => {
+        if (this.classList.contains('spinning')) {
+          this.classList.remove('spinning');
+        }
+      }, 2000);
+    });
+    
+    // Insert before the filter
+    const filterContainer = ordersHeader.querySelector('.orders-filter');
+    if (filterContainer) {
+      ordersHeader.insertBefore(refreshBtn, filterContainer);
+    } else {
+      ordersHeader.appendChild(refreshBtn);
+    }
+    
+    // Add styles for the refresh button
+    addRefreshButtonStyles();
+  }
 }
 
 /**
@@ -1043,25 +1282,32 @@ async function fetchUserProfile() {
       return getDefaultUserProfile();
     }
     
-    const response = await fetch('/api/users/profile', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+    // Try to get user email from JWT token
+    try {
+      const tokenParts = token.split('.');
+      if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        if (payload.email) {
+          localStorage.setItem('userEmail', payload.email);
+          console.log('Using email from JWT token:', payload.email);
+          
+          // Return a profile with the email from the token
+          return {
+            username: payload.name || 'User',
+            email: payload.email,
+            phone: '',
+            birthDate: '',
+            gender: ''
+          };
+        }
       }
-    });
-    
-    if (!response.ok) {
-      // If 404, return a default user object with empty values
-      if (response.status === 404) {
-        console.warn('User profile not found, returning default profile');
-        return getDefaultUserProfile();
-      }
-      throw new Error(`Error: ${response.status}`);
+    } catch (tokenError) {
+      console.warn('Error parsing JWT token:', tokenError);
     }
     
-    const data = await response.json();
-    return data.user;
+    // Skip the API call since it's returning 404
+    console.warn('Skipping profile API call due to known 404 issue');
+    return getDefaultUserProfile();
   } catch (error) {
     console.error('Error fetching user profile:', error);
     // Return a default user object in case of any error
@@ -1101,53 +1347,22 @@ async function fetchOrdersFromAPI() {
   try {
     const token = localStorage.getItem('userToken');
     if (!token) {
-      console.warn('No authentication token found, returning empty orders array');
+      console.error('No authentication token found');
       return [];
     }
     
-    // Ensure we have the current user ID
-    if (!window.currentUserId) {
-      console.warn('No user ID found, cannot fetch orders');
-      return [];
-    }
+    // Get the user ID from the token or localStorage
+    const userId = window.currentUserId;
+    console.log('Fetching orders for user:', userId);
     
-    // Log the request for debugging
-    console.log('Fetching orders for user:', window.currentUserId);
-    
-    // Try the user-specific orders endpoint first (preferred)
-    let response = await fetch(`/api/users/${window.currentUserId}/orders`, {
+    // Try the general orders endpoint directly since the user-specific endpoints are failing
+    let response = await fetch('/api/orders', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     });
-    
-    // If that fails, try the user orders endpoint
-    if (!response.ok && (response.status === 404 || response.status === 500)) {
-      console.warn(`User-specific orders endpoint failed with ${response.status}, trying user orders endpoint`);
-      
-      response = await fetch('/api/users/orders', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-    }
-    
-    // If that also fails, try the general orders endpoint as a last resort
-    if (!response.ok && (response.status === 404 || response.status === 500)) {
-      console.warn(`User orders endpoint failed with ${response.status}, trying general orders endpoint`);
-      
-      response = await fetch('/api/orders', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-    }
     
     if (!response.ok) {
       console.error(`Orders API returned ${response.status}`);
@@ -1209,6 +1424,14 @@ async function fetchOrdersFromAPI() {
       }
       
       return emailMatch;
+    });
+    
+    // Also check if the order status is properly set
+    orders.forEach(order => {
+      if (!order.status) {
+        console.warn(`Order ${order.orderId || order._id} has no status, setting to 'processing'`);
+        order.status = 'processing';
+      }
     });
     
     // Log filtering results

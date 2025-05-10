@@ -5,16 +5,11 @@
  * to fetch products and other data.
  */
 
-<<<<<<< HEAD
 // Base API URL - use window object to prevent redeclaration errors
 window.API_BASE_URL = window.API_BASE_URL || '/api';
 
 // Use the global API_BASE_URL without redeclaring it
 var API_BASE_URL = window.API_BASE_URL;
-=======
-// Base API URL
-const API_BASE_URL = '/api';
->>>>>>> neww
 
 /**
  * Fetch all products from the API
@@ -146,10 +141,125 @@ async function fetchProductById(productId) {
   }
 }
 
+/**
+ * Fetch all orders for the current user
+ * @returns {Promise<Array>} - Array of order objects
+ */
+async function fetchOrders() {
+  try {
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      console.error('No authentication token found');
+      return [];
+    }
+    
+    const url = `${API_BASE_URL}/orders`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    
+    // Check which property contains the orders
+    let orders = [];
+    if (data.orders && Array.isArray(data.orders)) {
+      orders = data.orders;
+    } else if (data.data && Array.isArray(data.data)) {
+      orders = data.data;
+    } else if (Array.isArray(data)) {
+      orders = data;
+    }
+    
+    // Filter orders by user email
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      const normalizedUserEmail = userEmail.toLowerCase().trim();
+      orders = orders.filter(order => {
+        const orderEmail = order.customer?.email;
+        if (!orderEmail) return false;
+        return orderEmail.toLowerCase().trim() === normalizedUserEmail;
+      });
+    }
+    
+    return orders;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    return [];
+  }
+}
+
+/**
+ * Fetch user profile
+ * @returns {Promise<Object>} - User profile object
+ */
+async function fetchUserProfile() {
+  try {
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      console.warn('No authentication token found');
+      return null;
+    }
+    
+    // Try to extract user info from JWT token
+    try {
+      const tokenParts = token.split('.');
+      if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        if (payload.email) {
+          localStorage.setItem('userEmail', payload.email);
+          
+          // Return a profile with the email from the token
+          return {
+            username: payload.name || 'User',
+            email: payload.email,
+            phone: '',
+            birthDate: '',
+            gender: ''
+          };
+        }
+      }
+    } catch (tokenError) {
+      console.warn('Error parsing JWT token:', tokenError);
+    }
+    
+    // If we couldn't get the profile from the token, try the API
+    const url = `${API_BASE_URL}/users/profile`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data.user || data.data || data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return null;
+  }
+}
+
 // Export all functions
 window.apiService = {
   fetchProducts,
   fetchProductsByCategory,
   fetchFeaturedProducts,
-  fetchProductById
+  fetchProductById,
+  fetchOrders,
+  fetchUserProfile
 };

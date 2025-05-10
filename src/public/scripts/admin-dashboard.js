@@ -32,12 +32,20 @@ async function verifyToken() {
     }
 
     const data = await res.json();
-    if (data.role !== "admin" && data.role !== "superadmin") {
-      throw new Error("Not authorized");
-    }
     
-    return data;
+    // Check if the response has data property (from getAdminProfile)
+    const admin = data.data || data.admin || data;
+    
+    // Check if the user has admin privileges
+    if (admin && (admin.role === "admin" || admin.role === "superadmin")) {
+      // Valid admin user
+      console.log("Admin verified:", admin.name);
+      return admin;
+    } else {
+      throw new Error("Not authorized as admin");
+    }
   } catch (err) {
+    console.error("Token verification error:", err.message);
     localStorage.removeItem("token");
     window.location.href = "/login-admin.html";
   }
@@ -126,18 +134,38 @@ async function fetchRecentOrders() {
     recentOrders.forEach(order => {
       const row = document.createElement('tr');
       
+      // Format date
       const date = new Date(order.date).toLocaleDateString();
-      const total = order.total ? `$${order.total.toFixed(2)}` : 'N/A';
+      
+      // Extract customer name from different possible locations in the order object
+      let customerName = 'N/A';
+      if (order.customer && order.customer.fullName) {
+        customerName = order.customer.fullName;
+      } else if (order.customer && order.customer.name) {
+        customerName = order.customer.name;
+      } else if (order.customerName) {
+        customerName = order.customerName;
+      }
+      
+      // Extract total from different possible locations in the order object
+      let orderTotal = 'N/A';
+      if (order.total) {
+        orderTotal = `$${parseFloat(order.total).toFixed(2)}`;
+      } else if (order.totals && order.totals.total) {
+        orderTotal = `$${parseFloat(order.totals.total).toFixed(2)}`;
+      } else if (order.totalAmount) {
+        orderTotal = `$${parseFloat(order.totalAmount).toFixed(2)}`;
+      }
       
       row.innerHTML = `
         <td>${order.orderId || 'N/A'}</td>
         <td>${date}</td>
-        <td>${order.customer?.name || 'N/A'}</td>
-        <td>${total}</td>
+        <td>${customerName}</td>
+        <td>${orderTotal}</td>
         <td>${order.status || 'pending'}</td>
         <td>
           <div class="action-buttons">
-            <a href="/admin-orders.html" class="button">View Details</a>
+            <a href="/admin-orders.html?id=${order._id || order.orderId}" class="button">View Details</a>
           </div>
         </td>
       `;
@@ -145,8 +173,17 @@ async function fetchRecentOrders() {
       tbody.appendChild(row);
     });
     
+    // Log for debugging
+    console.log('Recent orders loaded:', recentOrders);
+    
   } catch (error) {
-    showNotification('Error loading recent orders', 'error');
+    console.error('Error loading recent orders:', error);
+    // Check if showNotification function exists
+    if (typeof showNotification === 'function') {
+      showNotification('Error loading recent orders', 'error');
+    } else {
+      console.error('Error loading recent orders');
+    }
   }
 }
 

@@ -432,12 +432,16 @@ function isValidCVV(cvv) {
  * Apply promo code
  */
 function applyPromoCode(code) {
-  // Example promo codes
+  // Valid promo codes with discount percentages
   const promoCodes = {
     'WELCOME10': 10,
     'SAVE20': 20,
-    'SPECIAL30': 30
+    'SPECIAL30': 30,
+    'FLAT50': 50  // Adding the FLAT50 code
   };
+  
+  // Normalize code to uppercase and trim whitespace
+  code = code.toUpperCase().trim();
   
   if (promoCodes[code]) {
     const discount = promoCodes[code];
@@ -449,10 +453,18 @@ function applyPromoCode(code) {
     discountAmount.textContent = `-$${discountValue.toFixed(2)}`;
     discountRow.style.display = 'flex';
     
+    // Store the applied promo code in session
+    sessionStorage.setItem('appliedPromoCode', code);
+    sessionStorage.setItem('discountPercentage', discount);
+    
+    // Update the order summary with the new discount
     updateOrderSummary();
-    alert(`Promo code applied! You saved $${discountValue.toFixed(2)}`);
+    
+    // Show success notification instead of alert
+    showNotification(`Promo code ${code} applied! You saved $${discountValue.toFixed(2)}`, 'success');
   } else {
-    alert('Invalid promo code');
+    // Show error notification instead of alert
+    showNotification(`Invalid promo code: ${code}`, 'error');
   }
 }
 
@@ -484,6 +496,7 @@ function updateOrderSummary() {
   const shippingEl = document.getElementById('summaryShipping');
   const taxEl = document.getElementById('summaryTax');
   const discountEl = document.getElementById('summaryDiscount');
+  const discountRow = document.getElementById('discountRow');
   const totalEl = document.getElementById('summaryTotal');
   const itemsContainer = document.getElementById('summaryItems');
   
@@ -514,7 +527,21 @@ function updateOrderSummary() {
   const selectedCity = document.getElementById('city').value;
   const shipping = calculateShippingRate(selectedCity);
   const tax = subtotal * 0.1;
-  const discount = parseFloat(discountEl.textContent.replace(/[^0-9.-]/g, '')) || 0;
+  
+  // Calculate discount if a promo code has been applied
+  let discount = 0;
+  const appliedPromoCode = sessionStorage.getItem('appliedPromoCode');
+  const discountPercentage = sessionStorage.getItem('discountPercentage');
+  
+  if (appliedPromoCode && discountPercentage) {
+    discount = (subtotal * parseInt(discountPercentage)) / 100;
+    discountEl.textContent = `-$${discount.toFixed(2)}`;
+    discountRow.style.display = 'flex';
+  } else if (discountEl.textContent) {
+    // If there's already a discount showing in the UI but not in session storage
+    discount = parseFloat(discountEl.textContent.replace(/[^0-9.-]/g, '')) || 0;
+  }
+  
   const total = subtotal + shipping + tax - discount;
   
   // Update summary values
